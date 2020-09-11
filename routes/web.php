@@ -24,9 +24,11 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/dashboard', [\App\Http\Controllers\DashbordController::class, 'index'])->name('dashboard');
 
         // Sacre
+        Route::post('/sacres', [\App\Http\Controllers\SacreController::class, 'store'])->name('sacres.create');
         Route::get('/sacres/create', [\App\Http\Controllers\SacreController::class, 'create'])->name('sacres.create');
         Route::get('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'show'])->name('sacres.show');
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
+
 
     });
 });

@@ -8,7 +8,11 @@
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                form element
+                <create-details-form
+                        :sacre="sacre"
+                        :regions="regions"/>
+
+                <jet-section-border />
             </div>
         </div>
     </app-layout>
@@ -17,6 +21,8 @@
 <script>
     import AppLayout from './../../Layouts/AppLayout'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
+    import CreateDetailsForm from "./CreateDetailsForm";
+
 
     export default {
         props: [
@@ -26,6 +32,7 @@
         components: {
             AppLayout,
             JetSectionBorder,
+            CreateDetailsForm
         },
     }
 </script>

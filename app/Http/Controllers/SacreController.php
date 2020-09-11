@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Sacre\CreateSacreInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Models\Sacre;
 use App\Models\Region;
@@ -44,6 +45,9 @@ class SacreController extends Controller
     public function store(Request $request)
     {
         //
+        $sacre = app(CreateSacreInformation::class)->create($request->all());
+
+        return redirect()->route('sacres.show', ['sacre' => $sacre->id]);
     }
 
     /**
@@ -59,7 +63,6 @@ class SacreController extends Controller
             'sacre' => $sacre->toResource(),
             'regions' => Region::all()
         ]);
-
     }
 
     /**

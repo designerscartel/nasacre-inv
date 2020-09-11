@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
 
+        app()->singleton(CreatesSacreInformation::class, CreateSacreInformation::class);
         app()->singleton(UpdatesSacreInformation::class, UpdateSacreInformation::class);
     }
 }

@@ -2,27 +2,29 @@
 
 namespace App\Actions\Sacre;
 
+use App\Models\Sacre;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use App\Contracts\Sacre\UpdatesSacreInformation;
+use App\Contracts\Sacre\CreatesSacreInformation;
 
-class UpdateSacreInformation implements UpdatesSacreInformation
+class CreateSacreInformation implements CreatesSacreInformation
 {
     /**
-     * Validate and update the given sacre's information.
+     * Validate and Create the given sacre's information.
      *
-     * @param  mixed  $sacre
      * @param  array  $input
      * @return void
      */
-    public function update($sacre, array $input)
+    public function Create(array $input)
     {
         Validator::make($input, [
             'title' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-        ])->validateWithBag('updateSacreInformation');
+        ])->validateWithBag('createSacreInformation');
 
-        $sacre->fill([
+        $sacre = new Sacre();
+
+        return $sacre->create([
             'region_id' => $input['region_id'],
             'title' => $input['title'],
             'member' => $input['member'],
@@ -31,6 +33,7 @@ class UpdateSacreInformation implements UpdatesSacreInformation
             'code' => $input['code'],
             'po' => $input['po'],
             'finance' => $input['finance'],
-        ])->save();
+        ]);
+
     }
 }

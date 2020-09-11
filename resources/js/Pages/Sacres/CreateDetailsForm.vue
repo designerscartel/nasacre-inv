@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateSacreInformation">
+    <jet-form-section @submitted="createSacreInformation">
         <template #title>
             Sacre Information
         </template>
@@ -111,25 +111,25 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    '_method': 'PUT',
-                    region_id: this.sacre.region_id,
-                    title: this.sacre.title,
-                    member: this.sacre.member,
-                    address: this.sacre.address,
-                    short_code: this.sacre.short_code,
-                    code: this.sacre.code,
-                    po: this.sacre.po,
-                    finance: this.sacre.finance,
+                    '_method': 'POST',
+                    region_id: '',
+                    title: '',
+                    member:'',
+                    address: '',
+                    short_code: '',
+                    code: '',
+                    po: '',
+                    finance: '',
                 }, {
-                    bag: 'updateSacreInformation',
+                    bag: 'createSacreInformation',
                     resetOnSuccess: false,
                 }),
             }
         },
 
         methods: {
-            updateSacreInformation() {
-                this.form.put('/sacres/' + this.sacre.id, {
+            createSacreInformation() {
+                this.form.post('/sacres', {
                     preserveScroll: true
                 });
             },

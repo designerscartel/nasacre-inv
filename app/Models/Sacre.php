@@ -9,8 +9,20 @@ class Sacre extends Model
 {
     use HasFactory;
 
-
-    // protected $with = ['region'];
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'region_id',
+        'title',
+        'member',
+        'address',
+        'short_code',
+        'code',
+        'po',
+        'finance',
+    ];
 
     /**
      * Get the region of the Sacre.
