@@ -17,8 +17,8 @@
                             <jet-nav-link href="/dashboard" :active="$page.currentRouteName == 'dashboard'">
                                 Dashboard
                             </jet-nav-link>
-                            <jet-nav-link href="/sacres/create" :active="$page.currentRouteName == 'sacres.create'">
-                                Sacre
+                            <jet-nav-link href="/regions" :active="$page.currentRouteName == 'regions.show'">
+                                Regions
                             </jet-nav-link>
                         </div>
                     </div>

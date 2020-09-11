@@ -30,5 +30,12 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
 
 
+        Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
+        Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.create');
+        Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
+        Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
+        Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
+
+
     });
 });

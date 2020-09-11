@@ -10,6 +10,14 @@ class Region extends Model
     use HasFactory;
 
     /**
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'title',
+    ];
+
+    /**
      * Return a Resource
      */
     public function toResource()

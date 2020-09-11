@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Sacre\CreateSacreInformation;
-use App\Contracts\Sacre\UpdatesSacreInformation;
-use App\Models\Sacre;
+use App\Actions\Region\CreateRegionInformation;
+use App\Contracts\Region\UpdatesRegionInformation;
 use App\Models\Region;
+use App\Http\Resources\RegionResource;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class SacreController extends Controller
+class RegionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Region $region)
     {
         //
+        return Inertia::render('Regions/Dashboard', [
+            'regions' => RegionResource::collection($region::all())
+        ]);
     }
 
     /**
@@ -29,9 +33,8 @@ class SacreController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Sacres/Create', [
-            'sacre' => null,
-            'regions' => Region::all()
+        return Inertia::render('Regions/Create', [
+            'region' => null,
         ]);
     }
 
@@ -44,33 +47,32 @@ class SacreController extends Controller
     public function store(Request $request)
     {
         //
-        $sacre = app(CreateSacreInformation::class)->create($request->all());
+        $region = app(CreateRegionInformation::class)->create($request->all());
 
-        return redirect()->route('sacres.show', ['sacre' => $sacre->id]);
+        return redirect()->route('regions.show', ['region' => $region->id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Sacre $sacre
+     * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function show(Sacre $sacre)
+    public function show(Region $region)
     {
         //
-        return Inertia::render('Sacres/Show', [
-            'sacre' => $sacre->toResource(),
-            'regions' => Region::all()
+        return Inertia::render('Regions/Show', [
+            'region' => $region->toResource(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Sacre $sacre
+     * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sacre $sacre)
+    public function edit(Region $region)
     {
         //
     }
@@ -79,12 +81,12 @@ class SacreController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Sacre $sacre
+     * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sacre $sacre)
+    public function update(Request $request, Region $region)
     {
-        app(UpdatesSacreInformation::class)->update($sacre, $request->all());
+        app(UpdatesRegionInformation::class)->update($region, $request->all());
 
         return back(303);
     }
@@ -92,10 +94,10 @@ class SacreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Sacre $sacre
+     * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sacres $sacre)
+    public function destroy(Regions $region)
     {
         //
     }
