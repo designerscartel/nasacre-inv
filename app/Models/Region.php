@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
     use HasFactory;
+
+    /**
+     * Return a Resource
+     */
+    public function toResource()
+    {
+        return new \App\Http\Resources\RegionResource($this);
+    }
 }

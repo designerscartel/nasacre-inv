@@ -54,8 +54,9 @@ class SacreController extends Controller
      */
     public function show(Sacre $sacre)
     {
+        //
         return Inertia::render('Sacres/Show', [
-            'sacre' => $sacre,
+            'sacre' => $sacre->toResource(),
             'regions' => Region::all()
         ]);
 

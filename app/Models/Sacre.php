@@ -10,14 +10,22 @@ class Sacre extends Model
     use HasFactory;
 
 
-    protected $with = ['region'];
+    // protected $with = ['region'];
 
     /**
-     * Get the owner of the team.
+     * Get the region of the Sacre.
      */
     public function region()
     {
         return $this->belongsTo(Region::class, 'region_id');
+    }
+
+    /**
+     * Return a Resource
+     */
+    public function toResource()
+    {
+        return new \App\Http\Resources\SacreResource($this);
     }
 
 
