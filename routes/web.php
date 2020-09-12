@@ -37,5 +37,12 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
 
 
+        Route::get('/positions', [\App\Http\Controllers\ContactPositionController::class, 'index'])->name('positions.index');
+        Route::post('/positions', [\App\Http\Controllers\ContactPositionController::class, 'store'])->name('positions.create');
+        Route::get('/positions/create', [\App\Http\Controllers\ContactPositionController::class, 'create'])->name('positions.create');
+        Route::get('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'show'])->name('positions.show');
+        Route::put('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'update'])->name('positions.update');
+
+
     });
 });

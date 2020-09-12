@@ -3,10 +3,21 @@
 namespace App\Providers;
 
 use App\Actions\Sacre\UpdateSacreInformation;
+use App\Actions\Sacre\CreateSacreInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
+use App\Contracts\Sacre\CreatesSacreInformation;
+
 
 use App\Actions\Region\UpdateRegionInformation;
+use App\Actions\Region\CreateRegionInformation;
 use App\Contracts\Region\UpdatesRegionInformation;
+use App\Contracts\Region\CreatesRegionInformation;
+
+use App\Actions\ContactPosition\UpdateContactPositionInformation;
+use App\Actions\ContactPosition\CreateContactPositionInformation;
+use App\Contracts\ContactPosition\UpdatesContactPositionInformation;
+use App\Contracts\ContactPosition\CreatesContactPositionInformation;
+
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -39,5 +50,10 @@ class AppServiceProvider extends ServiceProvider
 
         app()->singleton(CreatesRegionInformation::class, CreateRegionInformation::class);
         app()->singleton(UpdatesRegionInformation::class, UpdateRegionInformation::class);
+
+
+        app()->singleton(CreatesContactPositionInformation::class, CreateContactPositionInformation::class);
+        app()->singleton(UpdatesContactPositionInformation::class, UpdateContactPositionInformation::class);
+
     }
 }

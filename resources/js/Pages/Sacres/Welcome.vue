@@ -5,7 +5,7 @@
             <div class="mt-8 md:flex">
 
                 <h1 class="text-2xl md:w-5/6">
-                    Welcome to the SACRE application!
+                    Welcome to the NASACRE application!
                 </h1>
 
                 <div class="md:w-1/6 text-right">

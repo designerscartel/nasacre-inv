@@ -20,6 +20,10 @@
                             <jet-nav-link href="/regions" :active="$page.currentRouteName == 'regions.show'">
                                 Regions
                             </jet-nav-link>
+                            <jet-nav-link href="/positions" :active="$page.currentRouteName == 'positions.show'">
+                                Positions
+                            </jet-nav-link>
+
                         </div>
                     </div>
 

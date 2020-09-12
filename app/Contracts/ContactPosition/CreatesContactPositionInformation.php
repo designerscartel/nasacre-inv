@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contracts\Region;
+namespace App\Contracts\ContactPosition;
 
-interface CreatesRegionInformation
+interface CreatesContactPositionInformation
 {
     /**
      * Validate and update the given region's information.
