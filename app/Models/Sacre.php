@@ -33,6 +33,14 @@ class Sacre extends Model
     }
 
     /**
+     * Get all of the contacts the sacre belongs to.
+     */
+    public function contacts()
+    {
+        return $this->hasMany(SacreContact::class);
+    }
+
+    /**
      * Return a Resource
      */
     public function toResource()
