@@ -6,6 +6,7 @@ use App\Actions\Sacre\CreateSacreInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Models\Sacre;
 use App\Models\Region;
+use App\Models\ContactPosition;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -31,7 +32,7 @@ class SacreController extends Controller
         //
         return Inertia::render('Sacres/Create', [
             'sacre' => null,
-            'regions' => Region::all()
+            'regions' => \App\Http\Resources\RegionResource::collection(Region::all()),
         ]);
     }
 
@@ -60,7 +61,8 @@ class SacreController extends Controller
         //
         return Inertia::render('Sacres/Show', [
             'sacre' => $sacre->toResource(),
-            'regions' => Region::all()
+            'regions' => \App\Http\Resources\RegionResource::collection(Region::all()),
+            'positions' => \App\Http\Resources\ContactPositionResource::collection(ContactPosition::all()),
         ]);
     }
 

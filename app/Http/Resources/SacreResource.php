@@ -28,6 +28,7 @@ class SacreResource extends JsonResource
             'po' => $this->po,
             'finance' => $this->finance,
             'region' => new \App\Http\Resources\RegionResource($this->region),
+            'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

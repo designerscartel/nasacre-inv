@@ -28,6 +28,9 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/sacres/create', [\App\Http\Controllers\SacreController::class, 'create'])->name('sacres.create');
         Route::get('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'show'])->name('sacres.show');
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
+        Route::post('/sacres/{sacre}/contacts', [\App\Http\Controllers\SacreContactController::class, 'store'])->name('sacre-contacts.store');
+
+
 
 
         Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');

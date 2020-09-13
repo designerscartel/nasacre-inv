@@ -4,9 +4,10 @@ namespace App\Providers;
 
 use App\Actions\Sacre\UpdateSacreInformation;
 use App\Actions\Sacre\CreateSacreInformation;
+use App\Actions\SacreContact\AddSacreContact;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Contracts\Sacre\CreatesSacreInformation;
-
+use App\Contracts\SacreContact\AddsSacreContact;
 
 use App\Actions\Region\UpdateRegionInformation;
 use App\Actions\Region\CreateRegionInformation;
@@ -47,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
 
         app()->singleton(CreatesSacreInformation::class, CreateSacreInformation::class);
         app()->singleton(UpdatesSacreInformation::class, UpdateSacreInformation::class);
+        app()->singleton(AddsSacreContact::class, AddSacreContact::class);
 
         app()->singleton(CreatesRegionInformation::class, CreateRegionInformation::class);
         app()->singleton(UpdatesRegionInformation::class, UpdateRegionInformation::class);

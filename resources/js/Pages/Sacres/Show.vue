@@ -11,13 +11,15 @@
 
                 <update-details-form
                         :sacre="sacre.data"
-                        :regions="regions"/>
+                        :regions="regions.data"/>
 
-                <jet-section-border />
+                <contact-manager
+                        :sacre="sacre.data"
+                        :contacts="sacre.data.contacts"
+                        :positions="positions.data"/>
 
             </div>
         </div>
-
 
     </app-layout>
 </template>
@@ -26,16 +28,19 @@
     import AppLayout from './../../Layouts/AppLayout'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
+    import ContactManager from "./ContactManager";
 
     export default {
         props: [
             'sacre',
             'regions',
+            'positions'
         ],
         components: {
             UpdateDetailsForm,
             AppLayout,
             JetSectionBorder,
+            ContactManager
         },
     }
 </script>
