@@ -5,11 +5,21 @@
             <template #description><slot name="description"></slot></template>
         </jet-section-title>
 
+
         <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="px-4 py-5 sm:p-6 bg-white shadow sm:rounded-lg">
-                <slot name="content"></slot>
-            </div>
+            <form @submit.prevent="$emit('submitted')">
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-4 py-5 bg-white sm:p-6">
+                        <slot name="content"></slot>
+                    </div>
+
+                    <div class="flex items-center justify-end px-4 py-3 bg-gray-50 text-right sm:px-6" v-if="hasActions">
+                        <slot name="actions"></slot>
+                    </div>
+                </div>
+            </form>
         </div>
+
     </div>
 </template>
 
@@ -19,6 +29,11 @@
     export default {
         components: {
             JetSectionTitle,
+        },
+        computed: {
+            hasActions() {
+                return !! this.$slots.actions
+            }
         }
     }
 </script>

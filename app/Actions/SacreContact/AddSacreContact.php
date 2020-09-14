@@ -11,7 +11,7 @@ use App\Contracts\SacreContact\AddsSacreContact;
 class AddSacreContact implements AddsSacreContact
 {
     /**
-     * Validate and Create the given sacre's information.
+     * Validate and Create the given sacre's contact information.
      *
      * @param mixed $sacre
      * @param array $input
@@ -31,6 +31,7 @@ class AddSacreContact implements AddsSacreContact
         $contact = new SacreContact();
         $contact->position_id = $input['position_id'];
         $contact->name = $input['name'];
+        $contact->email = $input['email'];
         $contact->tel = $input['tel'];
         $contact->role_dscpn = $input['role_dscpn'];
         $contact->default = $input['default'];

@@ -48,8 +48,7 @@
 
             <!-- Member -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="member" value="Member" />
-                <jet-input id="member" type="text" class="mt-1 block w-full" v-model="form.member" />
+                <jet-toggle type="toggle" class="mt-1 block w-full" v-model="form.member" :label="'Member'" :forid="'member'"/>
                 <jet-input-error :message="form.error('member')" class="mt-2" />
             </div>
 
@@ -90,6 +89,7 @@
     import JetInputError from './../../Jetstream/InputError'
     import JetSelect from './../../Jetstream/Select'
     import JetLabel from './../../Jetstream/Label'
+    import JetToggle from './../../Jetstream/Toggle'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
 
@@ -101,6 +101,7 @@
             JetInput,
             JetTextarea,
             JetSelect,
+            JetToggle,
             JetInputError,
             JetLabel,
             JetSecondaryButton,

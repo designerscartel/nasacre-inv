@@ -16,12 +16,6 @@
             <!-- Contact List -->
             <template #content>
 
-                <!-- Add new contact dialog-->
-                <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-                        @click="addContactDialog()">
-                        Add new contact
-                </button>
-
                 <div class="space-y-6">
                     <div class="flex items-center justify-between" v-for="contact in contacts">
                         <div class="flex items-center">
@@ -29,79 +23,151 @@
                         </div>
                         <div class="flex items-center">
 
-                            <!-- Manage Team Member Role -->
-                            <!--
-                            <div class="ml-2 text-sm text-gray-400" v-else-if="availableRoles.length > 0">
-                                {{ displayableRole(user.membership.role) }}
+                            <div class="ml-2 text-sm text-gray-400">
+                                {{ contact.position.title }}
                             </div>
-                            -->
+
+                            <button class="ml-2 text-sm text-gray-400 underline" @click="updateContactDialog(contact)">
+                                Edit
+                            </button>
+
                             <!-- Remove Team Member -->
-                            <!--
-                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
-                                    @click="confirmTeamMemberRemoval(user)"
-                                    v-if="userPermissions.canRemoveTeamMembers">
+                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none">
                                 Remove
                             </button>
-                            -->
+
                         </div>
                     </div>
                 </div>
             </template>
+
+            <template #actions>
+                <!-- Add new contact dialog-->
+                <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
+                        @click="addContactDialog()">
+                    Add new contact
+                </button>
+
+            </template>
+
+
         </jet-action-section>
 
 
-        <!-- Role Management Modal -->
-        <jet-dialog-modal :show="newContactDialog" @close="newContactDialog = false">
+        <!-- New Contact Modal -->
+        <jet-dialog-modal :show="showNewContactDialog" @close="showNewContactDialog = false">
             <template #title>
                 Add Contact
             </template>
 
             <template #content>
-                Add contact form
-
                 <!-- Name -->
                 <div class="mt-4">
-                    <jet-label for="name" value="Name" />
-                    <jet-input id="name" type="text" class="mt-1 block w-full" v-model="addContactForm.name" />
-                    <jet-input-error :message="addContactForm.error('name')" class="mt-2" />
+                    <jet-label for="name" value="Name"/>
+                    <jet-input id="name" type="text" class="mt-1 block w-full" v-model="addContactForm.name"/>
+                    <jet-input-error :message="addContactForm.error('name')" class="mt-2"/>
                 </div>
 
                 <!-- Email -->
                 <div class="mt-4">
-                    <jet-label for="email" value="Email" />
-                    <jet-input id="email" type="text" class="mt-1 block w-full" v-model="addContactForm.email" />
-                    <jet-input-error :message="addContactForm.error('email')" class="mt-2" />
+                    <jet-label for="email" value="Email"/>
+                    <jet-input id="email" type="text" class="mt-1 block w-full" v-model="addContactForm.email"/>
+                    <jet-input-error :message="addContactForm.error('email')" class="mt-2"/>
                 </div>
 
                 <!-- Telephone -->
                 <div class="mt-4">
-                    <jet-label for="tel" value="Telephone" />
-                    <jet-input id="tel" type="text" class="mt-1 block w-full" v-model="addContactForm.tel" />
-                    <jet-input-error :message="addContactForm.error('tel')" class="mt-2" />
+                    <jet-label for="tel" value="Telephone"/>
+                    <jet-input id="tel" type="text" class="mt-1 block w-full" v-model="addContactForm.tel"/>
+                    <jet-input-error :message="addContactForm.error('tel')" class="mt-2"/>
                 </div>
 
                 <!-- Role Description -->
                 <div class="mt-4">
-                    <jet-label for="role_dscpn" value="Description" />
-                    <jet-input id="role_dscpn" type="text" class="mt-1 block w-full" v-model="addContactForm.role_dscpn" />
-                    <jet-input-error :message="addContactForm.error('role_dscpn')" class="mt-2" />
+                    <jet-label for="role_dscpn" value="Description"/>
+                    <jet-input id="role_dscpn" type="text" class="mt-1 block w-full"
+                               v-model="addContactForm.role_dscpn"/>
+                    <jet-input-error :message="addContactForm.error('role_dscpn')" class="mt-2"/>
                 </div>
 
                 <!-- Position -->
                 <div class="mt-4">
-                    <jet-label for="position_id" value="Position" />
-                    <jet-select id="position_id" type="select" class="mt-1 block w-full" v-model="addContactForm.position_id" :options="positions" />
-                    <jet-input-error :message="addContactForm.error('position_id')" class="mt-2" />
+                    <jet-label for="position_id" value="Position"/>
+                    <jet-select id="position_id" type="select" class="mt-1 block w-full"
+                                v-model="addContactForm.position_id" :options="positions"/>
+                    <jet-input-error :message="addContactForm.error('position_id')" class="mt-2"/>
                 </div>
 
             </template>
 
             <template #footer>
-                <jet-secondary-button @click.native="newContactDialog = false">
+                <jet-secondary-button @click.native="showNewContactDialog = false">
                     Nevermind
                 </jet-secondary-button>
 
-                <jet-button class="ml-2" @click.native="addContact" :class="{ 'opacity-25': addContactForm.processing }" :disabled="addContactForm.processing">
+                <jet-button class="ml-2" @click.native="addContact" :class="{ 'opacity-25': addContactForm.processing }"
+                            :disabled="addContactForm.processing">
+                    Save
+                </jet-button>
+
+            </template>
+        </jet-dialog-modal>
+
+
+        <!-- Update Contact Modal -->
+        <jet-dialog-modal :show="showUpdateContactDialog" @close="showUpdateContactDialog = false">
+            <template #title>
+                Update Contact
+            </template>
+
+            <template #content>
+                <!-- Name -->
+                <div class="mt-4">
+                    <jet-label for="name" value="Name"/>
+                    <jet-input id="name" type="text" class="mt-1 block w-full" v-model="updateContactForm.name"/>
+                    <jet-input-error :message="updateContactForm.error('name')" class="mt-2"/>
+                </div>
+
+                <!-- Email -->
+                <div class="mt-4">
+                    <jet-label for="email" value="Email"/>
+                    <jet-input id="email" type="text" class="mt-1 block w-full" v-model="updateContactForm.email"/>
+                    <jet-input-error :message="updateContactForm.error('email')" class="mt-2"/>
+                </div>
+
+                <!-- Telephone -->
+                <div class="mt-4">
+                    <jet-label for="tel" value="Telephone"/>
+                    <jet-input id="tel" type="text" class="mt-1 block w-full" v-model="updateContactForm.tel"/>
+                    <jet-input-error :message="updateContactForm.error('tel')" class="mt-2"/>
+                </div>
+
+                <!-- Role Description -->
+                <div class="mt-4">
+                    <jet-label for="role_dscpn" value="Description"/>
+                    <jet-input id="role_dscpn" type="text" class="mt-1 block w-full"
+                               v-model="updateContactForm.role_dscpn"/>
+                    <jet-input-error :message="updateContactForm.error('role_dscpn')" class="mt-2"/>
+                </div>
+
+                <!-- Position -->
+                <div class="mt-4">
+                    <jet-label for="position_id" value="Position"/>
+                    <jet-select id="position_id" type="select" class="mt-1 block w-full"
+                                v-model="updateContactForm.position_id" :options="positions"/>
+                    <jet-input-error :message="updateContactForm.error('position_id')" class="mt-2"/>
+                </div>
+
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="showUpdateContactDialog = false">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-button class="ml-2" @click.native="updateContact"
+                            :class="{ 'opacity-25': updateContactForm.processing }"
+                            :disabled="updateContactForm.processing">
                     Save
                 </jet-button>
 
@@ -164,7 +230,22 @@
                     resetOnSuccess: true,
                 }),
 
-                newContactDialog: false,
+                updateContactForm: this.$inertia.form({
+                    id: '',
+                    name: '',
+                    email: '',
+                    tel: '',
+                    role_dscpn: '',
+                    default: '',
+                    position_id: '',
+                }, {
+                    bag: 'updateContactForm',
+                    resetOnSuccess: true,
+                }),
+
+                contactId: null,
+                showNewContactDialog: false,
+                showUpdateContactDialog: false
             }
         },
 
@@ -173,12 +254,36 @@
                 this.addContactForm.post('/sacres/' + this.sacre.id + '/contacts', {
                     preserveScroll: true
                 }).then(() => {
-                    this.newContactDialog = false
+                    this.showNewContactDialog = false
+                    if (!this.addContactForm.hasErrors()) {
+                        this.showNewContactDialog = false
+                    }
                 })
             },
             addContactDialog() {
-                this.newContactDialog = true
+                this.showNewContactDialog = true
             },
+            updateContact() {
+                this.updateContactForm.put('/sacres/' + this.sacre.id + '/contacts/' + this.contactId, {
+                    preserveScroll: true
+                }).then(() => {
+                    this.contactId = null;
+                    if (!this.updateContactForm.hasErrors()) {
+                        this.showUpdateContactDialog = false
+                    }
+                })
+            },
+            updateContactDialog(contact) {
+                this.updateContactForm.id = contact.id
+                this.updateContactForm.name = contact.name
+                this.updateContactForm.email = contact.email
+                this.updateContactForm.tel = contact.tel
+                this.updateContactForm.role_dscpn = contact.role_dscpn
+                this.updateContactForm.default = contact.default
+                this.updateContactForm.position_id = contact.position_id
+                this.contactId = contact.id
+                this.showUpdateContactDialog = true
+            }
         },
     }
 </script>

@@ -20,6 +20,7 @@ class SacreContactResource extends JsonResource
             'id' => $this->id,
             'sacre_id' => $this->sacre_id,
             'position_id' => $this->position_id,
+            'position' => new \App\Http\Resources\ContactPositionResource($this->position),
             'name' => $this->name,
             'email' => $this->email,
             'tel' => $this->tel,
