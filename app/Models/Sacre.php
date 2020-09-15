@@ -41,13 +41,27 @@ class Sacre extends Model
     {
         return $this->hasMany(SacreContact::class);
     }
-    
+
     /**
      * Return a Resource
      */
     public function toResource()
     {
         return new \App\Http\Resources\SacreResource($this);
+    }
+
+
+    /**
+     * Boot Function
+     */
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($sacre) { // before delete() method call this
+            $sacre->contacts()->each(function ($contact) {
+                $contact->delete(); // <-- direct deletion
+            });
+        });
     }
 
 
