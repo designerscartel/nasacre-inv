@@ -18,9 +18,11 @@
 
                 <div class="space-y-6">
                     <div class="flex items-center justify-between" v-for="contact in contacts">
+
                         <div class="flex items-center">
-                            <div class="ml-4">{{ contact.name }}</div>
+                            <div class="ml-4">{{ contact.name }} <span v-if="contact.email">{{ contact.email}}</span></div>
                         </div>
+
                         <div class="flex items-center">
 
                             <div class="ml-2 text-sm text-gray-400">

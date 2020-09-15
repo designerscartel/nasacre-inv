@@ -44,13 +44,12 @@ class ContactsImport extends Command
 
         foreach($sacres as $sacre) {
 
-
             $sacreObject = Sacre::findOrFail($sacre->id);
 
             if(!empty($sacreObject)) {
 
                 // Create Chair
-                if( (!empty($sacre->chair)) or (!empty($sacreObject->chair_email)) ) {
+                if( (!empty(trim($sacre->chair))) or (!empty(trim($sacre->chair_email))) ) {
                     $contact = new SacreContact();
                     $contact->position_id = 1;
                     $contact->name = (!empty($sacre->chair)) ? $sacre->chair : null;
@@ -58,7 +57,8 @@ class ContactsImport extends Command
                     $sacreObject->contacts()->save($contact);
                 }
 
-                if( (!empty($sacre->clerk)) or (!empty($sacreObject->clerk_email)) or (!empty($sacreObject->clerk_tel)) ) {
+                // Create Clerk
+                if( (!empty(trim($sacre->clerk))) or (!empty(trim($sacre->clerk_email))) or (!empty(trim($sacre->clerk_tel))) ) {
                     $contact = new SacreContact();
                     $contact->position_id = 2;
                     $contact->name = (!empty($sacre->clerk)) ? $sacre->clerk : null;
@@ -67,7 +67,8 @@ class ContactsImport extends Command
                     $sacreObject->contacts()->save($contact);
                 }
 
-                if( (!empty($sacre->la_support)) or (!empty($sacreObject->la_role)) or (!empty($sacreObject->la_email)) ) {
+                // Create LA Support
+                if( (!empty(trim($sacre->la_support))) or (!empty(trim($sacre->la_role))) or (!empty(trim($sacre->la_email))) ) {
                     $contact = new SacreContact();
                     $contact->position_id = 3;
                     $contact->name = (!empty($sacre->la_support)) ? $sacre->la_support : null;
@@ -76,7 +77,8 @@ class ContactsImport extends Command
                     $sacreObject->contacts()->save($contact);
                 }
 
-                if( (!empty($sacre->adviser)) or (!empty($sacreObject->adviser_email)) ) {
+                // Create Advisor
+                if( (!empty(trim($sacre->adviser))) or (!empty(trim($sacre->adviser_email))) ) {
                     $contact = new SacreContact();
                     $contact->position_id = 4;
                     $contact->name = (!empty($sacre->adviser)) ? $sacre->adviser : null;
@@ -88,6 +90,8 @@ class ContactsImport extends Command
 
         }
 
-        return 'Contacts imported';
+        $this->info('Imported');
+
+        return 0;
     }
 }

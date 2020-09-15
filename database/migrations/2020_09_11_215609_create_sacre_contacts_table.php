@@ -17,7 +17,7 @@ class CreateSacreContactsTable extends Migration
             $table->id();
             $table->foreignId('sacre_id')->index();
             $table->foreignId('position_id')->index();
-            $table->string('name');
+            $table->string('name')->nullable($value = true);
             $table->string('email')->nullable($value = true);
             $table->string('tel')->nullable($value = true);
             $table->string('role_dscpn')->nullable($value = true);
