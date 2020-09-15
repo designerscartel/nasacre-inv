@@ -30,23 +30,21 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
         Route::post('/sacres/{sacre}/contacts', [\App\Http\Controllers\SacreContactController::class, 'store'])->name('sacre-contacts.store');
         Route::put('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'update'])->name('sacre-contacts.update');
+        Route::delete('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'destroy'])->name('sacre-contacts.destroy');
 
-
-
-
+        // Region
         Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
         Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.create');
         Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
         Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
 
-
+        // Position
         Route::get('/positions', [\App\Http\Controllers\ContactPositionController::class, 'index'])->name('positions.index');
         Route::post('/positions', [\App\Http\Controllers\ContactPositionController::class, 'store'])->name('positions.create');
         Route::get('/positions/create', [\App\Http\Controllers\ContactPositionController::class, 'create'])->name('positions.create');
         Route::get('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'show'])->name('positions.show');
         Route::put('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'update'])->name('positions.update');
-
 
     });
 });

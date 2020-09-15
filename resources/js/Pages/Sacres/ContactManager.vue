@@ -31,9 +31,9 @@
                                 Edit
                             </button>
 
-                            <!-- Remove Team Member -->
-                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none">
-                                Remove
+                            <!-- Delete Team Member -->
+                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"  @click="confirmContactDeletion(contact)">
+                                Delete
                             </button>
 
                         </div>
@@ -175,6 +175,28 @@
         </jet-dialog-modal>
 
 
+        <!-- Delete Contact Modal -->
+        <jet-confirmation-modal :show="contactBeingDeleted" @close="contactBeingDeleted = null">
+            <template #title v-if="contactBeingDeleted">
+                Delete SACRE contact
+            </template>
+
+            <template #content>
+                Are you sure you would like to delete this Contact?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="contactBeingDeleted = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-danger-button class="ml-2" @click.native="deleteContact" :class="{ 'opacity-25': deleteContact.processing }" :disabled="deleteContact.processing">
+                    Delete
+                </jet-danger-button>
+            </template>
+        </jet-confirmation-modal>
+
+
     </div>
 </template>
 
@@ -243,9 +265,13 @@
                     resetOnSuccess: true,
                 }),
 
+                deleteContactForm: this.$inertia.form(),
+
+
                 contactId: null,
                 showNewContactDialog: false,
-                showUpdateContactDialog: false
+                showUpdateContactDialog: false,
+                contactBeingDeleted: null
             }
         },
 
@@ -283,7 +309,20 @@
                 this.updateContactForm.position_id = contact.position_id
                 this.contactId = contact.id
                 this.showUpdateContactDialog = true
-            }
+            },
+
+            confirmContactDeletion(contact) {
+                this.contactBeingDeleted = contact
+            },
+
+            deleteContact() {
+                this.deleteContactForm.delete('/sacres/' + this.sacre.id + '/contacts/' + this.contactBeingDeleted.id, {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.contactBeingDeleted = null
+                })
+            },
         },
     }
 </script>

@@ -41,7 +41,7 @@ class Sacre extends Model
     {
         return $this->hasMany(SacreContact::class);
     }
-
+    
     /**
      * Return a Resource
      */

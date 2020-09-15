@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\SacreContact\UpdatesSacreContact;
+use App\Contracts\SacreContact\AddsSacreContact;
+use App\Actions\SacreContact\DeleteSacreContact;
 use App\Models\Sacre;
 use App\Models\SacreContact;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Contracts\SacreContact\AddsSacreContact;
 
 
 class SacreContactController extends Controller
@@ -25,16 +26,16 @@ class SacreContactController extends Controller
         //
         app(AddsSacreContact::class)->add($sacre, $request->all());
 
-        Return back(303);
+        return back(303);
     }
 
 
     /**
      * Update the given contacts details.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @param \App\Models\Sacre $sacre
-     * @param  int  $userId
+     * @param \App\Models\SacreContact $contact
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Sacre $sacre, SacreContact $contact)
@@ -44,5 +45,22 @@ class SacreContactController extends Controller
 
         return back(303);
     }
+
+    /**
+     * Delete the current user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Sacre $sacre
+     * @param \App\Models\SacreContact $contact
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request, Sacre $sacre, SacreContact $contact)
+    {
+        //
+        app(DeleteSacreContact::class)->delete($contact);
+
+        return back(303);
+    }
+
 
 }
