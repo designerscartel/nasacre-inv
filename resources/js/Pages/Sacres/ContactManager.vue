@@ -31,8 +31,9 @@
                                 Edit
                             </button>
 
-                            <!-- Delete Team Member -->
-                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"  @click="confirmContactDeletion(contact)">
+                            <!-- Delete Contact -->
+                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                                    @click="confirmContactDeletion(contact)">
                                 Delete
                             </button>
 
@@ -177,7 +178,7 @@
 
         <!-- Delete Contact Modal -->
         <jet-confirmation-modal :show="contactBeingDeleted" @close="contactBeingDeleted = null">
-            <template #title v-if="contactBeingDeleted">
+            <template #title>
                 Delete SACRE contact
             </template>
 
@@ -190,7 +191,9 @@
                     Nevermind
                 </jet-secondary-button>
 
-                <jet-danger-button class="ml-2" @click.native="deleteContact" :class="{ 'opacity-25': deleteContact.processing }" :disabled="deleteContact.processing">
+                <jet-danger-button class="ml-2" @click.native="deleteContact"
+                                   :class="{ 'opacity-25': deleteContactForm.processing }"
+                                   :disabled="deleteContactForm.processing">
                     Delete
                 </jet-danger-button>
             </template>

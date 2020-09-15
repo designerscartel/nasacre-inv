@@ -9,7 +9,8 @@
                 </h1>
 
                 <div class="md:w-1/6 text-right">
-                    <inertia-link href="/sacres/create" class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                    <inertia-link href="/sacres/create"
+                                  class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                         Create Sacre
                     </inertia-link>
                 </div>
@@ -17,9 +18,12 @@
             </div>
 
             <p class="mt-6 text-gray-500">
-                Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
-                to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
-                you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
+                Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel
+                is designed
+                to help you build your application using a development environment that is simple, powerful, and
+                enjoyable. We believe
+                you should love expressing your creativity through programming, so we have spent time carefully crafting
+                the Laravel
                 ecosystem to be a breath of fresh air. We hope you love it.
             </p>
 
@@ -40,23 +44,90 @@
                     <td class="border px-8 py-2">{{ sacre.title }}</td>
                     <td class="border px-4 py-2">{{ sacre.region.title }}</td>
                     <td class="border px-4 py-2">
-                        <inertia-link :href="'/sacres/'+ sacre.id" >
+                        <inertia-link class="text-sm" :href="'/sacres/'+ sacre.id">
                             Edit
                         </inertia-link>
+
+                        <!-- Delete Contact -->
+                        <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                                @click="confirmSacreDeletion(sacre)">
+                            Delete
+                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- Delete Sacre Modal -->
+        <jet-confirmation-modal :show="sacreBeingDeleted" @close="sacreBeingDeleted = null">
+            <template #title>
+                Delete SACRE
+            </template>
+
+            <template #content>
+                Are you sure you would like to delete this SACRE?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="sacreBeingDeleted = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-danger-button class="ml-2" @click.native="deleteSacre"
+                                   :class="{ 'opacity-25': deleteSacreForm.processing }"
+                                   :disabled="deleteSacreForm.processing">
+                    Delete
+                </jet-danger-button>
+            </template>
+        </jet-confirmation-modal>
+
     </div>
 </template>
 
 <script>
+    import JetConfirmationModal from './../../Jetstream/ConfirmationModal'
+    import JetActionMessage from "../../Jetstream/ActionMessage";
+    import JetActionSection from "../../Jetstream/ActionSection";
+    import JetButton from "../../Jetstream/Button";
+    import JetDangerButton from "../../Jetstream/DangerButton";
+    import JetSecondaryButton from "../../Jetstream/SecondaryButton";
+    import JetSectionBorder from "../../Jetstream/SectionBorder";
 
     export default {
+        components: {
+            JetActionMessage,
+            JetActionSection,
+            JetButton,
+            JetConfirmationModal,
+            JetDangerButton,
+            JetSecondaryButton,
+            JetSectionBorder,
+        },
         props: [
             'sacres',
         ],
+        data() {
+            return {
+                deleteSacreForm: this.$inertia.form(),
+                sacreBeingDeleted: null
+
+            }
+        },
+        methods: {
+
+            confirmSacreDeletion(contact) {
+                this.sacreBeingDeleted = contact
+            },
+
+            deleteSacre() {
+                this.deleteSacreForm.delete('/sacres/' + this.sacreBeingDeleted.id, {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.sacreBeingDeleted = null
+                })
+            },
+        },
     }
 </script>

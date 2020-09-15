@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Sacre\CreateSacreInformation;
+use App\Contracts\Sacre\DeletesSacre;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Models\Sacre;
 use App\Models\Region;
@@ -94,11 +95,16 @@ class SacreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \Illuminate\Http\Request $request
      * @param \App\Models\Sacre $sacre
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Sacres $sacre)
+    public function destroy(Request $request, Sacre $sacre)
     {
         //
+        app(DeletesSacre::class)->delete($sacre);
+
+        return back(303);
     }
+
 }

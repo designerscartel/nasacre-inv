@@ -47,7 +47,7 @@ class SacreContactController extends Controller
     }
 
     /**
-     * Delete the current user.
+     * Delete the current contact.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Sacre $sacre
