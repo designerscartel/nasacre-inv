@@ -21,22 +21,10 @@ class CampaignController extends Controller
     {
         //
         return Inertia::render('Campaigns/Dashboard', [
-            'Campaigns' => CampaignResource::collection($campaign::all())
+            'campaigns' => CampaignResource::collection($campaign::all())
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        return Inertia::render('Campaigns/Create', [
-            'Campaign' => null,
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,7 +37,7 @@ class CampaignController extends Controller
         //
         $campaign = app(CreateCampaignInformation::class)->create($request->all());
 
-        return redirect()->route('Campaigns.show', ['Campaign' => $campaign->id]);
+        return back(303);
     }
 
     /**
@@ -66,16 +54,6 @@ class CampaignController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Campaign $campaign
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Campaign $campaign)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
