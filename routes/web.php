@@ -24,7 +24,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/dashboard', [\App\Http\Controllers\DashbordController::class, 'index'])->name('dashboard');
 
         // Sacre
-        Route::post('/sacres', [\App\Http\Controllers\SacreController::class, 'store'])->name('sacres.create');
+        Route::post('/sacres', [\App\Http\Controllers\SacreController::class, 'store'])->name('sacres.store');
         Route::get('/sacres/create', [\App\Http\Controllers\SacreController::class, 'create'])->name('sacres.create');
         Route::get('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'show'])->name('sacres.show');
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
@@ -35,14 +35,22 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
         // Region
         Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
-        Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.create');
+        Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.store');
         Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
         Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
 
+        // Campaign
+        Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');
+        Route::post('/campaigns', [\App\Http\Controllers\CampaignController::class, 'store'])->name('campaigns.store');
+        Route::get('/campaigns/create', [\App\Http\Controllers\CampaignController::class, 'create'])->name('campaigns.create');
+        Route::get('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'show'])->name('campaigns.show');
+        Route::put('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'update'])->name('campaigns.update');
+
+
         // Position
         Route::get('/positions', [\App\Http\Controllers\ContactPositionController::class, 'index'])->name('positions.index');
-        Route::post('/positions', [\App\Http\Controllers\ContactPositionController::class, 'store'])->name('positions.create');
+        Route::post('/positions', [\App\Http\Controllers\ContactPositionController::class, 'store'])->name('positions.store');
         Route::get('/positions/create', [\App\Http\Controllers\ContactPositionController::class, 'create'])->name('positions.create');
         Route::get('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'show'])->name('positions.show');
         Route::put('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'update'])->name('positions.update');

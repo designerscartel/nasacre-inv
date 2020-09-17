@@ -2,26 +2,25 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                NASACRE Positions
+                NASACRE Campaigns
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-
                     <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
 
                         <div class="mt-8 md:flex">
 
                             <h1 class="text-2xl md:w-5/6">
-                                NASACRE Positions
+                                NASACRE Campaigns
                             </h1>
 
                             <div class="md:w-1/6 text-right">
-                                <inertia-link href="/positions/create"
+                                <inertia-link href="/campaigns/create"
                                               class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
-                                    Create position
+                                    Create campaign
                                 </inertia-link>
                             </div>
 
@@ -33,28 +32,27 @@
                         <table class="table-auto w-full">
                             <thead class="text-left">
                             <tr>
-                                <th class="px-8 py-2">Position</th>
+                                <th class="px-8 py-2">Campaign</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="positions == null">
-                                <td colspan="2" class="border px-8 py-2">No Positions</td>
-                            </tr>
-                            <template v-else>
-                                <tr v-if="positions" v-for="position in positions.data" :key="position.id">
-                                    <td class="border px-8 py-2">{{ position.title }}</td>
-                                    <td class="border px-4 py-2">
-                                        <inertia-link :href="'/positions/'+ position.id">
-                                            Edit
-                                        </inertia-link>
-                                    </td>
+                                <tr v-if="campaigns == null">
+                                    <td colspan="2" class="border px-8 py-2">No Campaigns</td>
                                 </tr>
-                            </template>
+                                <template v-else>
+                                    <tr v-for="campaign in campaigns.data" :key="campaign.id">
+                                        <td class="border px-8 py-2">{{ campaign.title }}</td>
+                                        <td class="border px-4 py-2">
+                                            <inertia-link :href="'/campaign/'+ campaign.id" >
+                                                Edit
+                                            </inertia-link>
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -66,7 +64,7 @@
 
     export default {
         props: [
-            'positions',
+            'campaigns',
         ],
         components: {
             AppLayout,

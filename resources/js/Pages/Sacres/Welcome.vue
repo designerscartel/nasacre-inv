@@ -40,21 +40,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="sacres" v-for="sacre in sacres" :key="sacre.id">
-                    <td class="border px-8 py-2">{{ sacre.title }}</td>
-                    <td class="border px-4 py-2">{{ sacre.region.title }}</td>
-                    <td class="border px-4 py-2">
-                        <inertia-link class="text-sm" :href="'/sacres/'+ sacre.id">
-                            Edit
-                        </inertia-link>
-
-                        <!-- Delete Contact -->
-                        <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
-                                @click="confirmSacreDeletion(sacre)">
-                            Delete
-                        </button>
-                    </td>
+                <tr v-if="sacres == null">
+                    <td colspan="3" class="border px-8 py-2">No SACRE'S</td>
                 </tr>
+                <template v-else>
+                    <tr v-if="sacres" v-for="sacre in sacres" :key="sacre.id">
+                        <td class="border px-8 py-2">{{ sacre.title }}</td>
+                        <td class="border px-4 py-2">{{ sacre.region.title }}</td>
+                        <td class="border px-4 py-2">
+                            <inertia-link class="text-sm" :href="'/sacres/'+ sacre.id">
+                                Edit
+                            </inertia-link>
+
+                            <!-- Delete Contact -->
+                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                                    @click="confirmSacreDeletion(sacre)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                </template>
                 </tbody>
             </table>
         </div>

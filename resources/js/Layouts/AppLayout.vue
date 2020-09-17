@@ -17,10 +17,13 @@
                             <jet-nav-link href="/dashboard" :active="$page.currentRouteName == 'dashboard'">
                                 Dashboard
                             </jet-nav-link>
-                            <jet-nav-link href="/regions" :active="$page.currentRouteName == 'regions.show'">
+                            <jet-nav-link href="/campaigns" :active="$page.currentRouteName == 'campaigns.index'">
+                                Campaigns
+                            </jet-nav-link>
+                            <jet-nav-link href="/regions" :active="$page.currentRouteName == 'regions.index'">
                                 Regions
                             </jet-nav-link>
-                            <jet-nav-link href="/positions" :active="$page.currentRouteName == 'positions.show'">
+                            <jet-nav-link href="/positions" :active="$page.currentRouteName == 'positions.index'">
                                 Positions
                             </jet-nav-link>
 

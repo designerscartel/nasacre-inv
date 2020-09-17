@@ -18,7 +18,8 @@
                             </h1>
 
                             <div class="md:w-1/6 text-right">
-                                <inertia-link href="/regions/create" class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                <inertia-link href="/regions/create"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                                     Create region
                                 </inertia-link>
                             </div>
@@ -36,17 +37,23 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="regions" v-for="region in regions.data" :key="region.id">
-                                <td class="border px-8 py-2">{{ region.title }}</td>
-                                <td class="border px-4 py-2">
-                                    <inertia-link :href="'/regions/'+ region.id" >
-                                        Edit
-                                    </inertia-link>
-                                </td>
+                            <tr v-if="regions == null">
+                                <td colspan="2" class="border px-8 py-2">No Regions</td>
                             </tr>
+                            <template v-else>
+                                <tr v-if="regions" v-for="region in regions.data" :key="region.id">
+                                    <td class="border px-8 py-2">{{ region.title }}</td>
+                                    <td class="border px-4 py-2">
+                                        <inertia-link :href="'/regions/'+ region.id">
+                                            Edit
+                                        </inertia-link>
+                                    </td>
+                                </tr>
+                            </template>
                             </tbody>
                         </table>
-                    </div>                </div>
+                    </div>
+                </div>
             </div>
         </div>
     </app-layout>

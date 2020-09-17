@@ -16,11 +16,15 @@ use App\Contracts\SacreContact\AddsSacreContact;
 use App\Contracts\SacreContact\UpdatesSacreContact;
 use App\Contracts\SacreContact\DeletesSacreContact;
 
-
 use App\Actions\Region\UpdateRegionInformation;
 use App\Actions\Region\CreateRegionInformation;
 use App\Contracts\Region\UpdatesRegionInformation;
 use App\Contracts\Region\CreatesRegionInformation;
+
+use App\Actions\Campaign\UpdateCampaignInformation;
+use App\Actions\Campaign\CreateCampaignInformation;
+use App\Contracts\Campaign\UpdatesCampaignInformation;
+use App\Contracts\Campaign\CreatesCampaignInformation;
 
 use App\Actions\ContactPosition\UpdateContactPositionInformation;
 use App\Actions\ContactPosition\CreateContactPositionInformation;
@@ -62,10 +66,11 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(UpdatesSacreContact::class, UpdateSacreContact::class);
         app()->singleton(DeletesSacreContact::class, DeleteSacreContact::class);
 
-
         app()->singleton(CreatesRegionInformation::class, CreateRegionInformation::class);
         app()->singleton(UpdatesRegionInformation::class, UpdateRegionInformation::class);
 
+        app()->singleton(CreatesCampaignInformation::class, CreateCampaignInformation::class);
+        app()->singleton(UpdatesCampaignInformation::class, UpdateCampaignInformation::class);
 
         app()->singleton(CreatesContactPositionInformation::class, CreateContactPositionInformation::class);
         app()->singleton(UpdatesContactPositionInformation::class, UpdateContactPositionInformation::class);

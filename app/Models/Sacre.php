@@ -35,7 +35,7 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the contacts the sacre belongs to.
+     * Get all of the contacts.
      */
     public function contacts()
     {
