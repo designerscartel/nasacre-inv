@@ -40,11 +40,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="sacres == null">
-                    <td colspan="3" class="border px-8 py-2">No SACRE'S</td>
-                </tr>
-                <template v-else>
-                    <tr v-if="sacres" v-for="sacre in sacres" :key="sacre.id">
+                <template v-if="sacres.data.length">
+                    <tr v-for="sacre in sacres.data" :key="sacre.id">
                         <td class="border px-8 py-2">{{ sacre.title }}</td>
                         <td class="border px-4 py-2">{{ sacre.region.title }}</td>
                         <td class="border px-4 py-2">
@@ -60,6 +57,10 @@
                         </td>
                     </tr>
                 </template>
+                <tr v-else>
+                    <td colspan="3" class="border px-8 py-2">No SACRE'S</td>
+                </tr>
+
                 </tbody>
             </table>
         </div>

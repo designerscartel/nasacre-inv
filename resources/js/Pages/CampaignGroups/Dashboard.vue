@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                NASACRE Campaigns
+                NASACRE Campaign Groups
             </h2>
         </template>
 
@@ -14,13 +14,13 @@
                         <div class="mt-8 md:flex">
 
                             <h1 class="text-2xl md:w-5/6">
-                                NASACRE Campaigns
+                                NASACRE Campaign Groups
                             </h1>
 
                             <div class="md:w-1/6 text-right">
                                 <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-                                        @click="addCampaignDialog">
-                                    Create campaign
+                                        @click="addGroupDialog">
+                                    Create group
                                 </button>
                             </div>
 
@@ -32,24 +32,28 @@
                         <table class="table-auto w-full">
                             <thead class="text-left">
                             <tr>
-                                <th class="px-8 py-2">Campaign</th>
+                                <th class="px-8 py-2">Group</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="campaigns == null">
-                                <td colspan="2" class="border px-8 py-2">No Campaigns</td>
-                            </tr>
-                            <template v-else>
-                                <tr v-for="campaign in campaigns.data" :key="campaign.id">
-                                    <td class="border px-8 py-2">{{ campaign.title }}</td>
+                            <template v-if="groups.data.length">
+                                <tr v-for="group in groups.data" :key="group.id">
+                                    <td class="border px-8 py-2">{{ group.title }}</td>
                                     <td class="border px-4 py-2">
-                                        <button class="text-sm" @click="updateCampaignDialog(campaign)">
+                                        <button class="text-sm mr-2" @click="updateGroupDialog(group)">
                                             Edit
                                         </button>
+
+                                        <inertia-link class="text-sm" :href="'/groups/'+ group.id">
+                                            Emails
+                                        </inertia-link>
                                     </td>
                                 </tr>
                             </template>
+                            <tr v-else>
+                                <td colspan="2" class="border px-8 py-2">No Groups</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -58,59 +62,59 @@
         </div>
 
 
-        <!-- New Campaign Modal -->
-        <jet-dialog-modal :show="showNewCampaignDialog" @close="showNewCampaignDialog = false">
+        <!-- New Group Modal -->
+        <jet-dialog-modal :show="showNewGroupDialog" @close="showNewGroupDialog = false">
             <template #title>
-                Add Campaign
+                Add Group
             </template>
 
             <template #content>
                 <!-- Title -->
                 <div class="mt-4">
                     <jet-label for="title" value="Title"/>
-                    <jet-input id="title" type="text" class="mt-1 block w-full" v-model="addCampaignForm.title"/>
-                    <jet-input-error :message="addCampaignForm.error('title')" class="mt-2"/>
+                    <jet-input id="title" type="text" class="mt-1 block w-full" v-model="addGroupForm.title"/>
+                    <jet-input-error :message="addGroupForm.error('title')" class="mt-2"/>
                 </div>
 
             </template>
 
             <template #footer>
-                <jet-secondary-button @click.native="showNewCampaignDialog = false">
+                <jet-secondary-button @click.native="showNewGroupDialog = false">
                     Nevermind
                 </jet-secondary-button>
 
-                <jet-button class="ml-2" @click.native="addCampaign" :class="{ 'opacity-25': addCampaignForm.processing }"
-                            :disabled="addCampaignForm.processing">
+                <jet-button class="ml-2" @click.native="addGroup" :class="{ 'opacity-25': addGroupForm.processing }"
+                            :disabled="addGroupForm.processing">
                     Save
                 </jet-button>
 
             </template>
         </jet-dialog-modal>
 
-        <!-- Update Campaign Modal -->
-        <jet-dialog-modal :show="showUpdateCampaignDialog" @close="showUpdateCampaignDialog = false">
+        <!-- Update Group Modal -->
+        <jet-dialog-modal :show="showUpdateGroupDialog" @close="showUpdateGroupDialog = false">
             <template #title>
-                Update Campaign
+                Update Group
             </template>
 
             <template #content>
                 <!-- Title -->
                 <div class="mt-4">
                     <jet-label for="title" value="Title"/>
-                    <jet-input id="title" type="text" class="mt-1 block w-full" v-model="updateCampaignForm.title"/>
-                    <jet-input-error :message="updateCampaignForm.error('title')" class="mt-2"/>
+                    <jet-input id="title" type="text" class="mt-1 block w-full" v-model="updateGroupForm.title"/>
+                    <jet-input-error :message="updateGroupForm.error('title')" class="mt-2"/>
                 </div>
 
             </template>
 
             <template #footer>
-                <jet-secondary-button @click.native="showUpdateCampaignDialog = false">
+                <jet-secondary-button @click.native="showUpdateGroupDialog = false">
                     Nevermind
                 </jet-secondary-button>
 
-                <jet-button class="ml-2" @click.native="updateCampaign"
-                            :class="{ 'opacity-25': showUpdateCampaignDialog.processing }"
-                            :disabled="showUpdateCampaignDialog.processing">
+                <jet-button class="ml-2" @click.native="updateGroup"
+                            :class="{ 'opacity-25': showUpdateGroupDialog.processing }"
+                            :disabled="showUpdateGroupDialog.processing">
                     Save
                 </jet-button>
 
@@ -138,7 +142,7 @@
 
     export default {
         props: [
-            'campaigns',
+            'groups',
         ],
         components: {
             AppLayout,
@@ -158,54 +162,54 @@
         },
         data() {
             return {
-                addCampaignForm: this.$inertia.form({
+                addGroupForm: this.$inertia.form({
                     title: '',
                 }, {
-                    bag: 'addCampaignForm',
+                    bag: 'addGroupForm',
                     resetOnSuccess: true,
                 }),
 
-                updateCampaignForm: this.$inertia.form({
+                updateGroupForm: this.$inertia.form({
                     title: '',
                 }, {
-                    bag: 'updateCampaignForm',
+                    bag: 'updateGroupForm',
                     resetOnSuccess: true,
                 }),
 
                 contactId: null,
-                showNewCampaignDialog: false,
-                showUpdateCampaignDialog: false,
+                showNewGroupDialog: false,
+                showUpdateGroupDialog: false,
             }
         },
         methods: {
-            addCampaign() {
-                this.addCampaignForm.post('/campaigns', {
+            addGroup() {
+                this.addGroupForm.post('/groups', {
                     preserveScroll: true
                 }).then(() => {
-                    this.showNewCampaignDialog = false
-                    if (!this.addCampaignForm.hasErrors()) {
-                        this.showNewCampaignDialog = false
+                    this.showNewGroupDialog = false
+                    if (!this.addGroupForm.hasErrors()) {
+                        this.showNewGroupDialog = false
                     }
                 })
             },
-            addCampaignDialog() {
-                this.showNewCampaignDialog = true
+            addGroupDialog() {
+                this.showNewGroupDialog = true
             },
-            updateCampaign() {
-                this.updateCampaignForm.put('/campaigns/' + this.campaignId, {
+            updateGroup() {
+                this.updateGroupForm.put('/groups/' + this.groupId, {
                     preserveScroll: true
                 }).then(() => {
-                    this.campaignId = null;
-                    if (!this.updateCampaignForm.hasErrors()) {
-                        this.showUpdateCampaignDialog = false
+                    this.groupId = null;
+                    if (!this.updateGroupForm.hasErrors()) {
+                        this.showUpdateGroupDialog = false
                     }
                 })
             },
-            updateCampaignDialog(campaign) {
-                this.updateCampaignForm.id = campaign.id
-                this.updateCampaignForm.title = campaign.title
-                this.campaignId = campaign.id
-                this.showUpdateCampaignDialog = true
+            updateGroupDialog(group) {
+                this.updateGroupForm.id = group.id
+                this.updateGroupForm.title = group.title
+                this.groupId = group.id
+                this.showUpdateGroupDialog = true
             },
         }
     }

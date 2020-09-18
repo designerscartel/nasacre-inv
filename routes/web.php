@@ -40,12 +40,11 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
 
-        // Campaign
-        Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');
-        Route::post('/campaigns', [\App\Http\Controllers\CampaignController::class, 'store'])->name('campaigns.store');
-        //Route::get('/campaigns/create', [\App\Http\Controllers\CampaignController::class, 'create'])->name('campaigns.create');
-        Route::get('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'show'])->name('campaigns.show');
-        Route::put('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'update'])->name('campaigns.update');
+        // CampaignGroups
+        Route::get('/groups', [\App\Http\Controllers\CampaignGroupController::class, 'index'])->name('groups.index');
+        Route::post('/groups', [\App\Http\Controllers\CampaignGroupController::class, 'store'])->name('groups.store');
+        Route::get('/groups/{campaignGroup}', [\App\Http\Controllers\CampaignGroupController::class, 'show'])->name('groups.show');
+        Route::put('/groups/{campaignGroup}', [\App\Http\Controllers\CampaignGroupController::class, 'update'])->name('groups.update');
 
 
         // Position

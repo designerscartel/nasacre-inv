@@ -37,10 +37,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="regions == null">
-                                <td colspan="2" class="border px-8 py-2">No Regions</td>
-                            </tr>
-                            <template v-else>
+                            <template v-if="regions.data.length">
                                 <tr v-if="regions" v-for="region in regions.data" :key="region.id">
                                     <td class="border px-8 py-2">{{ region.title }}</td>
                                     <td class="border px-4 py-2">
@@ -50,6 +47,10 @@
                                     </td>
                                 </tr>
                             </template>
+                            <tr v-else>
+                                <td colspan="2" class="border px-8 py-2">No Regions</td>
+                            </tr>
+
                             </tbody>
                         </table>
                     </div>

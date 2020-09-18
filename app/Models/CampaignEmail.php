@@ -24,7 +24,7 @@ class CampaignEmail extends Model
      */
     public function campaign()
     {
-        return $this->belongsTo(Campaign::class, 'campaign_id');
+        return $this->belongsTo(CampaignGroup::class, 'campaign_group_id');
     }
 
     /**

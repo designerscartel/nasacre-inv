@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Actions\Campaign;
+namespace App\Actions\CampaignGroup;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use App\Contracts\Campaign\UpdatesCampaignInformation;
+use App\Contracts\CampaignGroup\UpdatesCampaignGroupInformation;
 
-class UpdateCampaignInformation implements UpdatesCampaignInformation
+class UpdateCampaignGroupInformation implements UpdatesCampaignGroupInformation
 {
     /**
      * Validate and update the given Campaign's information.
      *
-     * @param  mixed  $Campaign
+     * @param  mixed  $campaignGroup
      * @param  array  $input
      * @return void
      */
-    public function update($Campaign, array $input)
+    public function update($campaignGroup, array $input)
     {
         Validator::make($input, [
             'title' => ['required', 'string', 'max:255'],
-        ])->validateWithBag('updateCampaignInformation');
+        ])->validateWithBag('updateCampaignGroupInformation');
 
-        $Campaign->fill([
+        $campaignGroup->fill([
             'title' => $input['title'],
         ])->save();
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contracts\Campaign;
+namespace App\Contracts\CampaignGroup;
 
-interface UpdatesCampaignInformation
+interface UpdatesCampaignGroupInformation
 {
     /**
      * Validate and update the given Campaign's information.

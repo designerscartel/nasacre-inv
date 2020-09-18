@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CampaignResource extends JsonResource
+class CampaignGroupResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,6 +19,7 @@ class CampaignResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'emails' => \App\Http\Resources\CampaignEmailResource::collection($this->emails),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Campaign extends Model
+class CampaignGroup extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -32,6 +32,6 @@ class Campaign extends Model
      */
     public function toResource()
     {
-        return new \App\Http\Resources\CampaignResource($this);
+        return new \App\Http\Resources\CampaignGroupResource($this);
     }
 }

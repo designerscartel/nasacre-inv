@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\Campaign;
+namespace App\Actions\CampaignGroup;
 
-use App\Models\Campaign;
+use App\Models\CampaignGroup;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use App\Contracts\Campaign\CreatesCampaignInformation;
+use App\Contracts\CampaignGroup\CreatesCampaignGroupInformation;
 
-class CreateCampaignInformation implements CreatesCampaignInformation
+class CreateCampaignGroupInformation implements CreatesCampaignGroupInformation
 {
     /**
      * Validate and Create the given Campaign's information.
@@ -19,11 +19,11 @@ class CreateCampaignInformation implements CreatesCampaignInformation
     {
         Validator::make($input, [
             'title' => ['required', 'string', 'max:255'],
-        ])->validateWithBag('createCampaignInformation');
+        ])->validateWithBag('createCampaignGroupInformation');
 
-        $Campaign = new Campaign();
+        $campaignGroup = new CampaignGroup();
 
-        return $Campaign->create([
+        return $campaignGroup->create([
             'title' => $input['title'],
         ]);
 

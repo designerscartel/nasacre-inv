@@ -15,7 +15,7 @@ class CreateCampaignEmailsTable extends Migration
     {
         Schema::create('campaign_emails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('campaign_id')->index();
+            $table->foreignId('campaign_group_id')->index();
             $table->string('name');
             $table->string('email');
             $table->timestamps();

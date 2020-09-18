@@ -38,10 +38,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="positions == null">
-                                <td colspan="2" class="border px-8 py-2">No Positions</td>
-                            </tr>
-                            <template v-else>
+                            <template v-if="positions.data.length">
                                 <tr v-if="positions" v-for="position in positions.data" :key="position.id">
                                     <td class="border px-8 py-2">{{ position.title }}</td>
                                     <td class="border px-4 py-2">
@@ -51,6 +48,9 @@
                                     </td>
                                 </tr>
                             </template>
+                            <tr v-else>
+                                <td colspan="2" class="border px-8 py-2">No Positions</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
