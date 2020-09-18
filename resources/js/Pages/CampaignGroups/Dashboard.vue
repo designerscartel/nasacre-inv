@@ -191,7 +191,7 @@
                     resetOnSuccess: true,
                 }),
 
-                contactId: null,
+                groupId: null,
                 showNewGroupDialog: false,
                 showUpdateGroupDialog: false,
             }

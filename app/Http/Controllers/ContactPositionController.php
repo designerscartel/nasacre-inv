@@ -47,9 +47,9 @@ class ContactPositionController extends Controller
     public function store(Request $request)
     {
         //
-        $contactPosition = app(CreatesContactPositionInformation::class)->create($request->all());
+        app(CreatesContactPositionInformation::class)->create($request->all());
 
-        return redirect()->route('positions.show', ['contactPosition' => $contactPosition->id]);
+        return back(303);
     }
 
     /**

@@ -47,9 +47,9 @@ class RegionController extends Controller
     public function store(Request $request)
     {
         //
-        $region = app(CreateRegionInformation::class)->create($request->all());
+        app(CreateRegionInformation::class)->create($request->all());
 
-        return redirect()->route('regions.show', ['region' => $region->id]);
+        return back(303);
     }
 
     /**
