@@ -17,11 +17,19 @@
                                 NASACRE Campaigns
                             </h1>
 
-                            <div class="md:w-1/6 text-right">
+
+                            <div class="md:w-2/6 text-right">
+
+                                <inertia-link href="/groups"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150 mr-2">
+                                    Campaign Groups
+                                </inertia-link>
+
                                 <inertia-link href="/campaigns/create"
                                               class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                                     Create campaign
                                 </inertia-link>
+
                             </div>
 
                         </div>
@@ -41,7 +49,7 @@
                                 <tr v-if="campaigns" v-for="campaign in campaigns.data" :key="campaign.id">
                                     <td class="border px-8 py-2">{{ campaign.subject }}</td>
                                     <td class="border px-4 py-2">
-                                        <inertia-link :href="'/campaigns/'+ campaign.id">
+                                        <inertia-link class="text-sm" :href="'/campaigns/'+ campaign.id">
                                             Edit
                                         </inertia-link>
                                     </td>
@@ -54,6 +62,22 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
+
+                        <div class="md:flex md:justify-end">
+
+                            <div class="md:w-1/6 text-right">
+                                <inertia-link href="/campaigns/create"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                    Create campaign
+                                </inertia-link>
+                            </div>
+
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

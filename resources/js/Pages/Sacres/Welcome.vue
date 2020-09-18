@@ -65,6 +65,22 @@
             </table>
         </div>
 
+        <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
+
+            <div class="md:flex md:justify-end">
+
+                <div class="md:w-1/6 text-right">
+                    <inertia-link href="/sacres/create"
+                                  class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                        Create Sacre
+                    </inertia-link>
+                </div>
+
+            </div>
+        </div>
+
+
+
         <!-- Delete Sacre Modal -->
         <jet-confirmation-modal :show="sacreBeingDeleted" @close="sacreBeingDeleted = null">
             <template #title>

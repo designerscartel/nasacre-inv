@@ -18,7 +18,7 @@
                             </h1>
 
                             <div class="md:w-1/6 text-right">
-                                <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
+                                <button class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
                                         @click="addGroupDialog">
                                     Create group
                                 </button>
@@ -57,6 +57,21 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
+
+                        <div class="md:flex md:justify-end">
+
+                            <div class="md:w-1/6 text-right">
+                                <button class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
+                                        @click="addGroupDialog">
+                                    Create group
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

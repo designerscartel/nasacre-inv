@@ -41,7 +41,7 @@
                                 <tr v-if="regions" v-for="region in regions.data" :key="region.id">
                                     <td class="border px-8 py-2">{{ region.title }}</td>
                                     <td class="border px-4 py-2">
-                                        <inertia-link :href="'/regions/'+ region.id">
+                                        <inertia-link class="text-sm" :href="'/regions/'+ region.id">
                                             Edit
                                         </inertia-link>
                                     </td>
@@ -54,6 +54,21 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
+
+                        <div class="md:flex md:justify-end">
+
+                            <div class="md:w-1/6 text-right">
+                                <inertia-link href="/regions/create"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                    Create region
+                                </inertia-link>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

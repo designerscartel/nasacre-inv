@@ -42,7 +42,7 @@
                                 <tr v-if="positions" v-for="position in positions.data" :key="position.id">
                                     <td class="border px-8 py-2">{{ position.title }}</td>
                                     <td class="border px-4 py-2">
-                                        <inertia-link :href="'/positions/'+ position.id">
+                                        <inertia-link class="text-sm" :href="'/positions/'+ position.id">
                                             Edit
                                         </inertia-link>
                                     </td>
@@ -53,6 +53,20 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
+
+                        <div class="md:flex md:justify-end">
+
+                            <div class="md:w-1/6 text-right">
+                                <inertia-link href="/positions/create"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                    Create position
+                                </inertia-link>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
