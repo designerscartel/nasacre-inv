@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CampaignEmail extends Model
+class Campaign extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -16,7 +16,11 @@ class CampaignEmail extends Model
      */
     protected $fillable = [
         'id',
-        'title',
+        'campaign_group_id',
+        'email',
+        'subject' ,
+        'url',
+        'message'
     ];
 
     /**
@@ -24,7 +28,7 @@ class CampaignEmail extends Model
      */
     public function group()
     {
-        return $this->belongsTo(CampaignGroup::class, 'campaign_group_id');
+        return $this->belongsTo(CampaignGroup::class);
     }
 
     /**
@@ -32,6 +36,6 @@ class CampaignEmail extends Model
      */
     public function toResource()
     {
-        return new \App\Http\Resources\RegionResource($this);
+        return new \App\Http\Resources\CampaignResource($this);
     }
 }
