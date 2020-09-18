@@ -35,6 +35,7 @@
                 <thead class="text-left">
                 <tr>
                     <th class="px-8 py-2">Sacre</th>
+                    <th class="px-4 py-2">Member</th>
                     <th class="px-4 py-2">Region</th>
                     <th class="px-4 py-2">Actions</th>
                 </tr>
@@ -43,13 +44,16 @@
                 <template v-if="sacres.data.length">
                     <tr v-for="sacre in sacres.data" :key="sacre.id">
                         <td class="border px-8 py-2">{{ sacre.title }}</td>
+                        <td class="border px-4 py-2">
+                            <span v-if="sacre.member"
+                                  class="bg-green-500 text-white text-xs px-2 py-1 inline-block rounded-full">Member</span>
+                            <span v-else class="bg-gray-200 text-gray-600 text-xs px-2 py-1 inline-block rounded-full">Paused</span>
+                        </td>
                         <td class="border px-4 py-2">{{ sacre.region.title }}</td>
                         <td class="border px-4 py-2">
                             <inertia-link class="text-sm" :href="'/sacres/'+ sacre.id">
                                 Edit
                             </inertia-link>
-
-                            <!-- Delete Contact -->
                             <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
                                     @click="confirmSacreDeletion(sacre)">
                                 Delete
@@ -78,7 +82,6 @@
 
             </div>
         </div>
-
 
 
         <!-- Delete Sacre Modal -->
