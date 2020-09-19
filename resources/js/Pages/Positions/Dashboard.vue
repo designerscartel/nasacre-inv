@@ -199,7 +199,6 @@
                 this.addPositionForm.post('/positions', {
                     preserveScroll: true
                 }).then(() => {
-                    this.showNewPositionDialog = false
                     if (!this.addPositionForm.hasErrors()) {
                         this.showNewPositionDialog = false
                     }

@@ -34,4 +34,17 @@ class CampaignGroup extends Model
     {
         return new \App\Http\Resources\CampaignGroupResource($this);
     }
+
+    /**
+     * Boot Function
+     */
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($campaignGroup) { // before delete() method call this
+            $campaignGroup->emails()->each(function ($email) {
+                $email->delete(); // <-- direct deletion
+            });
+        });
+    }
 }

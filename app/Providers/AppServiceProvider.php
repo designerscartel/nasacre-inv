@@ -28,8 +28,17 @@ use App\Contracts\Campaign\CreatesCampaignInformation;
 
 use App\Actions\CampaignGroup\UpdateCampaignGroupInformation;
 use App\Actions\CampaignGroup\CreateCampaignGroupInformation;
+use App\Actions\CampaignGroup\DeleteCampaignGroup;
 use App\Contracts\CampaignGroup\UpdatesCampaignGroupInformation;
 use App\Contracts\CampaignGroup\CreatesCampaignGroupInformation;
+use App\Contracts\CampaignGroup\DeletesCampaignGroup;
+
+use App\Actions\CampaignEmail\UpdateCampaignEmailInformation;
+use App\Actions\CampaignEmail\CreateCampaignEmailInformation;
+use App\Actions\CampaignEmail\DeleteCampaignEmail;
+use App\Contracts\CampaignEmail\UpdatesCampaignEmailInformation;
+use App\Contracts\CampaignEmail\CreatesCampaignEmailInformation;
+use App\Contracts\CampaignEmail\DeletesCampaignEmail;
 
 use App\Actions\ContactPosition\UpdateContactPositionInformation;
 use App\Actions\ContactPosition\CreateContactPositionInformation;
@@ -79,6 +88,12 @@ class AppServiceProvider extends ServiceProvider
 
         app()->singleton(CreatesCampaignGroupInformation::class, CreateCampaignGroupInformation::class);
         app()->singleton(UpdatesCampaignGroupInformation::class, UpdateCampaignGroupInformation::class);
+        app()->singleton(DeletesCampaignGroup::class, DeleteCampaignGroup::class);
+
+
+        app()->singleton(CreatesCampaignEmailInformation::class, CreateCampaignEmailInformation::class);
+        app()->singleton(UpdatesCampaignEmailInformation::class, UpdateCampaignEmailInformation::class);
+        app()->singleton(DeletesCampaignEmail::class, DeleteCampaignEmail::class);
 
         app()->singleton(CreatesContactPositionInformation::class, CreateContactPositionInformation::class);
         app()->singleton(UpdatesContactPositionInformation::class, UpdateContactPositionInformation::class);

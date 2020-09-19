@@ -200,7 +200,6 @@
                 this.addRegionForm.post('/regions', {
                     preserveScroll: true
                 }).then(() => {
-                    this.showNewRegionDialog = false
                     if (!this.addRegionForm.hasErrors()) {
                         this.showNewRegionDialog = false
                     }

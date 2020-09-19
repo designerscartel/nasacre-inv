@@ -16,7 +16,9 @@ class CampaignEmail extends Model
      */
     protected $fillable = [
         'id',
-        'title',
+        'campaign_group_id',
+        'name',
+        'email'
     ];
 
     /**

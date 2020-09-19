@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CampaignGroup\CreateCampaignGroupInformation;
+use App\Actions\CampaignGroup\DeleteCampaignGroup;
 use App\Contracts\CampaignGroup\UpdatesCampaignGroupInformation;
 use App\Models\CampaignGroup;
 use App\Http\Resources\CampaignGroupResource;
@@ -75,8 +76,11 @@ class CampaignGroupController extends Controller
      * @param \App\Models\CampaignGroup $campaignGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Campaigns $campaignGroup)
+    public function destroy(CampaignGroup $campaignGroup)
     {
         //
+        app(DeleteCampaignGroup::class)->delete($campaignGroup);
+
+        return back(303);
     }
 }

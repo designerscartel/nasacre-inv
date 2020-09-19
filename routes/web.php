@@ -52,7 +52,10 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::post('/groups', [\App\Http\Controllers\CampaignGroupController::class, 'store'])->name('groups.store');
         Route::get('/groups/{campaignGroup}', [\App\Http\Controllers\CampaignGroupController::class, 'show'])->name('groups.show');
         Route::put('/groups/{campaignGroup}', [\App\Http\Controllers\CampaignGroupController::class, 'update'])->name('groups.update');
-
+        Route::delete('/groups/{campaignGroup}', [\App\Http\Controllers\CampaignGroupController::class, 'destroy'])->name('groups.destroy');
+        Route::post('/groups/{campaignGroup}/emails', [\App\Http\Controllers\CampaignEmailController::class, 'store'])->name('group-emails.store');
+        Route::put('/groups/{campaignGroup}/emails/{campaignEmail}', [\App\Http\Controllers\CampaignEmailController::class, 'update'])->name('group-emails.update');
+        Route::delete('/groups/{campaignGroup}/emails/{campaignEmail}', [\App\Http\Controllers\CampaignEmailController::class, 'destroy'])->name('group-emails.destroy');
 
         // Position
         Route::get('/positions', [\App\Http\Controllers\ContactPositionController::class, 'index'])->name('positions.index');

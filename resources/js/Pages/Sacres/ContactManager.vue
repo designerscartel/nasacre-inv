@@ -284,7 +284,6 @@
                 this.addContactForm.post('/sacres/' + this.sacre.id + '/contacts', {
                     preserveScroll: true
                 }).then(() => {
-                    this.showNewContactDialog = false
                     if (!this.addContactForm.hasErrors()) {
                         this.showNewContactDialog = false
                     }

@@ -45,9 +45,15 @@
                                             Edit
                                         </button>
 
-                                        <inertia-link class="text-sm" :href="'/groups/'+ group.id">
+                                        <inertia-link class="text-sm mr-2" :href="'/groups/'+ group.id">
                                             Emails
                                         </inertia-link>
+
+                                        <!-- Delete Group -->
+                                        <button class="cursor-pointer text-sm text-red-500 focus:outline-none"
+                                                @click="confirmGroupDeletion(group)">
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
@@ -136,6 +142,30 @@
             </template>
         </jet-dialog-modal>
 
+
+        <!-- Delete Group Modal -->
+        <jet-confirmation-modal :show="groupBeingDeleted" @close="groupBeingDeleted = null">
+            <template #title>
+                Delete Group
+            </template>
+
+            <template #content>
+                Are you sure you would like to delete this group?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="groupBeingDeleted = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-danger-button class="ml-2" @click.native="deleteGroup"
+                                   :class="{ 'opacity-25': deleteGroupForm.processing }"
+                                   :disabled="deleteGroupForm.processing">
+                    Delete
+                </jet-danger-button>
+            </template>
+        </jet-confirmation-modal>
+
     </app-layout>
 </template>
 
@@ -191,9 +221,12 @@
                     resetOnSuccess: true,
                 }),
 
+                deleteGroupForm: this.$inertia.form(),
+
                 groupId: null,
                 showNewGroupDialog: false,
                 showUpdateGroupDialog: false,
+                groupBeingDeleted: null
             }
         },
         methods: {
@@ -225,6 +258,19 @@
                 this.updateGroupForm.title = group.title
                 this.groupId = group.id
                 this.showUpdateGroupDialog = true
+            },
+
+            confirmGroupDeletion(group) {
+                this.groupBeingDeleted = group
+            },
+
+            deleteGroup() {
+                this.deleteGroupForm.delete('/groups/' +  this.groupBeingDeleted.id, {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.groupBeingDeleted = null
+                })
             },
         }
     }

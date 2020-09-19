@@ -62,7 +62,7 @@
                     </tr>
                 </template>
                 <tr v-else>
-                    <td colspan="3" class="border px-8 py-2">No SACRE'S</td>
+                    <td colspan="4" class="border px-8 py-2">No SACRE'S</td>
                 </tr>
 
                 </tbody>
