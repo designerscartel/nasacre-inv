@@ -49,9 +49,16 @@
                                 <tr v-if="campaigns" v-for="campaign in campaigns.data" :key="campaign.id">
                                     <td class="border px-8 py-2">{{ campaign.subject }}</td>
                                     <td class="border px-4 py-2">
-                                        <inertia-link class="text-sm" :href="'/campaigns/'+ campaign.id">
+                                        <inertia-link class="text-sm mr-2" :href="'/campaigns/'+ campaign.id">
                                             Edit
                                         </inertia-link>
+
+                                        <!-- Send Campaign -->
+                                        <button class="cursor-pointer text-sm text-green-500 focus:outline-none"
+                                                @click="confirmCampaignSend(campaign)">
+                                            Send
+                                        </button>
+
                                     </td>
                                 </tr>
                             </template>
@@ -81,11 +88,49 @@
                 </div>
             </div>
         </div>
+
+        <!-- Send Campaign Modal -->
+        <jet-dialog-modal :show="campaignBeingSent" @close="campaignBeingSent = null">
+            <template #title>
+                Send Campaign
+            </template>
+
+            <template #content>
+                Are you sure you would like to send this campaign?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="campaignBeingSent = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-confirm-button class="ml-2" @click.native="sendCampaign"
+                                   :class="{ 'opacity-25': sendCampaignForm.processing }"
+                                   :disabled="sendCampaignForm.processing">
+                    Send
+                </jet-confirm-button>
+            </template>
+        </jet-dialog-modal>
+
     </app-layout>
 </template>
 
 <script>
     import AppLayout from './../../Layouts/AppLayout'
+    import JetActionMessage from './../../Jetstream/ActionMessage'
+    import JetActionSection from './../../Jetstream/ActionSection'
+    import JetButton from './../../Jetstream/Button'
+    import JetConfirmationModal from './../../Jetstream/ConfirmationModal'
+    import JetDangerButton from './../../Jetstream/DangerButton'
+    import JetConfirmButton from './../../Jetstream/ConfirmButton'
+    import JetDialogModal from './../../Jetstream/DialogModal'
+    import JetFormSection from './../../Jetstream/FormSection'
+    import JetInput from './../../Jetstream/Input'
+    import JetSelect from './../../Jetstream/Select'
+    import JetInputError from './../../Jetstream/InputError'
+    import JetLabel from './../../Jetstream/Label'
+    import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import JetSectionBorder from './../../Jetstream/SectionBorder'
 
     export default {
         props: [
@@ -93,6 +138,49 @@
         ],
         components: {
             AppLayout,
+            JetActionMessage,
+            JetActionSection,
+            JetButton,
+            JetConfirmationModal,
+            JetDangerButton,
+            JetConfirmButton,
+            JetDialogModal,
+            JetFormSection,
+            JetInput,
+            JetSelect,
+            JetInputError,
+            JetLabel,
+            JetSecondaryButton,
+            JetSectionBorder,
         },
+        data() {
+            return {
+
+                sendCampaignForm: this.$inertia.form({
+                    send: '',
+                }, {
+                    bag: 'sendCampaignInformation',
+                    resetOnSuccess: true,
+                }),
+
+                campaignId: null,
+                campaignBeingSent: null
+            }
+        },
+        methods: {
+            confirmCampaignSend(campaign) {
+                this.sendCampaignForm.send = true
+                this.campaignBeingSent = campaign
+            },
+
+            sendCampaign() {
+                this.sendCampaignForm.post('/campaigns/' +  this.campaignBeingSent.id + '/send', {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.campaignBeingSent = null
+                })
+            },
+        }
     }
 </script>

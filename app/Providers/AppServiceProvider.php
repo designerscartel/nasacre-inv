@@ -23,8 +23,10 @@ use App\Contracts\Region\CreatesRegionInformation;
 
 use App\Actions\Campaign\UpdateCampaignInformation;
 use App\Actions\Campaign\CreateCampaignInformation;
+use App\Actions\Campaign\SendCampaignInformation;
 use App\Contracts\Campaign\UpdatesCampaignInformation;
 use App\Contracts\Campaign\CreatesCampaignInformation;
+use App\Contracts\Campaign\SendsCampaignInformation;
 
 use App\Actions\CampaignGroup\UpdateCampaignGroupInformation;
 use App\Actions\CampaignGroup\CreateCampaignGroupInformation;
@@ -85,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
 
         app()->singleton(CreatesCampaignInformation::class, CreateCampaignInformation::class);
         app()->singleton(UpdatesCampaignInformation::class, UpdateCampaignInformation::class);
+        app()->singleton(SendsCampaignInformation::class, SendCampaignInformation::class);
 
         app()->singleton(CreatesCampaignGroupInformation::class, CreateCampaignGroupInformation::class);
         app()->singleton(UpdatesCampaignGroupInformation::class, UpdateCampaignGroupInformation::class);

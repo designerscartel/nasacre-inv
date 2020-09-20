@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Campaign\CreateCampaignInformation;
+use App\Contracts\Campaign\SendsCampaignInformation;
 use App\Contracts\Campaign\UpdatesCampaignInformation;
 use App\Models\Campaign;
 use App\Models\CampaignGroup;
@@ -93,6 +94,22 @@ class CampaignController extends Controller
 
         return back(303);
     }
+
+
+    /**
+     * Send the specified resource in storage
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Campaign $campaign
+     * @return \Illuminate\Http\Response
+     */
+    public function Send(Request $request, Campaign $campaign)
+    {
+        app(SendsCampaignInformation::class)->send($campaign, $request->all());
+
+        return back(303);
+    }
+
 
     /**
      * Remove the specified resource from storage.
