@@ -20,14 +20,22 @@ class SendCampaignInformation implements SendsCampaignInformation
     public function send($campaign, array $input)
     {
 
-
         Validator::make($input, [
             'send' => ['required'],
         ])->validateWithBag('sendCampaignInformation');
 
-        $details = ['email' => 'recipient@example.com'];
-        SendCampaign::dispatch($details);
+        if(!empty($campaign->group->emails)){
 
+            foreach($campaign->group->emails as $email) {
+
+                $details = [
+                    'campaign' => $campaign,
+                    'email' => $email
+                ];
+
+                SendCampaign::dispatch($details);
+            }
+        }
 
     }
 }

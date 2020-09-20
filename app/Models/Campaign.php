@@ -28,7 +28,7 @@ class Campaign extends Model
      */
     public function group()
     {
-        return $this->belongsTo(CampaignGroup::class);
+        return $this->belongsTo(CampaignGroup::class, 'campaign_group_id');
     }
 
     /**

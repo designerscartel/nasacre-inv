@@ -105,6 +105,7 @@ class CampaignController extends Controller
      */
     public function Send(Request $request, Campaign $campaign)
     {
+        //
         app(SendsCampaignInformation::class)->send($campaign, $request->all());
 
         return back(303);

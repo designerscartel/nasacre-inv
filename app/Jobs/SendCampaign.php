@@ -33,7 +33,7 @@ class SendCampaign implements ShouldQueue
      */
     public function handle()
     {
-        $email = new CampaignForQueuing();
-        Mail::to($this->details['email'])->send($email);
+        $email = new CampaignForQueuing($this->details['campaign'], $this->details['email']);
+        Mail::to($this->details['email']->email)->send($email);
     }
 }
