@@ -34,11 +34,11 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::delete('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'destroy'])->name('sacre-contacts.destroy');
 
         // Region
-        Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
-        Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.store');
-        Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
-        Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
-        Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
+        Route::get('/invoices', [\App\Http\Controllers\RegionController::class, 'index'])->name('invoices.index');
+        Route::post('/invoices', [\App\Http\Controllers\RegionController::class, 'store'])->name('invoices.store');
+        Route::get('/invoices/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('invoices.create');
+        Route::get('/invoices/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('invoices.show');
+        Route::put('/invoices/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('invoices.update');
 
         // Campaign
         Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');
@@ -48,8 +48,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'show'])->name('campaigns.show');
         Route::put('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'update'])->name('campaigns.update');
         Route::post('/campaigns/{campaign}/send', [\App\Http\Controllers\CampaignController::class, 'send'])->name('campaigns.send');
-
-
+        
         // CampaignGroups
         Route::get('/groups', [\App\Http\Controllers\CampaignGroupController::class, 'index'])->name('groups.index');
         Route::post('/groups', [\App\Http\Controllers\CampaignGroupController::class, 'store'])->name('groups.store');
@@ -67,5 +66,12 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'show'])->name('positions.show');
         Route::put('/positions/{contactPosition}', [\App\Http\Controllers\ContactPositionController::class, 'update'])->name('positions.update');
 
+        // Invoice
+        Route::get('/invoices', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices.index');
+        Route::post('/invoices', [\App\Http\Controllers\InvoiceController::class, 'store'])->name('invoices.store');
+        Route::get('/invoices/create', [\App\Http\Controllers\InvoiceController::class, 'create'])->name('invoices.create');
+        Route::get('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
+        Route::put('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'update'])->name('invoices.update');
+        
     });
 });

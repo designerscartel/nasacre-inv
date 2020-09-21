@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Region;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SacreResource extends JsonResource

@@ -51,10 +51,13 @@
                         </td>
                         <td class="border px-4 py-2">{{ sacre.region.title }}</td>
                         <td class="border px-4 py-2">
-                            <inertia-link class="text-sm" :href="'/sacres/'+ sacre.id">
+                            <inertia-link class="text-sm mr-2" :href="'/sacres/'+ sacre.id">
                                 Edit
                             </inertia-link>
-                            <button class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                            <inertia-link class="text-sm mr-2" :href="'/sacres/'+ sacre.id">
+                                Invoices
+                            </inertia-link>
+                            <button class="cursor-pointer text-sm text-red-500 focus:outline-none"
                                     @click="confirmSacreDeletion(sacre)">
                                 Delete
                             </button>

@@ -15,7 +15,7 @@ class CreateSacreInformation implements CreatesSacreInformation
      * @param  array  $input
      * @return void
      */
-    public function Create(array $input)
+    public function create(array $input)
     {
         Validator::make($input, [
             'title' => ['required', 'string', 'max:255'],

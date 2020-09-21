@@ -16,7 +16,7 @@ class CreateCampaignEmailInformation implements CreatesCampaignEmailInformation
      * @param object $campaignGroup
      * @return void
      */
-    public function Create(array $input, object $campaignGroup)
+    public function create(array $input, object $campaignGroup)
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],

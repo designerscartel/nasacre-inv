@@ -47,6 +47,14 @@ use App\Actions\ContactPosition\CreateContactPositionInformation;
 use App\Contracts\ContactPosition\UpdatesContactPositionInformation;
 use App\Contracts\ContactPosition\CreatesContactPositionInformation;
 
+use App\Actions\Invoice\UpdateInvoiceInformation;
+use App\Actions\Invoice\CreateInvoiceInformation;
+use App\Actions\Invoice\DeleteInvoice;
+use App\Contracts\Invoice\UpdatesInvoiceInformation;
+use App\Contracts\Invoice\CreatesInvoiceInformation;
+use App\Contracts\Invoice\DeletesInvoice;
+
+
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -100,6 +108,12 @@ class AppServiceProvider extends ServiceProvider
 
         app()->singleton(CreatesContactPositionInformation::class, CreateContactPositionInformation::class);
         app()->singleton(UpdatesContactPositionInformation::class, UpdateContactPositionInformation::class);
+
+        app()->singleton(CreatesInvoiceInformation::class, CreateInvoiceInformation::class);
+        app()->singleton(UpdatesInvoiceInformation::class, UpdateInvoiceInformation::class);
+        app()->singleton(DeletesInvoice::class, DeleteInvoice::class);
+
+
 
     }
 }

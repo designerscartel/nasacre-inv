@@ -15,7 +15,7 @@ class CreateCampaignInformation implements CreatesCampaignInformation
      * @param  array  $input
      * @return void
      */
-    public function Create(array $input)
+    public function create(array $input)
     {
         Validator::make($input, [
             'campaign_group_id' => ['required'],

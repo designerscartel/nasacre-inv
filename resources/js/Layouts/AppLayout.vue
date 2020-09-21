@@ -17,6 +17,9 @@
                             <jet-nav-link href="/dashboard" :active="$page.currentRouteName == 'dashboard'">
                                 Dashboard
                             </jet-nav-link>
+                            <jet-nav-link href="/invoices" :active="$page.currentRouteName == 'invoices.index'">
+                                Invoices
+                            </jet-nav-link>
                             <jet-nav-link href="/campaigns" :active="$page.currentRouteName == 'campaigns.index'">
                                 Campaigns
                             </jet-nav-link>
