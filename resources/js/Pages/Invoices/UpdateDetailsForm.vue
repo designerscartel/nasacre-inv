@@ -27,15 +27,8 @@
             <!-- Date -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="date" value="Date"/>
-                <jet-input id="date" type="text" class="mt-1 block w-full" v-model="form.date"/>
+                <datepicker input-class="form-input rounded-md shadow-sm mt-1 block w-full" v-model="form.date" name="date"></datepicker>
                 <jet-input-error :message="form.error('date')" class="mt-2"/>
-            </div>
-
-            <!-- Year -->
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="year" value="Year"/>
-                <jet-input id="year" type="text" class="mt-1 block w-full" v-model="form.year"/>
-                <jet-input-error :message="form.error('year')" class="mt-2"/>
             </div>
 
             <!-- From -->
@@ -76,6 +69,7 @@
     import JetLabel from './../../Jetstream/Label'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import Datepicker from 'vuejs-datepicker';
 
     export default {
         components: {
@@ -88,6 +82,7 @@
             JetInputError,
             JetLabel,
             JetSecondaryButton,
+            Datepicker
         },
 
         props: [
@@ -101,7 +96,6 @@
                     email: this.invoice.email,
                     subs: this.invoice.subs,
                     date: this.invoice.date,
-                    year: this.invoice.year,
                     from: this.invoice.from,
                     message: this.invoice.message,
                 }, {

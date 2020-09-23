@@ -50,9 +50,14 @@ use App\Contracts\ContactPosition\CreatesContactPositionInformation;
 use App\Actions\Invoice\UpdateInvoiceInformation;
 use App\Actions\Invoice\CreateInvoiceInformation;
 use App\Actions\Invoice\DeleteInvoice;
+use App\Actions\Invoice\SendInvoiceInformation;
+use App\Actions\Invoice\CreateInvoicePdf;
 use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Contracts\Invoice\CreatesInvoiceInformation;
 use App\Contracts\Invoice\DeletesInvoice;
+use App\Contracts\Invoice\SendsInvoiceInformation;
+use App\Contracts\Invoice\CreatesInvoicePdf;
+
 
 
 
@@ -112,8 +117,7 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(CreatesInvoiceInformation::class, CreateInvoiceInformation::class);
         app()->singleton(UpdatesInvoiceInformation::class, UpdateInvoiceInformation::class);
         app()->singleton(DeletesInvoice::class, DeleteInvoice::class);
-
-
-
+        app()->singleton(SendsInvoiceInformation::class, SendInvoiceInformation::class);
+        app()->singleton(CreatesInvoicePdf::class, CreateInvoicePdf::class);
     }
 }

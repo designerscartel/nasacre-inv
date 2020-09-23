@@ -24,6 +24,13 @@ class Invoice extends Model
         'message',
     ];
 
+    /**
+     * Return a Resource
+     */
+    public function toResource()
+    {
+        return new \App\Http\Resources\InvoiceResource($this);
+    }
 
     /**
      * Boot Function

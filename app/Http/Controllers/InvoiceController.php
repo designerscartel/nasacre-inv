@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Invoice\CreateInvoiceInformation;
 use App\Contracts\Invoice\DeletesInvoice;
 use App\Contracts\Invoice\UpdatesInvoiceInformation;
+use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
@@ -91,6 +92,21 @@ class InvoiceController extends Controller
         return back(303);
     }
 
+    /**
+     * Send the specified resource in storage
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\Http\Response
+     */
+    public function Send(Request $request, Invoice $invoice)
+    {
+        //
+        app(SendsInvoiceInformation::class)->send($invoice, $request->all());
+
+        return back(303);
+    }
+    
     /**
      * Remove the specified resource from storage.
      *

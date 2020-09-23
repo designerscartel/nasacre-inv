@@ -42,11 +42,17 @@
                             <tbody>
                             <template v-if="invoices.data.length">
                                 <tr v-if="invoices" v-for="invoice in invoices.data" :key="invoice.id">
-                                    <td class="border px-8 py-2">{{ invoice.subject }}</td>
+                                    <td class="border px-8 py-2">{{ invoice.year }}</td>
                                     <td class="border px-4 py-2">
                                         <inertia-link class="text-sm mr-2" :href="'/invoices/'+ invoice.id">
                                             Edit
                                         </inertia-link>
+
+                                        <!-- Send Invoices -->
+                                        <button class="cursor-pointer text-sm text-green-500 focus:outline-none"
+                                                @click="confirmInvoiceSend(invoice)">
+                                            Send
+                                        </button>
 
                                     </td>
                                 </tr>
@@ -77,6 +83,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- Send Invoice Modal -->
+        <jet-dialog-modal :show="InvoiceBeingSent" @close="InvoiceBeingSent = null">
+            <template #title>
+                Send Invoice
+            </template>
+
+            <template #content>
+                Are you sure you would like to send this Invoice?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="InvoiceBeingSent = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-confirm-button class="ml-2" @click.native="sendInvoice"
+                                    :class="{ 'opacity-25': sendInvoiceForm.processing }"
+                                    :disabled="sendInvoiceForm.processing">
+                    Send
+                </jet-confirm-button>
+            </template>
+        </jet-dialog-modal>
 
     </app-layout>
 </template>
@@ -119,5 +148,34 @@
             JetSecondaryButton,
             JetSectionBorder,
         },
+        data() {
+            return {
+
+                sendInvoiceForm: this.$inertia.form({
+                    send: '',
+                }, {
+                    bag: 'sendInvoiceInformation',
+                    resetOnSuccess: true,
+                }),
+
+                InvoiceId: null,
+                InvoiceBeingSent: null
+            }
+        },
+        methods: {
+            confirmInvoiceSend(Invoice) {
+                this.sendInvoiceForm.send = true
+                this.InvoiceBeingSent = Invoice
+            },
+
+            sendInvoice() {
+                this.sendInvoiceForm.post('/invoices/' +  this.InvoiceBeingSent.id + '/send', {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.InvoiceBeingSent = null
+                })
+            },
+        }
     }
 </script>

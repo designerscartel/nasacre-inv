@@ -34,11 +34,11 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::delete('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'destroy'])->name('sacre-contacts.destroy');
 
         // Region
-        Route::get('/invoices', [\App\Http\Controllers\RegionController::class, 'index'])->name('invoices.index');
-        Route::post('/invoices', [\App\Http\Controllers\RegionController::class, 'store'])->name('invoices.store');
-        Route::get('/invoices/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('invoices.create');
-        Route::get('/invoices/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('invoices.show');
-        Route::put('/invoices/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('invoices.update');
+        Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
+        Route::post('/regions', [\App\Http\Controllers\RegionController::class, 'store'])->name('regions.store');
+        Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
+        Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
+        Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
 
         // Campaign
         Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');
@@ -72,6 +72,8 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/invoices/create', [\App\Http\Controllers\InvoiceController::class, 'create'])->name('invoices.create');
         Route::get('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
         Route::put('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'update'])->name('invoices.update');
-        
+        Route::post('/invoices/{invoice}/send', [\App\Http\Controllers\InvoiceController::class, 'send'])->name('invoices.send');
+
+
     });
 });

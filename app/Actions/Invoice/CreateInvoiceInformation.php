@@ -21,18 +21,18 @@ class CreateInvoiceInformation implements CreatesInvoiceInformation
             'email' => ['required', 'string', 'max:255'],
             'subs' => ['required', 'string', 'max:255'],
             'date' => ['required', 'string', 'max:255'],
-            'year' => ['required', 'string', 'max:255'],
             'from' => ['required', 'string', 'max:255'],
             'message' => ['required'],
         ])->validateWithBag('createInvoiceInformation');
 
         $invoice = new Invoice();
+        $date = \Carbon\Carbon::parse($input['date']);
 
         return $invoice->create([
             'email' => $input['email'],
             'subs' => $input['subs'],
-            'date' => $input['date'],
-            'year' => $input['year'],
+            'date' => $date->toDateTimeString(),
+            'year' => $date->format('Y'),
             'from' => $input['from'],
             'message' => $input['message'],
         ]);
