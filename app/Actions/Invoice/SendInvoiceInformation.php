@@ -28,8 +28,7 @@ class SendInvoiceInformation implements SendsInvoiceInformation
             'send' => ['required'],
         ])->validateWithBag('sendInvoiceInformation');
 
-        // $sacres = Sacre::all();
-        $sacres = Sacre::limit(1)->get();
+        $sacres = Sacre::all();
 
         if (!empty($sacres)) {
             foreach ($sacres as $scare) {
