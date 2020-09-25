@@ -43,6 +43,15 @@ class Sacre extends Model
     }
 
     /**
+     * Get all of the invoices.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(SacreInvoice::class);
+    }
+
+
+    /**
      * Return a Resource
      */
     public function toResource()

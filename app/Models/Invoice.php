@@ -22,6 +22,7 @@ class Invoice extends Model
         'year',
         'from',
         'message',
+        'batch'
     ];
 
     /**
