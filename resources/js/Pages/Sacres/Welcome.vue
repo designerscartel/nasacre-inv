@@ -54,7 +54,7 @@
                             <inertia-link class="text-sm mr-2" :href="'/sacres/'+ sacre.id">
                                 Edit
                             </inertia-link>
-                            <inertia-link class="text-sm mr-2" :href="'/sacres/'+ sacre.id">
+                            <inertia-link class="text-sm mr-2" :href="'/sacres/'+ sacre.id + '/invoices'">
                                 Invoices
                             </inertia-link>
                             <button class="cursor-pointer text-sm text-red-500 focus:outline-none"

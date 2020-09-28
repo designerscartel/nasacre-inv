@@ -32,6 +32,9 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::post('/sacres/{sacre}/contacts', [\App\Http\Controllers\SacreContactController::class, 'store'])->name('sacre-contacts.store');
         Route::put('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'update'])->name('sacre-contacts.update');
         Route::delete('/sacres/{sacre}/contacts/{contact}', [\App\Http\Controllers\SacreContactController::class, 'destroy'])->name('sacre-contacts.destroy');
+        Route::get('/sacres/{sacre}/invoices', [\App\Http\Controllers\SacreInvoiceControlller::class, 'show'])->name('sacre-invoices.show');
+        Route::put('/sacres/{sacre}/invoices/{sacreInvoice}', [\App\Http\Controllers\SacreInvoiceControlller::class, 'update'])->name('sacre-invoices.update');
+        Route::get('/sacres/{sacre}/invoices/{sacreInvoice}/pdf', [\App\Http\Controllers\SacreInvoiceControlller::class, 'pdf'])->name('sacre-invoices.pdf');
 
         // Region
         Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');

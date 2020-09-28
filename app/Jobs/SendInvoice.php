@@ -49,7 +49,7 @@ class SendInvoice implements ShouldQueue
      */
     public function handle()
     {
-        $pdf = app(CreatesInvoicePdf::class)->create($this->details['invoice'], $this->details['sacre'], $this->details['contact']);
+        $pdf = app(CreatesInvoicePdf::class)->output($this->details['invoice'], $this->details['sacre']);
         $email = new InvoiceForQueuing($this->details['invoice'], $this->details['sacre'], $this->details['contact'], $pdf);
         Mail::to($this->details['contact']->email)->send($email);
 

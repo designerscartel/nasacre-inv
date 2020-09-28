@@ -58,7 +58,8 @@ use App\Contracts\Invoice\DeletesInvoice;
 use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Contracts\Invoice\CreatesInvoicePdf;
 
-
+use App\Actions\SacreInvoice\UpdateSacreInvoiceInformation;
+use App\Contracts\SacreInvoice\UpdatesSacreInvoiceInformation;
 
 
 use Illuminate\Support\ServiceProvider;
@@ -106,7 +107,6 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(UpdatesCampaignGroupInformation::class, UpdateCampaignGroupInformation::class);
         app()->singleton(DeletesCampaignGroup::class, DeleteCampaignGroup::class);
 
-
         app()->singleton(CreatesCampaignEmailInformation::class, CreateCampaignEmailInformation::class);
         app()->singleton(UpdatesCampaignEmailInformation::class, UpdateCampaignEmailInformation::class);
         app()->singleton(DeletesCampaignEmail::class, DeleteCampaignEmail::class);
@@ -119,5 +119,7 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(DeletesInvoice::class, DeleteInvoice::class);
         app()->singleton(SendsInvoiceInformation::class, SendInvoiceInformation::class);
         app()->singleton(CreatesInvoicePdf::class, CreateInvoicePdf::class);
+
+        app()->singleton(UpdatesSacreInvoiceInformation::class, UpdateSacreInvoiceInformation::class);
     }
 }

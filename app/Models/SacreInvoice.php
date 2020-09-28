@@ -17,6 +17,8 @@ class SacreInvoice extends Model
     protected $fillable = [
         'id',
         'po_number',
+        'address',
+        'date',
         'sacre_id',
         'invoice_id',
         'batch'
@@ -43,6 +45,6 @@ class SacreInvoice extends Model
      */
     public function toResource()
     {
-        return new \App\Http\Resources\ScareInvoiceResource($this);
+        return new \App\Http\Resources\SacreInvoiceResource($this);
     }
 }

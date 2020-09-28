@@ -137,8 +137,7 @@
     </tr>
     <tr>
         <td><p>Invoice Number:</p></td>
-        <td><p><strong>{{ $date->format('y') }}/SUBS/{{ $sacre->code }}@if(!empty($sacre->short_code))
-                        /{{ $sacre->short_code }}@endif/{{ $invoice->id }}</strong></p></td>
+        <td><p><strong>{{ $date->format('y') }}/SUBS/{{ $sacre->code }}@if(!empty($sacre->short_code))/{{ $sacre->short_code }}@endif/{{ $invoice->id }}</strong></p></td>
     </tr>
     @if(!empty($invoice->po_number))
         <tr>

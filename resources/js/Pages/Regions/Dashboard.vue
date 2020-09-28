@@ -38,7 +38,7 @@
                             </thead>
                             <tbody>
                             <template v-if="regions.data.length">
-                                <tr v-if="regions" v-for="region in regions.data" :key="region.id">
+                                <tr v-for="region in regions.data" :key="region.id">
                                     <td class="border px-8 py-2">{{ region.title }}</td>
                                     <td class="border px-4 py-2">
 
