@@ -11,5 +11,5 @@ interface UpdatesSacreContact
      * @param array  $input
      * @return void
      */
-    public function update($sacre, array $input);
+    public function update($sacreContact, $sacre, array $input);
 }

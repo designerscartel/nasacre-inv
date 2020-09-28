@@ -28,6 +28,10 @@ class AddSacreContact implements AddsSacreContact
             'default' => [],
         ])->validateWithBag('addContactForm');
 
+        if($input['default']) {
+            $sacre->contacts()->update(['default' => 0]);
+        }
+
         $contact = new SacreContact();
         $contact->position_id = $input['position_id'];
         $contact->name = $input['name'];

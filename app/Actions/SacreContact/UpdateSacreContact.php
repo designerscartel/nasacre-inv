@@ -15,17 +15,20 @@ class UpdateSacreContact implements UpdatesSacreContact
      * @param array $input
      * @return void
      */
-    public function update($sacreContact, array $input)
+    public function update($sacreContact, $sacre, array $input)
     {
         Validator::make($input, [
             'position_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:255'],
-            'tel' => ['required', 'string', 'max:255'],
+            'tel' => [],
             'role_dscpn' => [],
             'default' => []
         ])->validateWithBag('updateContactForm');
 
+        if($input['default']) {
+            $sacre->contacts()->update(['default' => 0]);
+        }
 
         return $sacreContact->fill([
             'position_id' => $input['position_id'],

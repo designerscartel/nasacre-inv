@@ -41,7 +41,7 @@ class SacreContactController extends Controller
     public function update(Request $request, Sacre $sacre, SacreContact $contact)
     {
         //
-        app(UpdatesSacreContact::class)->update($contact, $request->all());
+        app(UpdatesSacreContact::class)->update($contact, $sacre, $request->all());
 
         return back(303);
     }
