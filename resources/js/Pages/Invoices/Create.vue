@@ -30,7 +30,7 @@
         components: {
             AppLayout,
             JetSectionBorder,
-            CreateDetailsForm
+            CreateDetailsForm,
         },
     }
 </script>

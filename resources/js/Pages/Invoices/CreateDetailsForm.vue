@@ -9,7 +9,7 @@
         </template>
 
         <template #form>
-            
+
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
@@ -40,12 +40,13 @@
             </div>
 
             <!-- Message -->
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="message" value="Message" />
-                <jet-textarea id="message" type="text" class="mt-1 block w-full" v-model="form.message" />
+            <div class="col-span-6">
+                <jet-label for="message" value="Message"/>
+                <v-md-editor v-model="form.message" class="mt-1" height="400px"
+                             left-toolbar="undo redo bold italic quote ul ol link"
+                ></v-md-editor>
                 <jet-input-error :message="form.error('message')" class="mt-2" />
             </div>
-
 
         </template>
 
@@ -73,7 +74,6 @@
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
     import Datepicker from 'vuejs-datepicker';
 
-
     export default {
         components: {
             JetActionMessage,
@@ -85,7 +85,7 @@
             JetInputError,
             JetLabel,
             JetSecondaryButton,
-            Datepicker
+            Datepicker,
         },
 
         props: [
@@ -114,7 +114,7 @@
                 this.form.post('/invoices', {
                     preserveScroll: true
                 });
-            },
+            }
         },
     }
 </script>
