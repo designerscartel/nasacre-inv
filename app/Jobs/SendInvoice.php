@@ -51,7 +51,9 @@ class SendInvoice implements ShouldQueue
     {
         $pdf = app(CreatesInvoicePdf::class)->output($this->details['invoice'], $this->details['sacre']);
         $email = new InvoiceForQueuing($this->details['invoice'], $this->details['sacre'], $this->details['contact'], $pdf);
-        Mail::to($this->details['contact']->email)->send($email);
+        Mail::to($this->details['contact']->email)
+            ->cc($this->details['sacre']->finance ?: [])
+            ->send($email);
 
         if (count(Mail::failures()) == 0) {
             $sacreInvoice = new SacreInvoice();
