@@ -7,5 +7,4 @@ Jetstream
 
 # Todo #
 
-Group email creation from list
 Conference Email system (similar to invoice)
