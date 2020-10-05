@@ -7,4 +7,4 @@ Jetstream
 
 # Todo #
 
-Conference Email system (similar to invoice)
+Conference/Booking Email system (similar to invoice)
