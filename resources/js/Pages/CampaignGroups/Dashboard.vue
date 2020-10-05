@@ -18,8 +18,9 @@
                             </h1>
 
                             <div class="md:w-1/6 text-right">
-                                <button class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
-                                        @click="addGroupDialog">
+                                <button
+                                    class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
+                                    @click="addGroupDialog">
                                     Create group
                                 </button>
                             </div>
@@ -69,8 +70,9 @@
                         <div class="md:flex md:justify-end">
 
                             <div class="md:w-1/6 text-right">
-                                <button class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
-                                        @click="addGroupDialog">
+                                <button
+                                    class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150"
+                                    @click="addGroupDialog">
                                     Create group
                                 </button>
                             </div>
@@ -95,6 +97,42 @@
                     <jet-label for="title" value="Title"/>
                     <jet-input id="title" type="text" class="mt-1 block w-full" v-model="addGroupForm.title"/>
                     <jet-input-error :message="addGroupForm.error('title')" class="mt-2"/>
+                </div>
+
+                <div class="mt-4 flex flex-wrap">
+
+                    <h4 class="text-lg w-full">Import Options</h4>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.members">
+                        <span class="ml-2 text-sm text-gray-600">Members Only</span>
+                    </label>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.nonmembers">
+                        <span class="ml-2 text-sm text-gray-600">Non-Members Only</span>
+                    </label>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.chair">
+                        <span class="ml-2 text-sm text-gray-600">All Chair Emails</span>
+                    </label>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.clerk">
+                        <span class="ml-2 text-sm text-gray-600">All Clerk Emails</span>
+                    </label>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.la">
+                        <span class="ml-2 text-sm text-gray-600">All LA Emails</span>
+                    </label>
+
+                    <label class="flex items-center w-6/12 mt-2">
+                        <input type="checkbox" class="form-checkbox" v-model="addGroupForm.adviser">
+                        <span class="ml-2 text-sm text-gray-600">All Adviser Emails</span>
+                    </label>
+
                 </div>
 
             </template>
@@ -170,108 +208,114 @@
 </template>
 
 <script>
-    import AppLayout from './../../Layouts/AppLayout'
-    import JetActionMessage from './../../Jetstream/ActionMessage'
-    import JetActionSection from './../../Jetstream/ActionSection'
-    import JetButton from './../../Jetstream/Button'
-    import JetConfirmationModal from './../../Jetstream/ConfirmationModal'
-    import JetDangerButton from './../../Jetstream/DangerButton'
-    import JetDialogModal from './../../Jetstream/DialogModal'
-    import JetFormSection from './../../Jetstream/FormSection'
-    import JetInput from './../../Jetstream/Input'
-    import JetSelect from './../../Jetstream/Select'
-    import JetInputError from './../../Jetstream/InputError'
-    import JetLabel from './../../Jetstream/Label'
-    import JetSecondaryButton from './../../Jetstream/SecondaryButton'
-    import JetSectionBorder from './../../Jetstream/SectionBorder'
+import AppLayout from './../../Layouts/AppLayout'
+import JetActionMessage from './../../Jetstream/ActionMessage'
+import JetActionSection from './../../Jetstream/ActionSection'
+import JetButton from './../../Jetstream/Button'
+import JetConfirmationModal from './../../Jetstream/ConfirmationModal'
+import JetDangerButton from './../../Jetstream/DangerButton'
+import JetDialogModal from './../../Jetstream/DialogModal'
+import JetFormSection from './../../Jetstream/FormSection'
+import JetInput from './../../Jetstream/Input'
+import JetSelect from './../../Jetstream/Select'
+import JetInputError from './../../Jetstream/InputError'
+import JetLabel from './../../Jetstream/Label'
+import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+import JetSectionBorder from './../../Jetstream/SectionBorder'
 
-    export default {
-        props: [
-            'groups',
-        ],
-        components: {
-            AppLayout,
-            JetActionMessage,
-            JetActionSection,
-            JetButton,
-            JetConfirmationModal,
-            JetDangerButton,
-            JetDialogModal,
-            JetFormSection,
-            JetInput,
-            JetSelect,
-            JetInputError,
-            JetLabel,
-            JetSecondaryButton,
-            JetSectionBorder,
-        },
-        data() {
-            return {
-                addGroupForm: this.$inertia.form({
-                    title: '',
-                }, {
-                    bag: 'addGroupForm',
-                    resetOnSuccess: true,
-                }),
+export default {
+    props: [
+        'groups',
+    ],
+    components: {
+        AppLayout,
+        JetActionMessage,
+        JetActionSection,
+        JetButton,
+        JetConfirmationModal,
+        JetDangerButton,
+        JetDialogModal,
+        JetFormSection,
+        JetInput,
+        JetSelect,
+        JetInputError,
+        JetLabel,
+        JetSecondaryButton,
+        JetSectionBorder,
+    },
+    data() {
+        return {
+            addGroupForm: this.$inertia.form({
+                title: '',
+                members: '',
+                nonmembers: '',
+                chair: '',
+                clerk: '',
+                la: '',
+                adviser: '',
+            }, {
+                bag: 'addGroupForm',
+                resetOnSuccess: true,
+            }),
 
-                updateGroupForm: this.$inertia.form({
-                    title: '',
-                }, {
-                    bag: 'updateGroupForm',
-                    resetOnSuccess: true,
-                }),
+            updateGroupForm: this.$inertia.form({
+                title: '',
+            }, {
+                bag: 'updateGroupForm',
+                resetOnSuccess: true,
+            }),
 
-                deleteGroupForm: this.$inertia.form(),
+            deleteGroupForm: this.$inertia.form(),
 
-                groupId: null,
-                showNewGroupDialog: false,
-                showUpdateGroupDialog: false,
-                groupBeingDeleted: null
-            }
-        },
-        methods: {
-            addGroup() {
-                this.addGroupForm.post('/groups', {
-                    preserveScroll: true
-                }).then(() => {
-                    this.showNewGroupDialog = false
-                    if (!this.addGroupForm.hasErrors()) {
-                        this.showNewGroupDialog = false
-                    }
-                })
-            },
-            addGroupDialog() {
-                this.showNewGroupDialog = true
-            },
-            updateGroup() {
-                this.updateGroupForm.put('/groups/' + this.groupId, {
-                    preserveScroll: true
-                }).then(() => {
-                    this.groupId = null;
-                    if (!this.updateGroupForm.hasErrors()) {
-                        this.showUpdateGroupDialog = false
-                    }
-                })
-            },
-            updateGroupDialog(group) {
-                this.updateGroupForm.id = group.id
-                this.updateGroupForm.title = group.title
-                this.groupId = group.id
-                this.showUpdateGroupDialog = true
-            },
-
-            confirmGroupDeletion(group) {
-                this.groupBeingDeleted = group
-            },
-
-            deleteGroup() {
-                this.deleteGroupForm.delete('/groups/' +  this.groupBeingDeleted.id, {
-                    preserveScroll: true,
-                    preserveState: true,
-                }).then(() => {
-                    this.groupBeingDeleted = null
-                })
-            },
+            groupId: null,
+            showNewGroupDialog: false,
+            showUpdateGroupDialog: false,
+            groupBeingDeleted: null
         }
+    },
+    methods: {
+        addGroup() {
+            this.addGroupForm.post('/groups', {
+                preserveScroll: true
+            }).then(() => {
+                this.showNewGroupDialog = false
+                if (!this.addGroupForm.hasErrors()) {
+                    this.showNewGroupDialog = false
+                }
+            })
+        },
+        addGroupDialog() {
+            this.showNewGroupDialog = true
+        },
+        updateGroup() {
+            this.updateGroupForm.put('/groups/' + this.groupId, {
+                preserveScroll: true
+            }).then(() => {
+                this.groupId = null;
+                if (!this.updateGroupForm.hasErrors()) {
+                    this.showUpdateGroupDialog = false
+                }
+            })
+        },
+        updateGroupDialog(group) {
+            this.updateGroupForm.id = group.id
+            this.updateGroupForm.title = group.title
+            this.groupId = group.id
+            this.showUpdateGroupDialog = true
+        },
+
+        confirmGroupDeletion(group) {
+            this.groupBeingDeleted = group
+        },
+
+        deleteGroup() {
+            this.deleteGroupForm.delete('/groups/' + this.groupBeingDeleted.id, {
+                preserveScroll: true,
+                preserveState: true,
+            }).then(() => {
+                this.groupBeingDeleted = null
+            })
+        },
     }
+}
 </script>
