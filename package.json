@@ -26,7 +26,6 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "@kangc/v-md-editor": "^1.4.10",
         "date-fns": "^2.16.1",
         "vuejs-datepicker": "^1.6.2"
     }
