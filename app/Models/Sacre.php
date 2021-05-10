@@ -50,6 +50,14 @@ class Sacre extends Model
         return $this->hasMany(SacreInvoice::class);
     }
 
+    /**
+     * Get all of the files.
+     */
+    public function files()
+    {
+        return $this->hasMany(SacreFile::class);
+    }
+
 
     /**
      * Return a Resource

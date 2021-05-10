@@ -28,8 +28,8 @@ class SacreResource extends JsonResource
             'finance' => $this->finance,
             'region' => new \App\Http\Resources\RegionResource($this->region),
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
-            // 'invoices' => $this->invoices,
             'invoices' => \App\Http\Resources\SacreInvoiceResource::collection($this->invoices),
+            'files' => \App\Http\Resources\SacreFileResource::collection($this->files),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

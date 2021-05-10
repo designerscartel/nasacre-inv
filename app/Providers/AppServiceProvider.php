@@ -16,6 +16,13 @@ use App\Contracts\SacreContact\AddsSacreContact;
 use App\Contracts\SacreContact\UpdatesSacreContact;
 use App\Contracts\SacreContact\DeletesSacreContact;
 
+use App\Actions\SacreFile\AddSacreFile;
+use App\Actions\SacreFile\UpdateSacreFile;
+use App\Actions\SacreFile\DeleteSacreFile;
+use App\Contracts\SacreFile\AddsSacreFile;
+use App\Contracts\SacreFile\UpdatesSacreFile;
+use App\Contracts\SacreFile\DeletesSacreFile;
+
 use App\Actions\Region\UpdateRegionInformation;
 use App\Actions\Region\CreateRegionInformation;
 use App\Contracts\Region\UpdatesRegionInformation;
@@ -95,6 +102,10 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(AddsSacreContact::class, AddSacreContact::class);
         app()->singleton(UpdatesSacreContact::class, UpdateSacreContact::class);
         app()->singleton(DeletesSacreContact::class, DeleteSacreContact::class);
+
+        app()->singleton(AddsSacreFile::class, AddSacreFile::class);
+        app()->singleton(UpdatesSacreFile::class, UpdateSacreFile::class);
+        app()->singleton(DeletesSacreFile::class, DeleteSacreFile::class);
 
         app()->singleton(CreatesRegionInformation::class, CreateRegionInformation::class);
         app()->singleton(UpdatesRegionInformation::class, UpdateRegionInformation::class);

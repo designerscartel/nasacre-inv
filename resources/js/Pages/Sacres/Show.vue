@@ -18,6 +18,10 @@
                         :contacts="sacre.data.contacts"
                         :positions="positions.data"/>
 
+                <file-manager
+                    :sacre="sacre.data"
+                    :files="sacre.data.files"/>
+
             </div>
         </div>
 
@@ -29,18 +33,20 @@
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
     import ContactManager from "./ContactManager";
+    import FileManager from "./FileManager";
 
     export default {
         props: [
             'sacre',
             'regions',
-            'positions'
+            'positions',
         ],
         components: {
             UpdateDetailsForm,
             AppLayout,
             JetSectionBorder,
-            ContactManager
+            ContactManager,
+            FileManager
         },
     }
 </script>

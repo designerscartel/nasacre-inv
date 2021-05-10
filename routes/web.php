@@ -38,6 +38,10 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/sacres/{sacre}/invoices', [\App\Http\Controllers\SacreInvoiceControlller::class, 'show'])->name('sacre-invoices.show');
         Route::put('/sacres/{sacre}/invoices/{sacreInvoice}', [\App\Http\Controllers\SacreInvoiceControlller::class, 'update'])->name('sacre-invoices.update');
         Route::get('/sacres/{sacre}/invoices/{sacreInvoice}/pdf', [\App\Http\Controllers\SacreInvoiceControlller::class, 'pdf'])->name('sacre-invoices.pdf');
+        Route::post('/sacres/{sacre}/files', [\App\Http\Controllers\SacreFileController::class, 'store'])->name('sacre-files.store');
+        Route::get('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'show'])->name('sacre-files.store');
+        Route::put('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'update'])->name('sacre-files.update');
+        Route::delete('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'destroy'])->name('sacre-files.destroy');
 
         // Region
         Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index'])->name('regions.index');
