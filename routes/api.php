@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/database', [\App\Http\Controllers\Api\DatabaseController::class, 'index'])->name('api.database');
 Route::get('/regions', [\App\Http\Controllers\Api\RegionController::class, 'index'])->name('api.region');
+Route::get('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\Api\FileController::class, 'show'])->name('api.file');
 
 
 
