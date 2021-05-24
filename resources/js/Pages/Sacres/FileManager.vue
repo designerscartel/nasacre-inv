@@ -19,15 +19,12 @@
                 <div class="space-y-6">
                     <div class="flex items-center justify-between" v-for="file in files">
 
-                        <div class="flex items-center">
+                        <a target="_blank" :href="'/sacres/' + sacre.id + '/files/'+ file.id"  class="flex items-center">
                             <div class="ml-4 align-middle">
-                                <a target="_blank" :href="'/sacres/' + sacre.id + '/files/'+ file.id" >{{ file.filename }}</a>
+                                {{ file.year }} - {{ file.filename }}
                             </div>
-                        </div>
+                        </a>
 
-                        <div class="flex items-center">
-
-                        </div>
                     </div>
                 </div>
             </template>

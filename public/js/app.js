@@ -7281,9 +7281,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -37277,26 +37274,28 @@ var render = function() {
                       "div",
                       { staticClass: "flex items-center justify-between" },
                       [
-                        _c("div", { staticClass: "flex items-center" }, [
-                          _c("div", { staticClass: "ml-4 align-middle" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: {
-                                  target: "_blank",
-                                  href:
-                                    "/sacres/" +
-                                    _vm.sacre.id +
-                                    "/files/" +
-                                    file.id
-                                }
-                              },
-                              [_vm._v(_vm._s(file.filename))]
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "flex items-center" })
+                        _c(
+                          "a",
+                          {
+                            staticClass: "flex items-center",
+                            attrs: {
+                              target: "_blank",
+                              href:
+                                "/sacres/" + _vm.sacre.id + "/files/" + file.id
+                            }
+                          },
+                          [
+                            _c("div", { staticClass: "ml-4 align-middle" }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(file.year) +
+                                  " - " +
+                                  _vm._s(file.filename) +
+                                  "\n                        "
+                              )
+                            ])
+                          ]
+                        )
                       ]
                     )
                   }),

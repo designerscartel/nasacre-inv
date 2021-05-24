@@ -55,7 +55,7 @@ class Sacre extends Model
      */
     public function files()
     {
-        return $this->hasMany(SacreFile::class);
+        return $this->hasMany(SacreFile::class)->orderBy('year', 'DESC');
     }
 
 

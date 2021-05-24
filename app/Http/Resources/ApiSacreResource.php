@@ -21,17 +21,9 @@ class ApiSacreResource extends JsonResource
             'region_id' => $this->region_id,
             'title' => $this->title,
             'member' => $this->member,
-            //'address' => $this->address,
-            //'short_code' => $this->short_code,
-            //'code' => $this->code,
-            //'po' => $this->po,
-            //'finance' => $this->finance,
-            'region' => new \App\Http\Resources\RegionResource($this->region),
+            'region' => New \App\Http\Resources\RegionResource($this->region),
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
-            // 'invoices' => $this->invoices,
-            //'invoices' => \App\Http\Resources\SacreInvoiceResource::collection($this->invoices),
-            //'created_at' => $this->created_at,
-            //'updated_at' => $this->updated_at,
+            'files' => \App\Http\Resources\SacreFileResource::collection($this->files),
         ];
 
     }
