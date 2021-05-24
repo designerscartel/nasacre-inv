@@ -18,6 +18,7 @@ class SacreFile extends Model
         'id',
         'sacre_id',
         'filename',
+        'year'
     ];
 
     /**
