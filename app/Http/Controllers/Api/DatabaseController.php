@@ -21,4 +21,12 @@ class DatabaseController extends Controller
     }
 
 
+    public function show($term)
+    {
+        //
+        $results = Sacre::search($term)->get();
+        return ApiSacreResource::collection($results);
+    }
+
+
 }
