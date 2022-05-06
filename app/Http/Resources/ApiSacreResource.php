@@ -24,6 +24,7 @@ class ApiSacreResource extends JsonResource
             'region' => New \App\Http\Resources\RegionResource($this->region),
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
             'files' => \App\Http\Resources\SacreFileResource::collection($this->files),
+            'shared' => \App\Http\Resources\SharedFileResource::collection($this->shared),
         ];
 
     }

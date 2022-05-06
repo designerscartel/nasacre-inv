@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ApiSharedResource;
 use App\Models\Sacre;
 use App\Models\SharedFile;
 use Illuminate\Http\Request;
 
 class SharedController extends Controller
 {
+
+    public function index(SharedFile $sharedFile)
+    {
+        //
+        return ApiSharedResource::collection($sharedFile::all());
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -29,6 +38,16 @@ class SharedController extends Controller
             abort(404, 'File not found!');
         }
     }
+
+    public function shared($term)
+    {
+        //
+        $results = SharedFile::search($term)->get();
+        return ApiSharedResource::collection($results);
+    }
+
+
+
 
 
 }

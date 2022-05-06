@@ -35,4 +35,17 @@ class SharedFile extends Model
     {
         return new \App\Http\Resources\SharedFileResource($this);
     }
+
+    /**
+     * Search Sacre
+     */
+    public function scopeSearch($query, $term)
+    {
+        $query->when($term ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('filename', 'like', '%'.$search.'%');
+            });
+        });
+    }
+
 }
