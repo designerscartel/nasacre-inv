@@ -7281,6 +7281,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -7321,11 +7379,19 @@ __webpack_require__.r(__webpack_exports__);
         bag: 'addFileForm',
         resetOnSuccess: true
       }),
+      updateFileForm: this.$inertia.form({
+        id: '',
+        filename: '',
+        year: ''
+      }, {
+        bag: 'updateFileForm',
+        resetOnSuccess: true
+      }),
       deleteFileForm: this.$inertia.form(),
-      FileId: null,
+      fileId: null,
       showNewFileDialog: false,
       showUpdateFileDialog: false,
-      FileBeingDeleted: null
+      fileBeingDeleted: null
     };
   },
   methods: {
@@ -7343,10 +7409,39 @@ __webpack_require__.r(__webpack_exports__);
     addFileDialog: function addFileDialog() {
       this.showNewFileDialog = true;
     },
-    confirmFileDeletion: function confirmFileDeletion(File) {
-      this.FileBeingDeleted = File;
+    updateFile: function updateFile() {
+      var _this2 = this;
+
+      this.updateFileForm.put('/sacres/' + this.sacre.id + '/files/' + this.fileId, {
+        preserveScroll: true
+      }).then(function () {
+        _this2.fileId = null;
+
+        if (!_this2.updateFileForm.hasErrors()) {
+          _this2.showUpdateFileDialog = false;
+        }
+      });
     },
-    deleteFile: function deleteFile() {}
+    updateFileDialog: function updateFileDialog(file) {
+      this.updateFileForm.id = file.id;
+      this.updateFileForm.filename = file.filename;
+      this.updateFileForm.year = file.year;
+      this.fileId = file.id;
+      this.showUpdateFileDialog = true;
+    },
+    confirmFileDeletion: function confirmFileDeletion(file) {
+      this.fileBeingDeleted = file;
+    },
+    deleteFile: function deleteFile() {
+      var _this3 = this;
+
+      this.deleteFileForm["delete"]('/sacres/' + this.sacre.id + '/files/' + this.fileBeingDeleted.id, {
+        preserveScroll: true,
+        preserveState: true
+      }).then(function () {
+        _this3.fileBeingDeleted = null;
+      });
+    }
   }
 });
 
@@ -7564,6 +7659,287 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Jetstream_ActionMessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../../Jetstream/ActionMessage */ "./resources/js/Jetstream/ActionMessage.vue");
+/* harmony import */ var _Jetstream_ActionSection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../Jetstream/ActionSection */ "./resources/js/Jetstream/ActionSection.vue");
+/* harmony import */ var _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../Jetstream/Button */ "./resources/js/Jetstream/Button.vue");
+/* harmony import */ var _Jetstream_ConfirmationModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../Jetstream/ConfirmationModal */ "./resources/js/Jetstream/ConfirmationModal.vue");
+/* harmony import */ var _Jetstream_DangerButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../Jetstream/DangerButton */ "./resources/js/Jetstream/DangerButton.vue");
+/* harmony import */ var _Jetstream_DialogModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../Jetstream/DialogModal */ "./resources/js/Jetstream/DialogModal.vue");
+/* harmony import */ var _Jetstream_FormSection__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../../Jetstream/FormSection */ "./resources/js/Jetstream/FormSection.vue");
+/* harmony import */ var _Jetstream_Input__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../../Jetstream/Input */ "./resources/js/Jetstream/Input.vue");
+/* harmony import */ var _Jetstream_Select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../../Jetstream/Select */ "./resources/js/Jetstream/Select.vue");
+/* harmony import */ var _Jetstream_InputError__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./../../Jetstream/InputError */ "./resources/js/Jetstream/InputError.vue");
+/* harmony import */ var _Jetstream_Label__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./../../Jetstream/Label */ "./resources/js/Jetstream/Label.vue");
+/* harmony import */ var _Jetstream_Toggle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./../../Jetstream/Toggle */ "./resources/js/Jetstream/Toggle.vue");
+/* harmony import */ var _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./../../Jetstream/SecondaryButton */ "./resources/js/Jetstream/SecondaryButton.vue");
+/* harmony import */ var _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./../../Jetstream/SectionBorder */ "./resources/js/Jetstream/SectionBorder.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    JetActionMessage: _Jetstream_ActionMessage__WEBPACK_IMPORTED_MODULE_0__["default"],
+    JetActionSection: _Jetstream_ActionSection__WEBPACK_IMPORTED_MODULE_1__["default"],
+    JetButton: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__["default"],
+    JetConfirmationModal: _Jetstream_ConfirmationModal__WEBPACK_IMPORTED_MODULE_3__["default"],
+    JetDangerButton: _Jetstream_DangerButton__WEBPACK_IMPORTED_MODULE_4__["default"],
+    JetDialogModal: _Jetstream_DialogModal__WEBPACK_IMPORTED_MODULE_5__["default"],
+    JetFormSection: _Jetstream_FormSection__WEBPACK_IMPORTED_MODULE_6__["default"],
+    JetInput: _Jetstream_Input__WEBPACK_IMPORTED_MODULE_7__["default"],
+    JetSelect: _Jetstream_Select__WEBPACK_IMPORTED_MODULE_8__["default"],
+    JetToggle: _Jetstream_Toggle__WEBPACK_IMPORTED_MODULE_11__["default"],
+    JetInputError: _Jetstream_InputError__WEBPACK_IMPORTED_MODULE_9__["default"],
+    JetLabel: _Jetstream_Label__WEBPACK_IMPORTED_MODULE_10__["default"],
+    JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_12__["default"],
+    JetSectionBorder: _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_13__["default"]
+  },
+  props: ['sacre', 'shared'],
+  data: function data() {
+    return {
+      addFileForm: this.$inertia.form({
+        file: null
+      }, {
+        bag: 'addFileForm',
+        resetOnSuccess: true
+      }),
+      updateFileForm: this.$inertia.form({
+        id: '',
+        filename: '',
+        year: ''
+      }, {
+        bag: 'updateFileForm',
+        resetOnSuccess: true
+      }),
+      deleteFileForm: this.$inertia.form(),
+      fileId: null,
+      showNewFileDialog: false,
+      showUpdateFileDialog: false,
+      fileBeingDeleted: null
+    };
+  },
+  methods: {
+    addFile: function addFile() {
+      var _this = this;
+
+      this.addFileForm.post('/sacres/' + this.sacre.id + '/shared', {
+        preserveScroll: true
+      }).then(function () {
+        if (!_this.addFileForm.hasErrors()) {
+          _this.showNewFileDialog = false;
+        }
+      });
+    },
+    addFileDialog: function addFileDialog() {
+      this.showNewFileDialog = true;
+    },
+    updateFile: function updateFile() {
+      var _this2 = this;
+
+      this.updateFileForm.put('/sacres/' + this.sacre.id + '/shared/' + this.fileId, {
+        preserveScroll: true
+      }).then(function () {
+        _this2.fileId = null;
+
+        if (!_this2.updateFileForm.hasErrors()) {
+          _this2.showUpdateFileDialog = false;
+        }
+      });
+    },
+    updateFileDialog: function updateFileDialog(file) {
+      this.updateFileForm.id = file.id;
+      this.updateFileForm.filename = file.filename;
+      this.updateFileForm.year = file.year;
+      this.fileId = file.id;
+      this.showUpdateFileDialog = true;
+    },
+    confirmFileDeletion: function confirmFileDeletion(file) {
+      this.fileBeingDeleted = file;
+    },
+    deleteFile: function deleteFile() {
+      var _this3 = this;
+
+      this.deleteFileForm["delete"]('/sacres/' + this.sacre.id + '/shared/' + this.fileBeingDeleted.id, {
+        preserveScroll: true,
+        preserveState: true
+      }).then(function () {
+        _this3.fileBeingDeleted = null;
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/Show.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sacres/Show.vue?vue&type=script&lang=js& ***!
@@ -7578,6 +7954,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UpdateDetailsForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UpdateDetailsForm */ "./resources/js/Pages/Sacres/UpdateDetailsForm.vue");
 /* harmony import */ var _ContactManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ContactManager */ "./resources/js/Pages/Sacres/ContactManager.vue");
 /* harmony import */ var _FileManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FileManager */ "./resources/js/Pages/Sacres/FileManager.vue");
+/* harmony import */ var _ShareManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ShareManager */ "./resources/js/Pages/Sacres/ShareManager.vue");
 //
 //
 //
@@ -7608,6 +7985,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -7620,7 +8002,8 @@ __webpack_require__.r(__webpack_exports__);
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"],
     JetSectionBorder: _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_1__["default"],
     ContactManager: _ContactManager__WEBPACK_IMPORTED_MODULE_3__["default"],
-    FileManager: _FileManager__WEBPACK_IMPORTED_MODULE_4__["default"]
+    FileManager: _FileManager__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ShareManager: _ShareManager__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 });
 
@@ -37274,28 +37657,82 @@ var render = function() {
                       "div",
                       { staticClass: "flex items-center justify-between" },
                       [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "flex items-center",
-                            attrs: {
-                              target: "_blank",
-                              href:
-                                "/sacres/" + _vm.sacre.id + "/files/" + file.id
-                            }
-                          },
-                          [
-                            _c("div", { staticClass: "ml-4 align-middle" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(file.year) +
-                                  " - " +
-                                  _vm._s(file.filename) +
-                                  "\n                        "
+                        _c("div", { staticClass: "flex items-center" }, [
+                          _c("div", { staticClass: "ml-4 align-middle" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(file.year) +
+                                " - " +
+                                _vm._s(file.filename) +
+                                "\n                        "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "flex items-center" }, [
+                          _c(
+                            "div",
+                            { staticClass: "ml-2 text-sm text-gray-400" },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "ml-2 text-sm text-gray-400 underline",
+                                  attrs: {
+                                    target: "_blank",
+                                    href:
+                                      "/sacres/" +
+                                      _vm.sacre.id +
+                                      "/files/" +
+                                      file.id
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                View\n                            "
+                                  )
+                                ]
                               )
-                            ])
-                          ]
-                        )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "ml-2 text-sm text-gray-400 underline",
+                              on: {
+                                click: function($event) {
+                                  return _vm.updateFileDialog(file)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Edit\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "cursor-pointer ml-6 text-sm text-red-500 focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.confirmFileDeletion(file)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Delete\n                        "
+                              )
+                            ]
+                          )
+                        ])
                       ]
                     )
                   }),
@@ -37414,11 +37851,124 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c("jet-confirmation-modal", {
-        attrs: { show: _vm.FileBeingDeleted },
+      _c("jet-dialog-modal", {
+        attrs: { show: _vm.showUpdateFileDialog },
         on: {
           close: function($event) {
-            _vm.FileBeingDeleted = null
+            _vm.showUpdateFileDialog = false
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Update File\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "mt-4" },
+                  [
+                    _c("jet-label", {
+                      attrs: { for: "filename", value: "filename" }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input", {
+                      staticClass: "mt-1 block w-full",
+                      attrs: { id: "filename", type: "text" },
+                      model: {
+                        value: _vm.updateFileForm.filename,
+                        callback: function($$v) {
+                          _vm.$set(_vm.updateFileForm, "filename", $$v)
+                        },
+                        expression: "updateFileForm.filename"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input-error", {
+                      staticClass: "mt-2",
+                      attrs: { message: _vm.updateFileForm.error("filename") }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mt-4" },
+                  [
+                    _c("jet-label", { attrs: { for: "year", value: "year" } }),
+                    _vm._v(" "),
+                    _c("jet-input", {
+                      staticClass: "mt-1 block w-full",
+                      attrs: { id: "year", type: "text" },
+                      model: {
+                        value: _vm.updateFileForm.year,
+                        callback: function($$v) {
+                          _vm.$set(_vm.updateFileForm, "year", $$v)
+                        },
+                        expression: "updateFileForm.year"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input-error", {
+                      staticClass: "mt-2",
+                      attrs: { message: _vm.updateFileForm.error("year") }
+                    })
+                  ],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.showUpdateFileDialog = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.updateFileForm.processing },
+                    attrs: { disabled: _vm.updateFileForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.updateFile($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Save\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("jet-confirmation-modal", {
+        attrs: { show: _vm.fileBeingDeleted },
+        on: {
+          close: function($event) {
+            _vm.fileBeingDeleted = null
           }
         },
         scopedSlots: _vm._u([
@@ -37449,7 +37999,7 @@ var render = function() {
                   {
                     nativeOn: {
                       click: function($event) {
-                        _vm.FileBeingDeleted = null
+                        _vm.fileBeingDeleted = null
                       }
                     }
                   },
@@ -37797,6 +38347,411 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("jet-section-border"),
+      _vm._v(" "),
+      _c("jet-action-section", {
+        staticClass: "mt-10 sm:mt-0",
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            SACRE Shared Files\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "description",
+            fn: function() {
+              return [
+                _vm._v(
+                  "\n            All of the files that are part of this SACRE.\n        "
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "space-y-6" },
+                  _vm._l(_vm.shared, function(file) {
+                    return _c(
+                      "div",
+                      { staticClass: "flex items-center justify-between" },
+                      [
+                        _c("div", { staticClass: "flex items-center" }, [
+                          _c("div", { staticClass: "ml-4 align-middle" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(file.filename) +
+                                "\n                        "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "flex items-center" }, [
+                          _c(
+                            "div",
+                            { staticClass: "ml-2 text-sm text-gray-400" },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "ml-2 text-sm text-gray-400 underline",
+                                  attrs: {
+                                    target: "_blank",
+                                    href:
+                                      "/sacres/" +
+                                      _vm.sacre.id +
+                                      "/shared/" +
+                                      file.id
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                View\n                            "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "ml-2 text-sm text-gray-400 underline",
+                              on: {
+                                click: function($event) {
+                                  return _vm.updateFileDialog(file)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Edit\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "cursor-pointer ml-6 text-sm text-red-500 focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.confirmFileDeletion(file)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Delete\n                        "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "actions",
+            fn: function() {
+              return [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150",
+                    on: {
+                      click: function($event) {
+                        return _vm.addFileDialog()
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Add new File\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("jet-dialog-modal", {
+        attrs: { show: _vm.showNewFileDialog },
+        on: {
+          close: function($event) {
+            _vm.showNewFileDialog = false
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Add File\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _c("input", {
+                  attrs: { type: "file" },
+                  on: {
+                    input: function($event) {
+                      _vm.addFileForm.file = $event.target.files[0]
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.addFileForm.progress
+                  ? _c(
+                      "progress",
+                      {
+                        attrs: { max: "100" },
+                        domProps: { value: _vm.addFileForm.progress.percentage }
+                      },
+                      [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.addFileForm.progress.percentage) +
+                            "%\n            "
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.showNewFileDialog = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.addFileForm.processing },
+                    attrs: { disabled: _vm.addFileForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.addFile($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Save\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("jet-dialog-modal", {
+        attrs: { show: _vm.showUpdateFileDialog },
+        on: {
+          close: function($event) {
+            _vm.showUpdateFileDialog = false
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Update File\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "mt-4" },
+                  [
+                    _c("jet-label", {
+                      attrs: { for: "filename", value: "filename" }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input", {
+                      staticClass: "mt-1 block w-full",
+                      attrs: { id: "filename", type: "text" },
+                      model: {
+                        value: _vm.updateFileForm.filename,
+                        callback: function($$v) {
+                          _vm.$set(_vm.updateFileForm, "filename", $$v)
+                        },
+                        expression: "updateFileForm.filename"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input-error", {
+                      staticClass: "mt-2",
+                      attrs: { message: _vm.updateFileForm.error("filename") }
+                    })
+                  ],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.showUpdateFileDialog = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.updateFileForm.processing },
+                    attrs: { disabled: _vm.updateFileForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.updateFile($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Save\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("jet-confirmation-modal", {
+        attrs: { show: _vm.fileBeingDeleted },
+        on: {
+          close: function($event) {
+            _vm.fileBeingDeleted = null
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Delete SACRE File\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _vm._v(
+                  "\n            Are you sure you would like to delete this File?\n        "
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.fileBeingDeleted = null
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-danger-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.deleteFileForm.processing },
+                    attrs: { disabled: _vm.deleteFileForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.deleteFile($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Delete\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/Show.vue?vue&type=template&id=eb515b30&":
 /*!*********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sacres/Show.vue?vue&type=template&id=eb515b30& ***!
@@ -37855,6 +38810,10 @@ var render = function() {
             _vm._v(" "),
             _c("file-manager", {
               attrs: { sacre: _vm.sacre.data, files: _vm.sacre.data.files }
+            }),
+            _vm._v(" "),
+            _c("share-manager", {
+              attrs: { sacre: _vm.sacre.data, shared: _vm.sacre.data.shared }
             })
           ],
           1
@@ -56119,6 +57078,8 @@ var map = {
 	"./Sacres/FileManager.vue": "./resources/js/Pages/Sacres/FileManager.vue",
 	"./Sacres/Invoices": "./resources/js/Pages/Sacres/Invoices.vue",
 	"./Sacres/Invoices.vue": "./resources/js/Pages/Sacres/Invoices.vue",
+	"./Sacres/ShareManager": "./resources/js/Pages/Sacres/ShareManager.vue",
+	"./Sacres/ShareManager.vue": "./resources/js/Pages/Sacres/ShareManager.vue",
 	"./Sacres/Show": "./resources/js/Pages/Sacres/Show.vue",
 	"./Sacres/Show.vue": "./resources/js/Pages/Sacres/Show.vue",
 	"./Sacres/UpdateDetailsForm": "./resources/js/Pages/Sacres/UpdateDetailsForm.vue",
@@ -58088,6 +59049,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Invoices_vue_vue_type_template_id_35bf9c51___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Invoices_vue_vue_type_template_id_35bf9c51___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sacres/ShareManager.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/Pages/Sacres/ShareManager.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShareManager.vue?vue&type=template&id=a23c9a8e& */ "./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e&");
+/* harmony import */ var _ShareManager_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShareManager.vue?vue&type=script&lang=js& */ "./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ShareManager_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Sacres/ShareManager.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ShareManager_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ShareManager.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ShareManager_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ShareManager.vue?vue&type=template&id=a23c9a8e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sacres/ShareManager.vue?vue&type=template&id=a23c9a8e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShareManager_vue_vue_type_template_id_a23c9a8e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

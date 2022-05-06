@@ -4,7 +4,7 @@ namespace App\Actions\SacreFile;
 
 use App\Contracts\SacreFile\DeletesSacreFile;
 
-class DeleteSacreFile implements DeletesSacreFile
+class DeleteScareFile implements DeletesSacreFile
 {
     /**
      * Delete the given sacreFile.

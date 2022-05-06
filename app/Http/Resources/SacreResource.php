@@ -30,6 +30,7 @@ class SacreResource extends JsonResource
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
             'invoices' => \App\Http\Resources\SacreInvoiceResource::collection($this->invoices),
             'files' => \App\Http\Resources\SacreFileResource::collection($this->files),
+            'shared' => \App\Http\Resources\SharedFileResource::collection($this->shared),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

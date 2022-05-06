@@ -22,6 +22,10 @@
                     :sacre="sacre.data"
                     :files="sacre.data.files"/>
 
+                <share-manager
+                    :sacre="sacre.data"
+                    :shared="sacre.data.shared"/>
+
             </div>
         </div>
 
@@ -34,6 +38,7 @@
     import UpdateDetailsForm from "./UpdateDetailsForm";
     import ContactManager from "./ContactManager";
     import FileManager from "./FileManager";
+    import ShareManager from "./ShareManager";
 
     export default {
         props: [
@@ -46,7 +51,8 @@
             AppLayout,
             JetSectionBorder,
             ContactManager,
-            FileManager
+            FileManager,
+            ShareManager
         },
     }
 </script>

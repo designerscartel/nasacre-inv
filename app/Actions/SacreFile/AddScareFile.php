@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Contracts\SacreFile\AddsSacreFile;
 
 
-class AddSacreFile implements AddsSacreFile
+class AddScareFile implements AddsSacreFile
 {
     /**
      * Validate and Create the given sacre's file information.

@@ -3,10 +3,10 @@
     <div>
         <jet-section-border/>
 
-        <!-- Manage SACRE Files -->
+        <!-- Manage SACRE Shared Files -->
         <jet-action-section class="mt-10 sm:mt-0">
             <template #title>
-                SACRE Files
+                SACRE Shared Files
             </template>
 
             <template #description>
@@ -17,18 +17,18 @@
             <template #content>
 
                 <div class="space-y-6">
-                    <div class="flex items-center justify-between" v-for="file in files">
+                    <div class="flex items-center justify-between" v-for="file in shared">
 
                         <div class="flex items-center">
                             <div class="ml-4 align-middle">
-                                {{ file.year }} - {{ file.filename }}
+                                {{ file.filename }}
                             </div>
                         </div>
 
                         <div class="flex items-center">
 
                             <div class="ml-2 text-sm text-gray-400">
-                                <a target="_blank" :href="'/sacres/' + sacre.id + '/files/'+ file.id"  class="ml-2 text-sm text-gray-400 underline">
+                                <a target="_blank" :href="'/sacres/' + sacre.id + '/shared/'+ file.id"  class="ml-2 text-sm text-gray-400 underline">
                                     View
                                 </a>
                             </div>
@@ -103,14 +103,6 @@
                     <jet-input id="filename" type="text" class="mt-1 block w-full" v-model="updateFileForm.filename"/>
                     <jet-input-error :message="updateFileForm.error('filename')" class="mt-2"/>
                 </div>
-
-                <!-- Year -->
-                <div class="mt-4">
-                    <jet-label for="year" value="year"/>
-                    <jet-input id="year" type="text" class="mt-1 block w-full" v-model="updateFileForm.year"/>
-                    <jet-input-error :message="updateFileForm.error('year')" class="mt-2"/>
-                </div>
-
 
             </template>
 
@@ -192,7 +184,7 @@ export default {
 
     props: [
         'sacre',
-        'files',
+        'shared',
     ],
 
     data() {
@@ -223,7 +215,7 @@ export default {
 
     methods: {
         addFile() {
-            this.addFileForm.post('/sacres/' + this.sacre.id + '/files', {
+            this.addFileForm.post('/sacres/' + this.sacre.id + '/shared', {
                 preserveScroll: true
             }).then(() => {
                 if (!this.addFileForm.hasErrors()) {
@@ -235,7 +227,7 @@ export default {
             this.showNewFileDialog = true
         },
         updateFile() {
-            this.updateFileForm.put('/sacres/' + this.sacre.id + '/files/' + this.fileId, {
+            this.updateFileForm.put('/sacres/' + this.sacre.id + '/shared/' + this.fileId, {
                 preserveScroll: true
             }).then(() => {
                 this.fileId = null;
@@ -255,7 +247,7 @@ export default {
             this.fileBeingDeleted = file
         },
         deleteFile() {
-            this.deleteFileForm.delete('/sacres/' + this.sacre.id + '/files/' + this.fileBeingDeleted.id, {
+            this.deleteFileForm.delete('/sacres/' + this.sacre.id + '/shared/' + this.fileBeingDeleted.id, {
                 preserveScroll: true,
                 preserveState: true,
             }).then(() => {

@@ -58,6 +58,13 @@ class Sacre extends Model
         return $this->hasMany(SacreFile::class)->orderBy('year', 'DESC');
     }
 
+    /**
+     * Get all of the shared.
+     */
+    public function shared()
+    {
+        return $this->hasMany(SharedFile::class);
+    }
 
     /**
      * Return a Resource

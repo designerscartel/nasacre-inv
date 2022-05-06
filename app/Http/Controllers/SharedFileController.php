@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\SacreFile\UpdatesScareFile;
-use App\Contracts\SacreFile\AddsScareFile;
-use App\Actions\SacreFile\DeleteScareFile;
+use App\Contracts\SharedFile\UpdatesSharedFile;
+use App\Contracts\SharedFile\AddsSharedFile;
+use App\Actions\SharedFile\DeleteSharedFile;
 use App\Models\Sacre;
-use App\Models\SacreFile;
+use App\Models\SharedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
-class SacreFileController extends Controller
+class SharedFileController extends Controller
 {
 
     /**
      * Display the specified resource.
      *
      * @param \App\Models\Sacre $sacre
-     * @param \App\Models\SacreFile $file
+     * @param \App\Models\SharedFile $file
      * @return \Illuminate\Http\Response
      */
-    public function show(Sacre $sacre, SacreFile $file)
+    public function show(Sacre $sacre, SharedFile $file)
     {
         //
         $file = storage_path('app/public/files').'/' .$file->filename;
@@ -47,7 +47,7 @@ class SacreFileController extends Controller
     public function store(Request $request, Sacre $sacre)
     {
         //
-        app(AddsScareFile::class)->add($sacre, $request);
+        app(AddsSharedFile::class)->add($sacre, $request);
 
         return back(303);
     }
@@ -58,13 +58,13 @@ class SacreFileController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Sacre $sacre
-     * @param \App\Models\SacreFile $file
+     * @param \App\Models\SharedFile $file
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Sacre $sacre, SacreFile $file)
+    public function update(Request $request, Sacre $sacre, SharedFile $file)
     {
         //
-        app(UpdatesScareFile::class)->update($file, $sacre, $request->all());
+        app(UpdatesSharedFile::class)->update($file, $sacre, $request->all());
 
         return back(303);
     }
@@ -74,13 +74,13 @@ class SacreFileController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Sacre $sacre
-     * @param \App\Models\SacreFile $file
+     * @param \App\Models\SharedFile $file
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request, Sacre $sacre, SacreFile $file)
+    public function destroy(Request $request, Sacre $sacre, SharedFile $file)
     {
         //
-        app(DeleteScareFile::class)->delete($file);
+        app(DeleteSharedFile::class)->delete($file);
 
         return back(303);
     }

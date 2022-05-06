@@ -16,12 +16,19 @@ use App\Contracts\SacreContact\AddsSacreContact;
 use App\Contracts\SacreContact\UpdatesSacreContact;
 use App\Contracts\SacreContact\DeletesSacreContact;
 
-use App\Actions\SacreFile\AddSacreFile;
-use App\Actions\SacreFile\UpdateSacreFile;
-use App\Actions\SacreFile\DeleteSacreFile;
-use App\Contracts\SacreFile\AddsSacreFile;
-use App\Contracts\SacreFile\UpdatesSacreFile;
-use App\Contracts\SacreFile\DeletesSacreFile;
+use App\Actions\SacreFile\AddScareFile;
+use App\Actions\SacreFile\UpdateScareFile;
+use App\Actions\SacreFile\DeleteScareFile;
+use App\Contracts\SacreFile\AddsScareFile;
+use App\Contracts\SacreFile\UpdatesScareFile;
+use App\Contracts\SacreFile\DeletesScareFile;
+
+use App\Actions\SharedFile\AddSharedFile;
+use App\Actions\SharedFile\UpdateSharedFile;
+use App\Actions\SharedFile\DeleteSharedFile;
+use App\Contracts\SharedFile\AddsSharedFile;
+use App\Contracts\SharedFile\UpdatesSharedFile;
+use App\Contracts\SharedFile\DeletesSharedFile;
 
 use App\Actions\Region\UpdateRegionInformation;
 use App\Actions\Region\CreateRegionInformation;
@@ -103,9 +110,13 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(UpdatesSacreContact::class, UpdateSacreContact::class);
         app()->singleton(DeletesSacreContact::class, DeleteSacreContact::class);
 
-        app()->singleton(AddsSacreFile::class, AddSacreFile::class);
-        app()->singleton(UpdatesSacreFile::class, UpdateSacreFile::class);
-        app()->singleton(DeletesSacreFile::class, DeleteSacreFile::class);
+        app()->singleton(AddsScareFile::class, AddScareFile::class);
+        app()->singleton(UpdatesScareFile::class, UpdateScareFile::class);
+        app()->singleton(DeletesScareFile::class, DeleteScareFile::class);
+
+        app()->singleton(AddsSharedFile::class, AddSharedFile::class);
+        app()->singleton(UpdatesSharedFile::class, UpdateSharedFile::class);
+        app()->singleton(DeletesSharedFile::class, DeleteSharedFile::class);
 
         app()->singleton(CreatesRegionInformation::class, CreateRegionInformation::class);
         app()->singleton(UpdatesRegionInformation::class, UpdateRegionInformation::class);
