@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/database/{sacre}/shared/{file}', [\App\Http\Controllers\Api\SharedController::class, 'show'])->name('api.shared');
 Route::get('/database/{sacre}/files/{file}', [\App\Http\Controllers\Api\FileController::class, 'show'])->name('api.file');
 Route::get('/database/{term}', [\App\Http\Controllers\Api\DatabaseController::class, 'show'])->name('api.search');
 Route::get('/database', [\App\Http\Controllers\Api\DatabaseController::class, 'index'])->name('api.database');
