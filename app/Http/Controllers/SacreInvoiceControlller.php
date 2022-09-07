@@ -69,6 +69,10 @@ class SacreInvoiceControlller extends Controller
             $sacreInvoice->invoice->date = $sacreInvoice->date;
         }
 
+        if(!empty($sacreInvoice->virtual_training)) {
+            $sacreInvoice->invoice->virtual_training = $sacreInvoice->virtual_training;
+        }
+
         $pdf = app(CreatesInvoicePdf::class)->inline($sacreInvoice->invoice, $sacre);
         return $pdf;
     }

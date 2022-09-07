@@ -37,7 +37,7 @@ class CampaignForQueuing extends Mailable
      */
     public function build()
     {
-        return $this->from('mail@example.com', 'Mailtrap')
+        return $this->from('admin@nasacre.org.uk', 'NASACRE')
             ->subject($this->campaign->subject)
             ->with([
                 'campaign' => $this->campaign,

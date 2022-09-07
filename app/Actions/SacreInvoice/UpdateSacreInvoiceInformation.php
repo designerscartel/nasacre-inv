@@ -31,6 +31,7 @@ class UpdateSacreInvoiceInformation implements UpdatesSacreInvoiceInformation
             'po_number' => $input['po_number'],
             'address' => $input['address'],
             'date' => $date,
+            'virtual_training' => $input['virtual_training'],
         ])->save();
     }
 }

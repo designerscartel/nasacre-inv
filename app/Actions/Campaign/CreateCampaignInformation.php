@@ -22,7 +22,7 @@ class CreateCampaignInformation implements CreatesCampaignInformation
             'email' => ['required', 'string', 'max:255'],
             'subject' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255'],
-            'message' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string'],
         ])->validateWithBag('createCampaignInformation');
 
         $campaign = new Campaign();

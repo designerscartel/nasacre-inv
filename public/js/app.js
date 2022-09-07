@@ -7579,6 +7579,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -7623,7 +7629,8 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         po_number: '',
         address: '',
-        date: ''
+        date: '',
+        virtual_training: ''
       }, {
         bag: 'updateSacreInvoiceInformation',
         resetOnSuccess: true
@@ -7651,6 +7658,7 @@ __webpack_require__.r(__webpack_exports__);
       this.updateInvoiceForm.po_number = invoice.po_number;
       this.updateInvoiceForm.address = invoice.address;
       this.updateInvoiceForm.date = invoice.date;
+      this.updateInvoiceForm.virtual_training = invoice.virtual_training;
       this.invoiceId = invoice.id;
       this.showUpdateInvoiceDialog = true;
     }
@@ -8111,6 +8119,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -8146,7 +8161,8 @@ __webpack_require__.r(__webpack_exports__);
         short_code: this.sacre.short_code,
         code: this.sacre.code,
         po: this.sacre.po,
-        finance: this.sacre.finance
+        finance: this.sacre.finance,
+        virtual_training: this.sacre.virtual_training
       }, {
         bag: 'updateSacreInformation',
         resetOnSuccess: false
@@ -38269,6 +38285,40 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
+                  { staticClass: "col-span-6 sm:col-span-4" },
+                  [
+                    _c("jet-toggle", {
+                      staticClass: "mt-1 block w-full",
+                      attrs: {
+                        type: "toggle",
+                        label: "Virtual Training",
+                        forid: "virtual_training"
+                      },
+                      model: {
+                        value: _vm.updateInvoiceForm.virtual_training,
+                        callback: function($$v) {
+                          _vm.$set(
+                            _vm.updateInvoiceForm,
+                            "virtual_training",
+                            $$v
+                          )
+                        },
+                        expression: "updateInvoiceForm.virtual_training"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input-error", {
+                      staticClass: "mt-2",
+                      attrs: {
+                        message: _vm.updateInvoiceForm.error("virtual_training")
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
                   { staticClass: "mt-4" },
                   [
                     _c("jet-label", { attrs: { for: "date", value: "Date" } }),
@@ -39032,6 +39082,34 @@ var render = function() {
                 _c("jet-input-error", {
                   staticClass: "mt-2",
                   attrs: { message: _vm.form.error("member") }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-span-6 sm:col-span-4" },
+              [
+                _c("jet-toggle", {
+                  staticClass: "mt-1 block w-full",
+                  attrs: {
+                    type: "toggle",
+                    label: "Virtual Training",
+                    forid: "virtual_training"
+                  },
+                  model: {
+                    value: _vm.form.virtual_training,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "virtual_training", $$v)
+                    },
+                    expression: "form.virtual_training"
+                  }
+                }),
+                _vm._v(" "),
+                _c("jet-input-error", {
+                  staticClass: "mt-2",
+                  attrs: { message: _vm.form.error("virtual_training") }
                 })
               ],
               1

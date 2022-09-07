@@ -26,6 +26,7 @@ class SacreResource extends JsonResource
             'code' => $this->code,
             'po' => $this->po,
             'finance' => $this->finance,
+            'virtual_training' => $this->virtual_training,
             'region' => new \App\Http\Resources\RegionResource($this->region),
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
             'invoices' => \App\Http\Resources\SacreInvoiceResource::collection($this->invoices),

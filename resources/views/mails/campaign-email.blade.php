@@ -5,8 +5,4 @@
 
 {{ $campaign->message }}
 
-{{ $campaign->url }}
-
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent

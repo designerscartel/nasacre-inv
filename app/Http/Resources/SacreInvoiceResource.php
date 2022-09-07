@@ -21,6 +21,7 @@ class SacreInvoiceResource extends JsonResource
             'batch' => $this->batch,
             'invoice' => new \App\Http\Resources\InvoiceResource($this->invoice),
             'po_number' => $this->po_number,
+            'virtual_training' => $this->virtual_training,
             'date' => $this->date,
             'address' => $this->address
         ];

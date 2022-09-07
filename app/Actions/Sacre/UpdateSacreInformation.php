@@ -31,6 +31,7 @@ class UpdateSacreInformation implements UpdatesSacreInformation
             'code' => $input['code'],
             'po' => $input['po'],
             'finance' => $input['finance'],
+            'virtual_training' => $input['virtual_training'],
         ])->save();
     }
 }

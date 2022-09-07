@@ -52,6 +52,13 @@
                 <jet-input-error :message="form.error('member')" class="mt-2" />
             </div>
 
+            <!-- Virtual Training -->
+            <div class="col-span-6 sm:col-span-4">
+                <jet-toggle type="toggle" class="mt-1 block w-full" v-model="form.virtual_training" :label="'Virtual Training'" :forid="'virtual_training'"/>
+                <jet-input-error :message="form.error('virtual_training')" class="mt-2" />
+            </div>
+
+
             <!-- PO -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="po" value="PO" />
@@ -121,6 +128,7 @@
                     code: this.sacre.code,
                     po: this.sacre.po,
                     finance: this.sacre.finance,
+                    virtual_training: this.sacre.virtual_training,
                 }, {
                     bag: 'updateSacreInformation',
                     resetOnSuccess: false,

@@ -174,6 +174,16 @@
         <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
         <td><p>&pound;{{ $invoice->subs }}</p></td>
     </tr>
+    @if($sacre->virtual_training == 1)
+        <tr>
+            <td><p>Virtual Training</p></td>
+            <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
+            <td><p>&pound;50.00</p></td>
+        </tr>
+        @php
+            $invoice->subs = $invoice->subs + 50.00;
+        @endphp
+    @endif
     <tr>
         <td colspan="3">&nbsp;</td>
     </tr>

@@ -78,6 +78,12 @@
                     <jet-input-error :message="updateInvoiceForm.error('address')" class="mt-2"/>
                 </div>
 
+                <!-- Virtual Training -->
+                <div class="col-span-6 sm:col-span-4">
+                    <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateInvoiceForm.virtual_training" :label="'Virtual Training'" :forid="'virtual_training'"/>
+                    <jet-input-error :message="updateInvoiceForm.error('virtual_training')" class="mt-2" />
+                </div>
+
                 <!-- Date -->
                 <div class="mt-4">
                     <jet-label for="date" value="Date"/>
@@ -153,7 +159,8 @@ export default {
                 id: '',
                 po_number: '',
                 address: '',
-                date: ''
+                date: '',
+                virtual_training: ''
             }, {
                 bag: 'updateSacreInvoiceInformation',
                 resetOnSuccess: true,
@@ -179,6 +186,7 @@ export default {
             this.updateInvoiceForm.po_number = invoice.po_number
             this.updateInvoiceForm.address = invoice.address
             this.updateInvoiceForm.date = invoice.date
+            this.updateInvoiceForm.virtual_training = invoice.virtual_training
             this.invoiceId = invoice.id
             this.showUpdateInvoiceDialog = true
         },

@@ -24,6 +24,7 @@ class Sacre extends Model
         'code',
         'po',
         'finance',
+        'virtual_training',
     ];
 
     /**
