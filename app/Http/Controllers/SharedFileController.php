@@ -30,7 +30,9 @@ class SharedFileController extends Controller
             $headers = [
                 'Content-Type' => 'application/pdf'
             ];
-            return response()->file($file, $headers);
+
+            //dd($file);
+            return response()->file($file);
         } else {
             abort(404, 'File not found!');
         }

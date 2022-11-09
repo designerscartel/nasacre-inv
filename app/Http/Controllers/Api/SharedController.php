@@ -28,12 +28,10 @@ class SharedController extends Controller
     public function show(Sacre $sacre, SharedFile $file)
     {
         //
-        $file = storage_path('app/public/files').'/' .$file->filename;
-        if (file_exists($file)) {
-            $headers = [
-                'Content-Type' => 'application/pdf'
-            ];
-            return response()->file($file, $headers);
+        if (file_exists(storage_path('app/public/files') . '/' . $file->filename)) {
+            return \Storage::download('public/files/' . $file->filename, $file->filename, [
+                'Content-Type: ' . \Storage::mimeType('/public/files/' . $file->filename),
+            ]);
         } else {
             abort(404, 'File not found!');
         }
@@ -45,9 +43,6 @@ class SharedController extends Controller
         $results = SharedFile::search($term)->get();
         return ApiSharedResource::collection($results);
     }
-
-
-
 
 
 }
