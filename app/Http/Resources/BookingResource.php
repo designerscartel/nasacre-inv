@@ -27,6 +27,7 @@ class BookingResource extends JsonResource
             'from' => $this->from,
             'message' => $this->message,
             'venue' => $this->message,
+            'bookings' => $this->bookings,
         ];
 
     }

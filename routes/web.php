@@ -98,6 +98,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/bookings/create', [\App\Http\Controllers\BookingController::class, 'create'])->name('bookings.create');
         Route::get('/bookings/{booking}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
         Route::put('/bookings/{booking}', [\App\Http\Controllers\BookingController::class, 'update'])->name('bookings.update');
+        Route::get('/bookings/{booking}/edit', [\App\Http\Controllers\BookingController::class, 'edit'])->name('bookings.edit');
         Route::post('/bookings/{booking}/send', [\App\Http\Controllers\BookingController::class, 'send'])->name('bookings.send');
 
     });

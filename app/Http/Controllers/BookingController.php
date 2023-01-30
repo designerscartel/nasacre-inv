@@ -61,8 +61,10 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         //
+        $booking = $booking->with('bookings')->get()->first();
+        $booking = $booking->toResource();
         return Inertia::render('Bookings/Show', [
-            'booking' => $booking->toResource(),
+            'booking' => $booking,
         ]);
     }
 
@@ -75,6 +77,9 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         //
+        return Inertia::render('Bookings/Edit', [
+            'booking' => $booking->toResource(),
+        ]);
     }
 
     /**

@@ -44,8 +44,11 @@
                                 <tr v-if="bookings" v-for="booking in bookings.data" :key="booking.id">
                                     <td class="border px-8 py-2">{{ booking.year }}</td>
                                     <td class="border px-4 py-2">
-                                        <inertia-link class="text-sm mr-2" :href="'/bookings/'+ booking.id">
+                                        <inertia-link class="text-sm mr-2" :href="'/bookings/'+ booking.id+'/edit'">
                                             Edit
+                                        </inertia-link>
+                                        <inertia-link class="text-sm mr-2" :href="'/bookings/'+ booking.id">
+                                            Bookings
                                         </inertia-link>
                                     </td>
                                 </tr>

@@ -47,5 +47,12 @@ class Booking extends Model
         });
     }
 
+    /**
+     * Get all of the bookings.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(SacreBooking::class);
+    }
 
 }
