@@ -52,6 +52,14 @@ class Sacre extends Model
     }
 
     /**
+     * Get all of the bookings.
+     */
+    public function bookinsg()
+    {
+        return $this->hasMany(SacreBooking::class);
+    }
+
+    /**
      * Get all of the files.
      */
     public function files()

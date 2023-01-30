@@ -23,6 +23,8 @@ Route::get('/regions', [\App\Http\Controllers\Api\RegionController::class, 'inde
 Route::get('/shared/{term}', [\App\Http\Controllers\Api\SharedController::class, 'shared'])->name('api.shared.search');
 Route::get('/shared', [\App\Http\Controllers\Api\SharedController::class, 'index'])->name('api.shared');
 
+Route::post('/booking', [\App\Http\Controllers\Api\BookingController::class, 'store'])->name('api.booking');
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

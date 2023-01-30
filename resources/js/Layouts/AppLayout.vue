@@ -20,6 +20,9 @@
                             <jet-nav-link href="/invoices" :active="$page.currentRouteName == 'invoices.index'">
                                 Invoices
                             </jet-nav-link>
+                            <jet-nav-link href="/bookings" :active="$page.currentRouteName == 'bookings.index'">
+                                Booking
+                            </jet-nav-link>
                             <jet-nav-link href="/campaigns" :active="$page.currentRouteName == 'campaigns.index'">
                                 Campaigns
                             </jet-nav-link>
@@ -32,6 +35,7 @@
 
                         </div>
                     </div>
+
 
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">

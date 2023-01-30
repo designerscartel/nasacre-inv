@@ -2,9 +2,17 @@
 
 namespace App\Providers;
 
+use App\Actions\Booking\CreateBookingInformation;
+use App\Actions\Booking\DeleteBooking;
+use App\Actions\Booking\UpdateBookingInformation;
+use App\Actions\Booking\CreateBookingRefInformation;
 use App\Actions\Sacre\UpdateSacreInformation;
 use App\Actions\Sacre\CreateSacreInformation;
 use App\Actions\Sacre\DeleteSacre;
+use App\Contracts\Booking\CreatesBookingInformation;
+use App\Contracts\Booking\CreatesBookingRefInformation;
+use App\Contracts\Booking\DeletesBooking;
+use App\Contracts\Booking\UpdatesBookingInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Contracts\Sacre\CreatesSacreInformation;
 use App\Contracts\Sacre\DeletesSacre;
@@ -75,7 +83,6 @@ use App\Contracts\Invoice\CreatesInvoicePdf;
 use App\Actions\SacreInvoice\UpdateSacreInvoiceInformation;
 use App\Contracts\SacreInvoice\UpdatesSacreInvoiceInformation;
 
-
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -141,6 +148,12 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(DeletesInvoice::class, DeleteInvoice::class);
         app()->singleton(SendsInvoiceInformation::class, SendInvoiceInformation::class);
         app()->singleton(CreatesInvoicePdf::class, CreateInvoicePdf::class);
+
+        app()->singleton(CreatesBookingInformation::class, CreateBookingInformation::class);
+        app()->singleton(CreatesBookingRefInformation::class, CreateBookingRefInformation::class);
+        app()->singleton(UpdatesBookingInformation::class, UpdateBookingInformation::class);
+        app()->singleton(DeletesBooking::class, DeleteBooking::class);
+
 
         app()->singleton(UpdatesSacreInvoiceInformation::class, UpdateSacreInvoiceInformation::class);
     }
