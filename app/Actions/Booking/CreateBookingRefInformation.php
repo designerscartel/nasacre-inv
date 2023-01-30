@@ -3,11 +3,14 @@
 namespace App\Actions\booking;
 
 use App\Contracts\Booking\CreatesBookingRefInformation;
+use App\Mail\BookingInvoiceForQueuing;
 use App\Models\SacreBooking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Mail;
+
 
 class CreateBookingRefInformation implements CreatesBookingRefInformation
 {
@@ -74,6 +77,10 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
                 'id' => $bookingData->id
             ]
             ];
+
+            $email = new BookingInvoiceForQueuing($bookingData);
+            Mail::to($bookingData->email)->send($email);
+
         } else {
             $bookingData = new SacreBooking();
             $bookingData = $bookingData->create($bookingRequest);
