@@ -19,6 +19,7 @@ class BookingController extends Controller
     {
         //
         $booking = app(CreateBookingRefInformation::class)->create($request);
+        return $booking;
     }
 
 

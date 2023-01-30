@@ -25,12 +25,15 @@ class SacreBooking extends Model
         'booking_id',
         'delegate_one_name',
         'delegate_one_email',
+        'delegate_one_diet',
         'delegate_two_name',
         'delegate_two_email',
+        'delegate_two_diet',
         'virtual_one_name',
         'virtual_one_email',
         'virtual_two_name',
         'virtual_two_email',
+        'confirmed'
     ];
 
     /**
@@ -46,7 +49,7 @@ class SacreBooking extends Model
      */
     public function booking()
     {
-        return $this->belongsTo(Booking::class, 'invoice_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 
     /**
