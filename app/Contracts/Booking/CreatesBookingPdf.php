@@ -15,26 +15,26 @@ interface CreatesBookingPdf
      * @param  object  $sacre
      * @return void
      */
-    public function create(object $booking, object $sacre);
+    public function create(object $bookingData);
 
     /**
      * @param object $booking
      * @param object $sacre
      * @return mixed
      */
-    public function output(object $booking, object $sacre);
+    public function output(object $bookingData);
 
     /**
      * @param object $booking
      * @param object $sacre
      * @return mixed
      */
-    public function download(object $booking, object $sacre);
+    public function download(object $bookingData);
 
     /**
      * @param object $booking
      * @param object $sacre
      * @return mixed
      */
-    public function inline(object $booking, object $sacre);
+    public function inline(object $bookingData);
 }

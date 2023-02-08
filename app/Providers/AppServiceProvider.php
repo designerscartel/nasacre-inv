@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\Booking\CreateBookingInformation;
+use App\Actions\Booking\CreateBookingPdf;
 use App\Actions\Booking\DeleteBooking;
 use App\Actions\Booking\UpdateBookingInformation;
 use App\Actions\Booking\CreateBookingRefInformation;
@@ -10,6 +11,7 @@ use App\Actions\Sacre\UpdateSacreInformation;
 use App\Actions\Sacre\CreateSacreInformation;
 use App\Actions\Sacre\DeleteSacre;
 use App\Contracts\Booking\CreatesBookingInformation;
+use App\Contracts\Booking\CreatesBookingPdf;
 use App\Contracts\Booking\CreatesBookingRefInformation;
 use App\Contracts\Booking\DeletesBooking;
 use App\Contracts\Booking\UpdatesBookingInformation;
@@ -153,6 +155,7 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(CreatesBookingRefInformation::class, CreateBookingRefInformation::class);
         app()->singleton(UpdatesBookingInformation::class, UpdateBookingInformation::class);
         app()->singleton(DeletesBooking::class, DeleteBooking::class);
+        app()->singleton(CreatesBookingPdf::class, CreateBookingPdf::class);
 
 
         app()->singleton(UpdatesSacreInvoiceInformation::class, UpdateSacreInvoiceInformation::class);

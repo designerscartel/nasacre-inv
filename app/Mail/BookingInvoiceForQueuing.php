@@ -23,16 +23,21 @@ class BookingInvoiceForQueuing extends Mailable
      */
     protected $sacreBooking;
 
+    /**
+     * @var
+     */
+    protected $pdf;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(SacreBooking $sacreBooking)
+    public function __construct(SacreBooking $sacreBooking, $pdf)
     {
         //
         $this->sacreBooking = $sacreBooking;
+        $this->pdf = $pdf;
     }
 
     /**
@@ -47,6 +52,9 @@ class BookingInvoiceForQueuing extends Mailable
             ->with([
                 'sacreBooking' => $this->sacreBooking,
             ])
-            ->markdown('mails.booking-invoice');
+            ->markdown('mails.booking-invoice')
+            ->attachData($this->pdf, 'Attendance at the NASACRE Conference and AGM.pdf', [
+                'mime' => 'application/pdf',
+            ]);;
     }
 }

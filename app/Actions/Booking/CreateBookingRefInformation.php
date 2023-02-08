@@ -3,6 +3,8 @@
 namespace App\Actions\booking;
 
 use App\Contracts\Booking\CreatesBookingRefInformation;
+use App\Contracts\Booking\CreatesBookingPdf;
+
 use App\Mail\BookingInvoiceForQueuing;
 use App\Models\SacreBooking;
 use Illuminate\Http\Request;
@@ -78,8 +80,11 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
             ]
             ];
 
-            $email = new BookingInvoiceForQueuing($bookingData);
-            Mail::to($bookingData->email)->send($email);
+            // create invoice
+            $pdf = app(CreatesBookingPdf::class)->output($bookingData);
+
+            $email = new BookingInvoiceForQueuing($bookingData, $pdf);
+            Mail::to($bookingData->email)->cc('admin@nasacre.org.uk')->send($email);
 
         } else {
             $bookingData = new SacreBooking();

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Actions\booking;
+namespace App\Actions\Booking;
 
-use App\Models\Booking;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use App\Contracts\booking\CreatesBookingPdf;
+use App\Contracts\Booking\CreatesBookingPdf;
 
 /**
- * Class CreatebookingPdf
+ * Class CreateBookingPdf
  * @package App\Actions\booking
  */
 class CreateBookingPdf implements CreatesBookingPdf
@@ -16,18 +15,15 @@ class CreateBookingPdf implements CreatesBookingPdf
     /**
      * Create the given booking's pdf.
      *
-     * @param object $booking
-     * @param object $sacre
-     * @param object $contact
+     * @param object $bookingData
      * @return void
      */
-    public function create(object $booking, object $sacre)
+    public function create(object $bookingData)
     {
         //
         $data = [
-            'booking' => $booking,
-            'sacre' => $sacre,
-            'date' => \Carbon\Carbon::parse($booking->date)
+            'bookingData' => $bookingData,
+            'date' => \Carbon\Carbon::parse($bookingData->booking->date)
         ];
 
         $pdf = \PDF::loadView('pdfs.booking', $data);
@@ -36,38 +32,35 @@ class CreateBookingPdf implements CreatesBookingPdf
     }
 
     /**
-     * @param object $booking
-     * @param object $sacre
+     * @param object $bookingData
      * @return mixed
      */
-    public function output(object $booking, object $sacre)
+    public function output(object $bookingData)
     {
         //
-        $pdf = $this->create($booking, $sacre);
+        $pdf = $this->create($bookingData);
         return $pdf->output();
     }
 
     /**
-     * @param object $booking
-     * @param object $sacre
+     * @param object $bookingData
      * @return mixed
      */
-    public function download(object $booking, object $sacre)
+    public function download(object $bookingData)
     {
         //
-        $pdf = $this->create($booking, $sacre);
-        return $pdf->download($booking->year . '-' . $sacre->short_code . '.pdf');
+        $pdf = $this->create($bookingData);
+        return $pdf->download($bookingData->name . '.pdf');
     }
 
     /**
-     * @param object $booking
-     * @param object $sacre
+     * @param object $bookingData
      * @return mixed
      */
-    public function inline(object $booking, object $sacre)
+    public function inline(object $bookingData)
     {
         //
-        $pdf = $this->create($booking, $sacre);
-        return $pdf->inline($booking->year . '-' . $sacre->short_code . '.pdf');
+        $pdf = $this->create($bookingData);
+        return $pdf->inline($bookingData->name.'.pdf');
     }
 }
