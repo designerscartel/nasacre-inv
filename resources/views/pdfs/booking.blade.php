@@ -155,7 +155,7 @@
 
 <div class="attendance">
     <p>For:<br/>
-        <strong>Attendance at the NASACRE Conference and AGM {{ $date->format('Y') }}</strong><br />
+        <strong>Attendance at the NASACRE Conference and AGM {{ $bookingDataDate->format('Y') }}</strong><br />
         {{ $bookingData->booking->venue }}
         <br/>SACRE: {{ $bookingData->sacre->title }}</p>
 </div>

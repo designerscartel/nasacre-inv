@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Booking\CreateBookingInformation;
+use App\Contracts\Booking\AmendsBookingInformation;
+use App\Contracts\Booking\CreatesBookingPdf;
 use App\Contracts\Booking\DeletesBooking;
 use App\Contracts\Booking\UpdatesBookingInformation;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\SacreBooking;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -97,6 +100,13 @@ class BookingController extends Controller
     }
 
 
+    public function amend(Request $request, Booking $booking, SacreBooking $sacreBooking)
+    {
+        app(AmendsBookingInformation::class)->update($sacreBooking, $request->all());
+        return back(303);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -108,8 +118,16 @@ class BookingController extends Controller
     {
         //
         app(DeletesBooking::class)->delete($booking);
-
         return back(303);
     }
+
+
+    public function pdf(SacreBooking $sacreBooking)
+    {
+        $pdf = app(CreatesBookingPdf::class)->inline($sacreBooking);
+        return $pdf;
+
+    }
+
 
 }

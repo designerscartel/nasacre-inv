@@ -23,7 +23,8 @@ class CreateBookingPdf implements CreatesBookingPdf
         //
         $data = [
             'bookingData' => $bookingData,
-            'date' => \Carbon\Carbon::parse($bookingData->booking->date)
+            'bookingDataDate' => \Carbon\Carbon::parse($bookingData->booking->date),
+            'date' => \Carbon\Carbon::parse($bookingData->date)
         ];
 
         $pdf = \PDF::loadView('pdfs.booking', $data);

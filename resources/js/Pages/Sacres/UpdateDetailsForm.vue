@@ -130,7 +130,7 @@
                     finance: this.sacre.finance,
                     virtual_training: this.sacre.virtual_training,
                 }, {
-                    bag: 'updateSacreInformation',
+                    bag: 'updateSacreBookingInformation',
                     resetOnSuccess: false,
                 }),
             }

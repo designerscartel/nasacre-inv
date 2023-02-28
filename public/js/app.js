@@ -2697,7 +2697,8 @@ __webpack_require__.r(__webpack_exports__);
         'md': 'sm:max-w-md',
         'lg': 'sm:max-w-lg',
         'xl': 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl'
+        '2xl': 'sm:max-w-2xl',
+        '7xl': 'sm: max-w-7xl'
       }[this.maxWidth];
     }
   }
@@ -3942,6 +3943,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_Label__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./../../Jetstream/Label */ "./resources/js/Jetstream/Label.vue");
 /* harmony import */ var _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./../../Jetstream/SecondaryButton */ "./resources/js/Jetstream/SecondaryButton.vue");
 /* harmony import */ var _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./../../Jetstream/SectionBorder */ "./resources/js/Jetstream/SectionBorder.vue");
+/* harmony import */ var _Jetstream_Toggle__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../Jetstream/Toggle */ "./resources/js/Jetstream/Toggle.vue");
 //
 //
 //
@@ -4014,6 +4016,150 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -4046,10 +4192,71 @@ __webpack_require__.r(__webpack_exports__);
     JetInputError: _Jetstream_InputError__WEBPACK_IMPORTED_MODULE_11__["default"],
     JetLabel: _Jetstream_Label__WEBPACK_IMPORTED_MODULE_12__["default"],
     JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_13__["default"],
-    JetSectionBorder: _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_14__["default"]
+    JetSectionBorder: _Jetstream_SectionBorder__WEBPACK_IMPORTED_MODULE_14__["default"],
+    JetToggle: _Jetstream_Toggle__WEBPACK_IMPORTED_MODULE_15__["default"]
   },
   data: function data() {
-    return {};
+    return {
+      updateBookingForm: this.$inertia.form({
+        id: '',
+        po_number: '',
+        name: '',
+        email: '',
+        phone: '',
+        delegate_one_name: '',
+        delegate_one_email: '',
+        delegate_one_diet: '',
+        delegate_two_name: '',
+        delegate_two_email: '',
+        delegate_two_diet: '',
+        virtual_one_name: '',
+        virtual_one_email: '',
+        virtual_two_name: '',
+        virtual_two_email: '',
+        confirmed: ''
+      }, {
+        bag: 'updateBookingForm',
+        resetOnSuccess: true
+      }),
+      bookingId: null,
+      showUpdateBookingDialog: false
+    };
+  },
+  methods: {
+    updateBooking: function updateBooking() {
+      var _this = this;
+
+      this.updateBookingForm.put('/bookings/' + this.booking.data.id + '/amend/' + this.bookingId, {
+        preserveScroll: true
+      }).then(function () {
+        _this.bookingId = null;
+
+        if (!_this.updateBookingForm.hasErrors()) {
+          _this.showUpdateBookingDialog = false;
+        }
+      });
+    },
+    updateBookingDialog: function updateBookingDialog(booking) {
+      this.updateBookingForm.id = booking.id;
+      this.updateBookingForm.po_number = booking.po_number;
+      this.updateBookingForm.name = booking.name;
+      this.updateBookingForm.email = booking.email;
+      this.updateBookingForm.phone = booking.phone;
+      this.updateBookingForm.date = booking.date;
+      this.updateBookingForm.delegate_one_name = booking.delegate_one_name;
+      this.updateBookingForm.delegate_one_email = booking.delegate_one_email;
+      this.updateBookingForm.delegate_one_diet = booking.delegate_one_diet;
+      this.updateBookingForm.delegate_two_name = booking.delegate_two_name;
+      this.updateBookingForm.delegate_two_email = booking.delegate_two_email;
+      this.updateBookingForm.delegate_two_diet = booking.delegate_two_diet;
+      this.updateBookingForm.virtual_one_name = booking.virtual_one_name;
+      this.updateBookingForm.virtual_one_email = booking.virtual_one_email;
+      this.updateBookingForm.virtual_two_name = booking.virtual_two_name;
+      this.updateBookingForm.virtual_two_email = booking.virtual_two_email;
+      this.updateBookingForm.confirmed = booking.confirmed;
+      this.bookingId = booking.id;
+      this.showUpdateBookingDialog = true;
+    }
   }
 });
 
@@ -8867,7 +9074,7 @@ __webpack_require__.r(__webpack_exports__);
         finance: this.sacre.finance,
         virtual_training: this.sacre.virtual_training
       }, {
-        bag: 'updateSacreInformation',
+        bag: 'updateSacreBookingInformation',
         resetOnSuccess: false
       })
     };
@@ -33078,7 +33285,44 @@ var render = function() {
                                 _vm._v(_vm._s(bookingObj.name))
                               ]),
                               _vm._v(" "),
-                              _c("td", { staticClass: "border px-4 py-2" })
+                              _c("td", { staticClass: "border px-4 py-2" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "ml-2 text-sm text-gray-400 underline",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.updateBookingDialog(
+                                          bookingObj
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                        Edit\n                                    "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "text-sm mr-2",
+                                    attrs: {
+                                      target: "_blank",
+                                      href:
+                                        "/bookings/" + bookingObj.id + "/pdf"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                        PDF\n                                    "
+                                    )
+                                  ]
+                                )
+                              ])
                             ])
                           })
                         : _c("tr", [
@@ -33111,8 +33355,604 @@ var render = function() {
             ]
           )
         ])
-      ])
-    ]
+      ]),
+      _vm._v(" "),
+      _c("jet-dialog-modal", {
+        attrs: { "max-width": "7xl", show: _vm.showUpdateBookingDialog },
+        on: {
+          close: function($event) {
+            _vm.showUpdateBookingDialog = false
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Update Booking\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _c("div", { staticClass: "md:grid md:grid-cols-2 md:gap-6" }, [
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "po_number", value: "PO Number" }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "po_number", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.po_number,
+                          callback: function($$v) {
+                            _vm.$set(_vm.updateBookingForm, "po_number", $$v)
+                          },
+                          expression: "updateBookingForm.po_number"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error("po_number")
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "name", value: "Name" }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "name", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.updateBookingForm, "name", $$v)
+                          },
+                          expression: "updateBookingForm.name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: { message: _vm.updateBookingForm.error("name") }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "email", value: "Email" }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "email", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.email,
+                          callback: function($$v) {
+                            _vm.$set(_vm.updateBookingForm, "email", $$v)
+                          },
+                          expression: "updateBookingForm.email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: { message: _vm.updateBookingForm.error("email") }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "phone", value: "Phone" }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "phone", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.phone,
+                          callback: function($$v) {
+                            _vm.$set(_vm.updateBookingForm, "phone", $$v)
+                          },
+                          expression: "updateBookingForm.phone"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: { message: _vm.updateBookingForm.error("phone") }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_one_name",
+                          value: "Delegate One Name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_one_name", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_one_name,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_one_name",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_one_name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_one_name"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_one_email",
+                          value: "Delegate One Email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_one_email", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_one_email,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_one_email",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_one_email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_one_email"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_one_diet",
+                          value: "Delegate One Diet"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_one_diet", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_one_diet,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_one_diet",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_one_diet"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_one_diet"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_two_name",
+                          value: "Delegate Two Name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_two_name", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_two_name,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_two_name",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_two_name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_two_name"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_two_email",
+                          value: "Delegate Two Email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_two_email", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_two_email,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_two_email",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_two_email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_two_email"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "delegate_two_diet",
+                          value: "Delegate Two Diet"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "delegate_two_diet", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_two_diet,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_two_diet",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_two_diet"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_two_diet"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "virtual_one_name",
+                          value: "Virtual One Name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "virtual_one_name", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_one_name,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_one_name",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_one_name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_one_name"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "virtual_one_email",
+                          value: "Virtual One Email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "virtual_one_email", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_one_email,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_one_email",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_one_email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_one_email"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "virtual_two_name",
+                          value: "Virtual Two Name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "virtual_two_name", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_two_name,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_two_name",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_two_name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_two_name"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("jet-label", {
+                        attrs: {
+                          for: "virtual_two_email",
+                          value: "Virtual Two Email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "virtual_two_email", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_two_email,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_two_email",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_two_email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_two_email"
+                          )
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mt-4" },
+                  [
+                    _c("jet-toggle", {
+                      staticClass: "mt-1 block w-full",
+                      attrs: {
+                        type: "toggle",
+                        label: "Confirmed",
+                        forid: "confirmed"
+                      },
+                      model: {
+                        value: _vm.updateBookingForm.confirmed,
+                        callback: function($$v) {
+                          _vm.$set(_vm.updateBookingForm, "confirmed", $$v)
+                        },
+                        expression: "updateBookingForm.confirmed"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("jet-input-error", {
+                      staticClass: "mt-2",
+                      attrs: {
+                        message: _vm.updateBookingForm.error("confirmed")
+                      }
+                    })
+                  ],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.showUpdateBookingDialog = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.updateBookingForm.processing },
+                    attrs: { disabled: _vm.updateBookingForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.updateBooking($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Save\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      })
+    ],
+    1
   )
 }
 var staticRenderFns = []
