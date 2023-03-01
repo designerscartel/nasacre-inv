@@ -47,6 +47,10 @@
                                         <a target="_blank" class="text-sm mr-2" :href="'/bookings/'+ bookingObj.id+'/pdf'">
                                             PDF
                                         </a>
+                                        <button class="cursor-pointer text-sm text-red-500 focus:outline-none"
+                                                @click="confirmBookingDeletion(bookingObj)">
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
@@ -209,6 +213,29 @@
             </template>
         </jet-dialog-modal>
 
+        <!-- Delete Booking Modal -->
+        <jet-confirmation-modal :show="bookingBeingDeleted" @close="bookingBeingDeleted = null">
+            <template #title>
+                Delete Booking
+            </template>
+
+            <template #content>
+                Are you sure you would like to delete this Booking?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="bookingBeingDeleted = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-danger-button class="ml-2" @click.native="deleteBooking"
+                                   :class="{ 'opacity-25': deleteBookingForm.processing }"
+                                   :disabled="deleteBookingForm.processing">
+                    Delete
+                </jet-danger-button>
+            </template>
+        </jet-confirmation-modal>
+
 
     </app-layout>
 </template>
@@ -255,6 +282,7 @@ export default {
     },
     data() {
         return {
+            deleteBookingForm: this.$inertia.form(),
             updateBookingForm: this.$inertia.form({
                 id: '',
                 po_number: '',
@@ -277,12 +305,27 @@ export default {
                 resetOnSuccess: true,
             }),
 
+            bookingBeingDeleted: null,
             bookingId: null,
             showUpdateBookingDialog: false,
         }
     },
 
     methods: {
+
+        confirmBookingDeletion(booking) {
+            this.bookingBeingDeleted = booking
+        },
+
+        deleteBooking() {
+            this.deleteBookingForm.delete('/bookings/' + this.booking.data.id + '/delete/' + this.bookingBeingDeleted.id, {
+                preserveScroll: true,
+                preserveState: true,
+            }).then(() => {
+                this.bookingBeingDeleted = null
+            })
+        },
+
         updateBooking() {
             this.updateBookingForm.put('/bookings/' + this.booking.data.id + '/amend/' + this.bookingId, {
                 preserveScroll: true

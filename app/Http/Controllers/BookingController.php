@@ -6,6 +6,7 @@ use App\Actions\Booking\CreateBookingInformation;
 use App\Contracts\Booking\AmendsBookingInformation;
 use App\Contracts\Booking\CreatesBookingPdf;
 use App\Contracts\Booking\DeletesBooking;
+use App\Contracts\Booking\DeletesBookingInformation;
 use App\Contracts\Booking\UpdatesBookingInformation;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
@@ -121,6 +122,13 @@ class BookingController extends Controller
         return back(303);
     }
 
+
+    public function destroyBookingInformation(Request $request, Booking $booking, SacreBooking $sacreBooking)
+    {
+        //
+        app(DeletesBookingInformation::class)->delete($sacreBooking);
+        return back(303);
+    }
 
     public function pdf(SacreBooking $sacreBooking)
     {

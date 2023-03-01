@@ -4159,6 +4159,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4197,6 +4224,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      deleteBookingForm: this.$inertia.form(),
       updateBookingForm: this.$inertia.form({
         id: '',
         po_number: '',
@@ -4218,21 +4246,35 @@ __webpack_require__.r(__webpack_exports__);
         bag: 'updateBookingForm',
         resetOnSuccess: true
       }),
+      bookingBeingDeleted: null,
       bookingId: null,
       showUpdateBookingDialog: false
     };
   },
   methods: {
-    updateBooking: function updateBooking() {
+    confirmBookingDeletion: function confirmBookingDeletion(booking) {
+      this.bookingBeingDeleted = booking;
+    },
+    deleteBooking: function deleteBooking() {
       var _this = this;
+
+      this.deleteBookingForm["delete"]('/bookings/' + this.booking.data.id + '/delete/' + this.bookingBeingDeleted.id, {
+        preserveScroll: true,
+        preserveState: true
+      }).then(function () {
+        _this.bookingBeingDeleted = null;
+      });
+    },
+    updateBooking: function updateBooking() {
+      var _this2 = this;
 
       this.updateBookingForm.put('/bookings/' + this.booking.data.id + '/amend/' + this.bookingId, {
         preserveScroll: true
       }).then(function () {
-        _this.bookingId = null;
+        _this2.bookingId = null;
 
-        if (!_this.updateBookingForm.hasErrors()) {
-          _this.showUpdateBookingDialog = false;
+        if (!_this2.updateBookingForm.hasErrors()) {
+          _this2.showUpdateBookingDialog = false;
         }
       });
     },
@@ -33321,6 +33363,26 @@ var render = function() {
                                       "\n                                        PDF\n                                    "
                                     )
                                   ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "cursor-pointer text-sm text-red-500 focus:outline-none",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.confirmBookingDeletion(
+                                          bookingObj
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                        Delete\n                                    "
+                                    )
+                                  ]
                                 )
                               ])
                             ])
@@ -33944,6 +34006,69 @@ var render = function() {
                     }
                   },
                   [_vm._v("\n                Save\n            ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("jet-confirmation-modal", {
+        attrs: { show: _vm.bookingBeingDeleted },
+        on: {
+          close: function($event) {
+            _vm.bookingBeingDeleted = null
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function() {
+              return [_vm._v("\n            Delete Booking\n        ")]
+            },
+            proxy: true
+          },
+          {
+            key: "content",
+            fn: function() {
+              return [
+                _vm._v(
+                  "\n            Are you sure you would like to delete this Booking?\n        "
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "footer",
+            fn: function() {
+              return [
+                _c(
+                  "jet-secondary-button",
+                  {
+                    nativeOn: {
+                      click: function($event) {
+                        _vm.bookingBeingDeleted = null
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Nevermind\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "jet-danger-button",
+                  {
+                    staticClass: "ml-2",
+                    class: { "opacity-25": _vm.deleteBookingForm.processing },
+                    attrs: { disabled: _vm.deleteBookingForm.processing },
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.deleteBooking($event)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Delete\n            ")]
                 )
               ]
             },

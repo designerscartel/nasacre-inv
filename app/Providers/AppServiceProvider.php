@@ -6,6 +6,7 @@ use App\Actions\Booking\AmendBookingInformation;
 use App\Actions\Booking\CreateBookingInformation;
 use App\Actions\Booking\CreateBookingPdf;
 use App\Actions\Booking\DeleteBooking;
+use App\Actions\Booking\DeleteBookingInformation;
 use App\Actions\Booking\UpdateBookingInformation;
 use App\Actions\Booking\CreateBookingRefInformation;
 use App\Actions\Sacre\UpdateSacreInformation;
@@ -16,6 +17,7 @@ use App\Contracts\Booking\CreatesBookingInformation;
 use App\Contracts\Booking\CreatesBookingPdf;
 use App\Contracts\Booking\CreatesBookingRefInformation;
 use App\Contracts\Booking\DeletesBooking;
+use App\Contracts\Booking\DeletesBookingInformation;
 use App\Contracts\Booking\UpdatesBookingInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Contracts\Sacre\CreatesSacreInformation;
@@ -159,7 +161,7 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(DeletesBooking::class, DeleteBooking::class);
         app()->singleton(CreatesBookingPdf::class, CreateBookingPdf::class);
         app()->singleton(AmendsBookingInformation::class, AmendBookingInformation::class);
-
+        app()->singleton(DeletesBookingInformation::class, DeleteBookingInformation::class);
 
         app()->singleton(UpdatesSacreInvoiceInformation::class, UpdateSacreInvoiceInformation::class);
     }

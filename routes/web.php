@@ -100,6 +100,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::put('/bookings/{booking}', [\App\Http\Controllers\BookingController::class, 'update'])->name('bookings.update');
         Route::get('/bookings/{sacreBooking}/pdf', [\App\Http\Controllers\BookingController::class, 'pdf'])->name('bookings.pdf');
         Route::put('/bookings/{booking}/amend/{sacreBooking}', [\App\Http\Controllers\BookingController::class, 'amend'])->name('bookings.amend');
+        Route::delete('/bookings/{booking}/delete/{sacreBooking}', [\App\Http\Controllers\BookingController::class, 'destroyBookingInformation'])->name('bookings.destroy');
 
         Route::get('/bookings/{booking}/edit', [\App\Http\Controllers\BookingController::class, 'edit'])->name('bookings.edit');
         // Route::post('/bookings/{booking}/send', [\App\Http\Controllers\BookingController::class, 'send'])->name('bookings.send');
