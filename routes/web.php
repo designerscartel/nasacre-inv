@@ -98,6 +98,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/bookings/create', [\App\Http\Controllers\BookingController::class, 'create'])->name('bookings.create');
         Route::get('/bookings/{booking}', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
         Route::put('/bookings/{booking}', [\App\Http\Controllers\BookingController::class, 'update'])->name('bookings.update');
+        Route::get('/bookings/{booking}/csv', [\App\Http\Controllers\BookingController::class, 'csv'])->name('bookings.csv');
         Route::get('/bookings/{sacreBooking}/pdf', [\App\Http\Controllers\BookingController::class, 'pdf'])->name('bookings.pdf');
         Route::put('/bookings/{booking}/amend/{sacreBooking}', [\App\Http\Controllers\BookingController::class, 'amend'])->name('bookings.amend');
         Route::delete('/bookings/{booking}/delete/{sacreBooking}', [\App\Http\Controllers\BookingController::class, 'destroyBookingInformation'])->name('bookings.destroy');

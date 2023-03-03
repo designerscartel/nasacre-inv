@@ -4186,6 +4186,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -33296,7 +33298,23 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "md:w-2/6 text-right" })
+                    _c("div", { staticClass: "md:w-2/6 text-right" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150",
+                          attrs: {
+                            href: "/bookings/" + _vm.booking.data.id + "/csv"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Download CSV of confirmed bookings\n                            "
+                          )
+                        ]
+                      )
+                    ])
                   ])
                 ]
               ),

@@ -19,8 +19,10 @@
 
 
                             <div class="md:w-2/6 text-right">
-
-
+                                <a :href="'/bookings/'+ booking.data.id+'/csv'"
+                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                    Download CSV of confirmed bookings
+                                </a>
                             </div>
 
                         </div>

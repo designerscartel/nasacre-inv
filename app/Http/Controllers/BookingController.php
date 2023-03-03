@@ -13,6 +13,8 @@ use App\Models\Booking;
 use App\Models\SacreBooking;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use League\Csv\Writer;
+
 
 class BookingController extends Controller
 {
@@ -134,6 +136,68 @@ class BookingController extends Controller
     {
         $pdf = app(CreatesBookingPdf::class)->inline($sacreBooking);
         return $pdf;
+    }
+
+    public function csv(Booking $booking)
+    {
+
+        $header = [
+            'PO number',
+            'Name',
+            'Email',
+            'Phone',
+            'Date',
+            'Sacre',
+            'Delegate One Name',
+            'Delegate One Email',
+            'Delegate One Diet',
+            'Delegate Two Name',
+            'Delegate Two Email',
+            'Delegate Two Diet',
+            'Virtual One Name',
+            'Virtual One Email',
+            'Virtual Two_Name',
+            'Virtual Two Email'
+        ];
+
+
+        $records = [];
+
+        $booking = $booking->with([
+            'bookings' => function ($query) {
+                $query->where('confirmed', 1);
+            }]
+        )->get()->first();
+
+        foreach ($booking->bookings as $sacreBooking) {
+            $records[] = [
+                $sacreBooking->po_number,
+                $sacreBooking->name,
+                $sacreBooking->email,
+                $sacreBooking->phone,
+                $sacreBooking->date,
+                $sacreBooking->sacre->title,
+                $sacreBooking->delegate_one_name,
+                $sacreBooking->delegate_one_email,
+                $sacreBooking->delegate_one_diet,
+                $sacreBooking->delegate_two_name,
+                $sacreBooking->delegate_two_email,
+                $sacreBooking->delegate_two_diet,
+                $sacreBooking->virtual_one_name,
+                $sacreBooking->virtual_one_email,
+                $sacreBooking->virtual_two_name,
+                $sacreBooking->virtual_two_email
+            ];
+        }
+
+        //load the CSV document from a string
+        $csv = Writer::createFromString();
+        //insert the header
+        $csv->insertOne($header);
+        //insert all the records
+        $csv->insertAll($records);
+
+        echo $csv->output('booking.csv');
 
     }
 
