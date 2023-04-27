@@ -26,14 +26,19 @@ class SacreBooking extends Model
         'delegate_one_name',
         'delegate_one_email',
         'delegate_one_diet',
+        'delegate_one_free',
         'delegate_two_name',
         'delegate_two_email',
         'delegate_two_diet',
+        'delegate_two_free',
         'virtual_one_name',
         'virtual_one_email',
+        'virtual_one_free',
         'virtual_two_name',
         'virtual_two_email',
-        'confirmed'
+        'virtual_two_free',
+        'confirmed',
+        'address',
     ];
 
     /**

@@ -4188,6 +4188,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4236,14 +4254,19 @@ __webpack_require__.r(__webpack_exports__);
         delegate_one_name: '',
         delegate_one_email: '',
         delegate_one_diet: '',
+        delegate_one_free: '',
         delegate_two_name: '',
         delegate_two_email: '',
         delegate_two_diet: '',
+        delegate_two_free: '',
         virtual_one_name: '',
         virtual_one_email: '',
+        virtual_one_free: '',
         virtual_two_name: '',
         virtual_two_email: '',
-        confirmed: ''
+        virtual_two_free: '',
+        confirmed: '',
+        address: ''
       }, {
         bag: 'updateBookingForm',
         resetOnSuccess: true
@@ -4290,14 +4313,19 @@ __webpack_require__.r(__webpack_exports__);
       this.updateBookingForm.delegate_one_name = booking.delegate_one_name;
       this.updateBookingForm.delegate_one_email = booking.delegate_one_email;
       this.updateBookingForm.delegate_one_diet = booking.delegate_one_diet;
+      this.updateBookingForm.delegate_one_free = booking.delegate_one_free;
       this.updateBookingForm.delegate_two_name = booking.delegate_two_name;
       this.updateBookingForm.delegate_two_email = booking.delegate_two_email;
       this.updateBookingForm.delegate_two_diet = booking.delegate_two_diet;
+      this.updateBookingForm.delegate_two_free = booking.delegate_two_free;
       this.updateBookingForm.virtual_one_name = booking.virtual_one_name;
       this.updateBookingForm.virtual_one_email = booking.virtual_one_email;
+      this.updateBookingForm.virtual_one_free = booking.virtual_one_free;
       this.updateBookingForm.virtual_two_name = booking.virtual_two_name;
       this.updateBookingForm.virtual_two_email = booking.virtual_two_email;
+      this.updateBookingForm.virtual_two_free = booking.virtual_two_free;
       this.updateBookingForm.confirmed = booking.confirmed;
+      this.updateBookingForm.address = booking.address;
       this.bookingId = booking.id;
       this.showUpdateBookingDialog = true;
     }
@@ -30757,7 +30785,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "label",
-    { staticClass: "block font-medium text-sm text-gray-700" },
+    { staticClass: "mt-2 block font-medium text-sm text-gray-700" },
     [
       _vm.value
         ? _c("span", [_vm._v(_vm._s(_vm.value))])
@@ -31171,7 +31199,7 @@ var render = function() {
     "label",
     {
       staticClass:
-        "mt-3 inline-flex items-center cursor-pointer font-medium text-sm text-gray-700",
+        "mt-2 inline-flex items-center cursor-pointer font-medium text-sm text-gray-700",
       attrs: { for: _vm.forid },
       on: {
         click: function($event) {
@@ -33323,6 +33351,8 @@ var render = function() {
                 _c("table", { staticClass: "table-auto w-full" }, [
                   _c("thead", { staticClass: "text-left" }, [
                     _c("tr", [
+                      _c("th", { staticClass: "px-8 py-2" }, [_vm._v("Sacre")]),
+                      _vm._v(" "),
                       _c("th", { staticClass: "px-8 py-2" }, [
                         _vm._v("Booking")
                       ]),
@@ -33341,6 +33371,10 @@ var render = function() {
                             bookingObj
                           ) {
                             return _c("tr", { key: bookingObj.id }, [
+                              _c("td", { staticClass: "border px-8 py-2" }, [
+                                _vm._v(_vm._s(bookingObj.sacre.title))
+                              ]),
+                              _vm._v(" "),
                               _c("td", { staticClass: "border px-8 py-2" }, [
                                 _vm._v(_vm._s(bookingObj.name))
                               ]),
@@ -33369,7 +33403,8 @@ var render = function() {
                                 _c(
                                   "a",
                                   {
-                                    staticClass: "text-sm mr-2",
+                                    staticClass:
+                                      "text-sm ml-2 text-gray-400 underline",
                                     attrs: {
                                       target: "_blank",
                                       href:
@@ -33387,7 +33422,7 @@ var render = function() {
                                   "button",
                                   {
                                     staticClass:
-                                      "cursor-pointer text-sm text-red-500 focus:outline-none",
+                                      "cursor-pointer ml-2 text-sm text-red-500 underline focus:outline-none",
                                     on: {
                                       click: function($event) {
                                         return _vm.confirmBookingDeletion(
@@ -33459,7 +33494,7 @@ var render = function() {
                 _c("div", { staticClass: "md:grid md:grid-cols-2 md:gap-6" }, [
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: { for: "po_number", value: "PO Number" }
@@ -33489,7 +33524,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: { for: "name", value: "Name" }
@@ -33517,7 +33552,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: { for: "email", value: "Email" }
@@ -33545,7 +33580,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: { for: "phone", value: "Phone" }
@@ -33573,7 +33608,37 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2 lg:col-span-2" },
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "address", value: "Address" }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: { id: "address", type: "text" },
+                        model: {
+                          value: _vm.updateBookingForm.address,
+                          callback: function($$v) {
+                            _vm.$set(_vm.updateBookingForm, "address", $$v)
+                          },
+                          expression: "updateBookingForm.address"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error("address")
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: {
@@ -33605,15 +33670,8 @@ var render = function() {
                             "delegate_one_name"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
                         attrs: {
                           for: "delegate_one_email",
@@ -33644,15 +33702,37 @@ var render = function() {
                             "delegate_one_email"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
+                      _c("jet-toggle", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: {
+                          type: "toggle",
+                          label: "Delegate One Free",
+                          forid: "delegate_one_free"
+                        },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_one_free,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_one_free",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_one_free"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_one_free"
+                          )
+                        }
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
                         attrs: {
                           for: "delegate_one_diet",
@@ -33690,7 +33770,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: {
@@ -33722,16 +33802,10 @@ var render = function() {
                             "delegate_two_name"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
+                        staticClass: "mt-2",
                         attrs: {
                           for: "delegate_two_email",
                           value: "Delegate Two Email"
@@ -33761,16 +33835,39 @@ var render = function() {
                             "delegate_two_email"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
+                      _c("jet-toggle", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: {
+                          type: "toggle",
+                          label: "Delegate Two Free",
+                          forid: "delegate_two_free"
+                        },
+                        model: {
+                          value: _vm.updateBookingForm.delegate_two_free,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "delegate_two_free",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.delegate_two_free"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "delegate_two_free"
+                          )
+                        }
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
+                        staticClass: "mt-2",
                         attrs: {
                           for: "delegate_two_diet",
                           value: "Delegate Two Diet"
@@ -33807,7 +33904,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: {
@@ -33839,15 +33936,8 @@ var render = function() {
                             "virtual_one_name"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
                         attrs: {
                           for: "virtual_one_email",
@@ -33878,6 +33968,35 @@ var render = function() {
                             "virtual_one_email"
                           )
                         }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-toggle", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: {
+                          type: "toggle",
+                          label: "Virtual One Free",
+                          forid: "virtual_one_free"
+                        },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_one_free,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_one_free",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_one_free"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_one_free"
+                          )
+                        }
                       })
                     ],
                     1
@@ -33885,7 +34004,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "mt-4" },
+                    { staticClass: "mt-2" },
                     [
                       _c("jet-label", {
                         attrs: {
@@ -33917,15 +34036,8 @@ var render = function() {
                             "virtual_two_name"
                           )
                         }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-4" },
-                    [
+                      }),
+                      _vm._v(" "),
                       _c("jet-label", {
                         attrs: {
                           for: "virtual_two_email",
@@ -33956,6 +34068,35 @@ var render = function() {
                             "virtual_two_email"
                           )
                         }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-toggle", {
+                        staticClass: "mt-1 block w-full",
+                        attrs: {
+                          type: "toggle",
+                          label: "Virtual One Free",
+                          forid: "virtual_two_free"
+                        },
+                        model: {
+                          value: _vm.updateBookingForm.virtual_two_free,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.updateBookingForm,
+                              "virtual_two_free",
+                              $$v
+                            )
+                          },
+                          expression: "updateBookingForm.virtual_two_free"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("jet-input-error", {
+                        staticClass: "mt-2",
+                        attrs: {
+                          message: _vm.updateBookingForm.error(
+                            "virtual_two_free"
+                          )
+                        }
                       })
                     ],
                     1
@@ -33964,7 +34105,7 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "mt-4" },
+                  { staticClass: "mt-2" },
                   [
                     _c("jet-toggle", {
                       staticClass: "mt-1 block w-full",

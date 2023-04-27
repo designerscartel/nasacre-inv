@@ -132,7 +132,7 @@
 </head>
 
 <body>
-<h1>NASCARE AGM INVOICE</h1>
+<h1>NASACRE AGM INVOICE</h1>
 
 
 <table class="details">
@@ -161,9 +161,13 @@
 </div>
 
 <div class="fao">
-    @if(!empty($bookingData->sacre->address))
-        <p>Invoice Payment</p>
-        <p>{{ $bookingData->sacre->address }}</p>
+    <p>Invoice Payment</p>
+    @if(!empty($bookingData->address))
+        <p>{{ $bookingData->address }}</p>
+    @else
+        @if(!empty($bookingData->sacre->address))
+            <p>{{ $bookingData->sacre->address }}</p>
+        @endif
     @endif
 </div>
 
@@ -176,34 +180,60 @@
 
     @if(!empty($bookingData->delegate_one_name))
         @php
-        $total = $total + $delegateCost;
+            if(!$bookingData->delegate_one_free) {
+                $total = $total + $delegateCost;
+            } else {
+                $total = $total + 0;
+            }
         @endphp
         <tr>
             <td><p>{{ $bookingData->delegate_one_name }}</p></td>
             <td><p>{{ $bookingData->sacre->title }}</p></td>
-            <td><p>&pound;{{ $delegateCost }}</p></td>
+            @if(!$bookingData->delegate_one_free)
+                <td><p>&pound;{{ $delegateCost }}</p></td>
+            @else
+                <td><p>Free</p></td>
+            @endif
         </tr>
     @endif
 
     @if(!empty($bookingData->delegate_two_name))
         @php
-            $total = $total + $delegateCost;
+            if(!$bookingData->delegate_two_free) {
+                $total = $total + $delegateCost;
+            } else {
+                $total = $total + 0;
+            }
         @endphp
         <tr>
             <td><p>{{ $bookingData->delegate_two_name }}</p></td>
             <td><p>{{ $bookingData->sacre->title }}</p></td>
-            <td><p>&pound;{{ $delegateCost }}</p></td>
+            @if(!$bookingData->delegate_two_free)
+                <td><p>&pound;{{ $delegateCost }}</p></td>
+            @else
+                <td><p>Free</p></td>
+            @endif
         </tr>
     @endif
 
     @if(!empty($bookingData->virtual_one_name))
         @php
-        $total = $total + $bookingData->booking->additional;
+           if(!$bookingData->virtual_one_free) {
+               $total = $total + $bookingData->booking->additional;
+           } else {
+               $total = $total + 0;
+           }
         @endphp
         <tr>
             <td><p>{{ $bookingData->virtual_one_name }}</p></td>
             <td><p>{{ $bookingData->sacre->title }}</p></td>
             <td><p>&pound;{{ $bookingData->booking->additional }}</p></td>
+            @if(!$bookingData->virtual_one_free)
+                <td><p>&pound;{{  $bookingData->booking->additional }}</p></td>
+            @else
+                <td><p>Free</p></td>
+            @endif
+
         </tr>
     @endif
 

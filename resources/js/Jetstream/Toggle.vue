@@ -1,5 +1,5 @@
 <template>
-    <label v-bind:for="forid" class="mt-3 inline-flex items-center cursor-pointer font-medium text-sm text-gray-700"
+    <label v-bind:for="forid" class="mt-2 inline-flex items-center cursor-pointer font-medium text-sm text-gray-700"
            @click="change()">
         <div class="inline relative">
             <div class="w-10 h-6 bg-gray-200 rounded-full shadow-inner"></div>

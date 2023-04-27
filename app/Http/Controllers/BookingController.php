@@ -67,7 +67,7 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         //
-        $booking = $booking->with('bookings')->get()->first();
+        $booking = $booking->with('bookings.sacre')->get()->first();
         $booking = $booking->toResource();
         return Inertia::render('Bookings/Show', [
             'booking' => $booking,
@@ -146,18 +146,23 @@ class BookingController extends Controller
             'Name',
             'Email',
             'Phone',
+            'Address',
             'Date',
             'Sacre',
             'Delegate One Name',
             'Delegate One Email',
             'Delegate One Diet',
+            'Delegate One Free',
             'Delegate Two Name',
             'Delegate Two Email',
             'Delegate Two Diet',
+            'Delegate Two Free',
             'Virtual One Name',
             'Virtual One Email',
+            'Virtual One Free',
             'Virtual Two_Name',
-            'Virtual Two Email'
+            'Virtual Two Email',
+            'Virtual Two Free'
         ];
 
 
@@ -175,18 +180,23 @@ class BookingController extends Controller
                 $sacreBooking->name,
                 $sacreBooking->email,
                 $sacreBooking->phone,
+                $sacreBooking->address,
                 $sacreBooking->date,
                 $sacreBooking->sacre->title,
                 $sacreBooking->delegate_one_name,
                 $sacreBooking->delegate_one_email,
                 $sacreBooking->delegate_one_diet,
+                $sacreBooking->delegate_one_free,
                 $sacreBooking->delegate_two_name,
                 $sacreBooking->delegate_two_email,
                 $sacreBooking->delegate_two_diet,
+                $sacreBooking->delegate_two_free,
                 $sacreBooking->virtual_one_name,
                 $sacreBooking->virtual_one_email,
+                $sacreBooking->virtual_one_free,
                 $sacreBooking->virtual_two_name,
-                $sacreBooking->virtual_two_email
+                $sacreBooking->virtual_two_email,
+                $sacreBooking->virtual_two_free
             ];
         }
 

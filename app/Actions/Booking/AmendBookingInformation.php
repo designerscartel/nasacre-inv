@@ -27,16 +27,21 @@ class AmendBookingInformation implements AmendsBookingInformation
             'name' => $input['name'],
             'email' => $input['email'],
             'phone' => $input['phone'],
+            'address' => $input['address'],
             'delegate_one_name' => $input['delegate_one_name'],
             'delegate_one_email' => $input['delegate_one_email'],
             'delegate_one_diet' => $input['delegate_one_diet'],
+            'delegate_one_free' => ($input['delegate_one_free']) ? 1 :0,
             'delegate_two_name' => $input['delegate_two_name'],
             'delegate_two_email' => $input['delegate_two_email'],
+            'delegate_two_free' => $input['delegate_two_free'],
             'delegate_two_diet' => $input['delegate_two_diet'],
             'virtual_one_name' => $input['virtual_one_name'],
             'virtual_one_email' => $input['virtual_one_email'],
+            'virtual_one_free' => $input['virtual_one_free'],
             'virtual_two_name' => $input['virtual_two_name'],
             'virtual_two_email' => $input['virtual_two_email'],
+            'virtual_two_free' => $input['virtual_two_free'],
             'confirmed' => $input['confirmed']
         ])->save();
     }
