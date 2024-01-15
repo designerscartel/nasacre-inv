@@ -51,7 +51,7 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
         $date = \Carbon\Carbon::now();
 
         $bookingRequest = [
-            'booking_id' => 1,
+            'booking_id' => 2,
             'date' => $date->toDateTimeString(),
             'sacre_id' => $input['sacre_id'],
             'name' => $input['name'],
@@ -84,7 +84,8 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
             $pdf = app(CreatesBookingPdf::class)->output($bookingData);
 
             $email = new BookingInvoiceForQueuing($bookingData, $pdf);
-            Mail::to($bookingData->email)->cc('admin@nasacre.org.uk')->send($email);
+            //Mail::to('matt@papercode.co.uk')->send($email);
+            Mail::to('admin@nasacre.org.uk')->send($email);
 
         } else {
             $bookingData = new SacreBooking();
@@ -100,6 +101,7 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
         $total = 0;
         $delegateCost = ($bookingData->sacre->member)? $bookingData->booking->subscribed : $bookingData->booking->none_subscribed;
 
+
         if(!empty($bookingData->delegate_one_name)) {
             $total = $total + $delegateCost;
         }
@@ -107,9 +109,22 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
             $total = $total + $delegateCost;
         }
 
-        if(!empty($bookingData->virtual_one_name)) {
-            $total = $total + $bookingData->booking->additional;
+
+        if($bookingData->sacre->member) {
+            if(!empty($bookingData->virtual_one_name)) {
+                $total = $total + $bookingData->booking->additional;
+            }
+        } else {
+            if(!empty($bookingData->virtual_one_name)) {
+                $total = $total + 30;
+            }
+            if(!empty($bookingData->virtual_two_name)) {
+                $total = $total + 30;
+            }
         }
+
+
+
 
         $success['success']['cost'] = $total;
 

@@ -21,6 +21,7 @@ class ApiSacreResource extends JsonResource
             'region_id' => $this->region_id,
             'title' => $this->title,
             'member' => $this->member,
+            'past_member' => $this->past_member,
             'region' => New \App\Http\Resources\RegionResource($this->region),
             'contacts' => \App\Http\Resources\SacreContactResource::collection($this->contacts),
             'files' => \App\Http\Resources\SacreFileResource::collection($this->files),

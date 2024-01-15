@@ -52,6 +52,12 @@
                 <jet-input-error :message="form.error('member')" class="mt-2" />
             </div>
 
+            <!-- Past Member -->
+            <div class="col-span-6 sm:col-span-4">
+                <jet-toggle type="toggle" class="mt-1 block w-full" v-model="form.past_member" :label="'Past Member'" :forid="'past_member'"/>
+                <jet-input-error :message="form.error('past_member')" class="mt-2" />
+            </div>
+
             <!-- Virtual Training -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-toggle type="toggle" class="mt-1 block w-full" v-model="form.virtual_training" :label="'Virtual Training'" :forid="'virtual_training'"/>
@@ -123,6 +129,7 @@
                     region_id: this.sacre.region_id,
                     title: this.sacre.title,
                     member: this.sacre.member,
+                    past_member: this.sacre.past_member,
                     address: this.sacre.address,
                     short_code: this.sacre.short_code,
                     code: this.sacre.code,

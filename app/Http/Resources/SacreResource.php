@@ -21,6 +21,7 @@ class SacreResource extends JsonResource
             'region_id' => $this->region_id,
             'title' => $this->title,
             'member' => $this->member,
+            'past_member' => $this->past_member,
             'address' => $this->address,
             'short_code' => $this->short_code,
             'code' => $this->code,

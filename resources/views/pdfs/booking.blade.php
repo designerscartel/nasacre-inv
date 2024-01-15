@@ -216,33 +216,79 @@
         </tr>
     @endif
 
-    @if(!empty($bookingData->virtual_one_name))
-        @php
-           if(!$bookingData->virtual_one_free) {
-               $total = $total + $bookingData->booking->additional;
-           } else {
-               $total = $total + 0;
-           }
-        @endphp
+    @if($bookingData->sacre->member)
+        @if(!empty($bookingData->virtual_one_name))
+            @php
+               if(!$bookingData->virtual_one_free) {
+                   $total = $total + $bookingData->booking->additional;
+               } else {
+                   $total = $total + 0;
+               }
+            @endphp
+            <tr>
+                <td><p>{{ $bookingData->virtual_one_name }}</p></td>
+                <td><p>{{ $bookingData->sacre->title }}</p></td>
+                @if(!$bookingData->virtual_one_free)
+                    <td><p>&pound;{{  $bookingData->booking->additional }}</p></td>
+                @else
+                    <td><p>Free</p></td>
+                @endif
+
+            </tr>
+        @endif
+
+        @if(!empty($bookingData->virtual_two_name))
         <tr>
-            <td><p>{{ $bookingData->virtual_one_name }}</p></td>
+            <td><p>{{ $bookingData->virtual_two_name }}</p></td>
             <td><p>{{ $bookingData->sacre->title }}</p></td>
-            <td><p>&pound;{{ $bookingData->booking->additional }}</p></td>
-            @if(!$bookingData->virtual_one_free)
-                <td><p>&pound;{{  $bookingData->booking->additional }}</p></td>
-            @else
-                <td><p>Free</p></td>
-            @endif
-
+            <td><p></p></td>
         </tr>
-    @endif
+        @endif
 
-    @if(!empty($bookingData->virtual_two_name))
-    <tr>
-        <td><p>{{ $bookingData->virtual_two_name }}</p></td>
-        <td><p>{{ $bookingData->sacre->title }}</p></td>
-        <td><p></p></td>
-    </tr>
+    @else
+
+        @if(!empty($bookingData->virtual_one_name))
+            @php
+                if(!$bookingData->virtual_one_free) {
+                    $total = $total + 30;
+                } else {
+                    $total = $total + 0;
+                }
+            @endphp
+            <tr>
+                <td><p>{{ $bookingData->virtual_one_name }}</p></td>
+                <td><p>{{ $bookingData->sacre->title }}</p></td>
+                @if(!$bookingData->virtual_one_free)
+                    <td><p>&pound;30</p></td>
+                @else
+                    <td><p>Free</p></td>
+                @endif
+
+            </tr>
+        @endif
+
+        @if(!empty($bookingData->virtual_two_name))
+
+                @php
+                    if(!$bookingData->virtual_two_free) {
+                        $total = $total + 30;
+                    } else {
+                        $total = $total + 0;
+                    }
+                @endphp
+
+            <tr>
+                <td><p>{{ $bookingData->virtual_two_name }}</p></td>
+                <td><p>{{ $bookingData->sacre->title }}</p></td>
+                @if(!$bookingData->virtual_two_free)
+                    <td><p>&pound;30</p></td>
+                @else
+                    <td><p>Free</p></td>
+                @endif
+            </tr>
+        @endif
+
+
     @endif
 
     <tr>

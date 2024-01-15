@@ -67,7 +67,8 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         //
-        $booking = $booking->with('bookings.sacre')->get()->first();
+        $booking = $booking->with('bookings.sacre')->where('id', $booking->id)->first();
+
         $booking = $booking->toResource();
         return Inertia::render('Bookings/Show', [
             'booking' => $booking,
@@ -98,7 +99,6 @@ class BookingController extends Controller
     public function update(Request $request, Booking $booking)
     {
         app(UpdatesBookingInformation::class)->update($booking, $request->all());
-
         return back(303);
     }
 
@@ -165,14 +165,12 @@ class BookingController extends Controller
             'Virtual Two Free'
         ];
 
-
         $records = [];
 
         $booking = $booking->with([
             'bookings' => function ($query) {
                 $query->where('confirmed', 1);
-            }]
-        )->get()->first();
+            }])->where('id', $booking->id)->first();
 
         foreach ($booking->bookings as $sacreBooking) {
             $records[] = [

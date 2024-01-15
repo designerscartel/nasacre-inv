@@ -19,6 +19,7 @@ class Sacre extends Model
         'region_id',
         'title',
         'member',
+        'past_member',
         'address',
         'short_code',
         'code',

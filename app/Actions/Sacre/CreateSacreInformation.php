@@ -28,6 +28,7 @@ class CreateSacreInformation implements CreatesSacreInformation
             'region_id' => $input['region_id'],
             'title' => $input['title'],
             'member' => $input['member'],
+            'past_member' => $input['past_member'],
             'address' => $input['address'],
             'short_code' => $input['short_code'],
             'code' => $input['code'],
