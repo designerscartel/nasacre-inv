@@ -10,7 +10,7 @@
     if(!empty($sacreBooking->delegate_two_name)) {
         $total = $total + $delegateCost;
     }
-    if($sacreBooking->booking->sacre->member) {
+    if($sacreBooking->sacre->member) {
         if(!empty($sacreBooking->virtual_one_name)) {
             $total = $total + $sacreBooking->booking->additional;
         }

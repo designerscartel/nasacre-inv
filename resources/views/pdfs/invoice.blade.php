@@ -31,7 +31,6 @@
         table {
             width: 100%;
             border-spacing: 0;
-            border-collapse: collapse;
         }
 
         th {
@@ -52,7 +51,6 @@
             margin: 0;
         }
 
-
         h1 {
             margin-bottom: 60px;
         }
@@ -66,12 +64,28 @@
             margin: 0;
         }
 
-
         .booking td, .booking th {
             border: 1px solid #DDD;
             padding: 10px;
         }
 
+        .header {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .header td {
+            text-align: right;
+            vertical-align: bottom;
+        }
+
+        .logo-holder {
+            width: 5cm;
+        }
+
+        .logo {
+            width: 100%;
+        }
 
         .details {
             width: 50%;
@@ -127,8 +141,13 @@
 </head>
 
 <body>
-<h1>INVOICE</h1>
 
+<table class="header">
+    <tr>
+        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" /></td>
+        <td><h1>INVOICE</h1></td>
+    </tr>
+</table>
 
 <table class="details">
     <tr>
@@ -168,7 +187,6 @@
         <th><h5>Year</h5></th>
         <th><h5>&pound;</h5></th>
     </tr>
-
     <tr>
         <td><p>{{ $sacre->title}}</p></td>
         <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
@@ -178,10 +196,10 @@
         <tr>
             <td><p>Virtual Training</p></td>
             <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
-            <td><p>&pound;50.00</p></td>
+            <td><p>&pound;60.00</p></td>
         </tr>
         @php
-            $invoice->subs = $invoice->subs + 50.00;
+            $invoice->subs = $invoice->subs + 60.00;
         @endphp
     @endif
     <tr>

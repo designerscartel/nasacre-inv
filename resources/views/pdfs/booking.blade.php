@@ -71,12 +71,28 @@
             margin: 0;
         }
 
-
         .booking td, .booking th {
             border: 1px solid #DDD;
             padding: 10px;
         }
 
+        .header {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .header td {
+            text-align: right;
+            vertical-align: bottom;
+        }
+
+        .logo-holder {
+            width: 5cm;
+        }
+
+        .logo {
+            width: 100%;
+        }
 
         .details {
             width: 50%;
@@ -132,8 +148,13 @@
 </head>
 
 <body>
-<h1>NASACRE AGM INVOICE</h1>
 
+<table class="header">
+    <tr>
+        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" /></td>
+        <td><h1>NASACRE AGM INVOICE</h1></td>
+    </tr>
+</table>
 
 <table class="details">
     <tr>

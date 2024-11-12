@@ -109,7 +109,6 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
             $total = $total + $delegateCost;
         }
 
-
         if($bookingData->sacre->member) {
             if(!empty($bookingData->virtual_one_name)) {
                 $total = $total + $bookingData->booking->additional;
@@ -122,9 +121,6 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
                 $total = $total + 30;
             }
         }
-
-
-
 
         $success['success']['cost'] = $total;
 
