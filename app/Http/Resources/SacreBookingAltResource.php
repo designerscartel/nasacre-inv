@@ -41,6 +41,8 @@ class SacreBookingAltResource extends JsonResource
             'virtual_two_name' => $this->virtual_two_name,
             'virtual_two_email' => $this->virtual_two_email,
             'virtual_two_free' => $this->virtual_two_free,
+            'offer' => $this->offer,
+            'delegates' => \App\Http\Resources\BookingDelegateResource::collection($this->delegates),
         ];
 
     }

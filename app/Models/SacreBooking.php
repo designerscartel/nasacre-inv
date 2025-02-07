@@ -67,6 +67,9 @@ class SacreBooking extends Model
         return $this->hasMany(BookingDelegate::class,  'sacre_booking_id');
     }
 
+
+
+
     /**
      * Return a Resource
      */

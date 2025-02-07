@@ -80,8 +80,7 @@
             <div class="col-span-6">
                 <jet-label for="member" value="Member Price"/>
 
-                <template v-for="sub, index in form.memberSubs" :key="index">
-                    <div class="flex flex-wrap items-center">
+                    <div class="flex flex-wrap items-center" v-for="(sub, index) in form.memberSubs" :key="index">
                         <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                         <div class="w-6/12 pr-3">
                             <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
@@ -91,15 +90,13 @@
                             <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeMemberSub(index)">Remove</span>
                         </div>
                     </div>
-                </template>
             </div>
 
             <!-- Subs -->
             <div class="col-span-6">
                 <jet-label for="subs" value="None Member Price"/>
 
-                <template v-for="sub, index in form.subs" :key="index">
-                    <div class="flex flex-wrap items-center">
+                    <div class="flex flex-wrap items-center" v-for="(sub, index) in form.subs" :key="index">
                         <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                         <div class="w-6/12 pr-3">
                             <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
@@ -109,7 +106,6 @@
                             <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeSub(index)">Remove</span>
                         </div>
                     </div>
-                </template>
             </div>
 
         </template>

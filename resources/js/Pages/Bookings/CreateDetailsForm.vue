@@ -35,7 +35,8 @@
             <!-- Additional -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="additional_amount" value="Additional Amount"/>
-                <jet-input id="additional_amount" type="text" class="mt-1 block w-full" v-model="form.additional_amount"/>
+                <jet-input id="additional_amount" type="text" class="mt-1 block w-full"
+                           v-model="form.additional_amount"/>
                 <jet-input-error :message="form.error('additional_amount')" class="mt-2"/>
             </div>
 
@@ -84,36 +85,37 @@
             <div class="col-span-6">
                 <jet-label for="member" value="Member Price"/>
 
-                <template v-for="sub, index in form.memberSubs" :key="index">
-                    <div class="flex flex-wrap items-center">
-                        <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
-                        <div class="w-6/12 pr-3">
-                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
-                        </div>
-                        <div class="w-3/12 flex flex-wrap">
-                            <span class="text-green-500 cursor-pointer mr-3" @click="addMemberSub" >Add</span>
-                            <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeMemberSub(index)">Remove</span>
-                        </div>
+
+                <div class="flex flex-wrap items-center" v-for="(sub, index) in form.memberSubs" :key="index">
+                    <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
+                    <div class="w-6/12 pr-3">
+                        <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
                     </div>
-                </template>
+                    <div class="w-3/12 flex flex-wrap">
+                        <span class="text-green-500 cursor-pointer mr-3" @click="addMemberSub">Add</span>
+                        <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer"
+                              @click="removeMemberSub(index)">Remove</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Subs -->
             <div class="col-span-6">
                 <jet-label for="subs" value="None Member Price"/>
 
-                <template v-for="sub, index in form.subs" :key="index">
-                    <div class="flex flex-wrap items-center">
-                        <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
-                        <div class="w-6/12 pr-3">
-                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
-                        </div>
-                        <div class="w-3/12 flex flex-wrap">
-                            <span class="text-green-500 cursor-pointer mr-3" @click="addSub" >Add</span>
-                            <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeSub(index)">Remove</span>
-                        </div>
+
+                <div class="flex flex-wrap items-center" v-for="(sub, index) in form.subs" :key="index">
+                    <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
+                    <div class="w-6/12 pr-3">
+                        <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
                     </div>
-                </template>
+                    <div class="w-3/12 flex flex-wrap">
+                        <span class="text-green-500 cursor-pointer mr-3" @click="addSub">Add</span>
+                        <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer"
+                              @click="removeSub(index)">Remove</span>
+                    </div>
+                </div>
+
             </div>
 
 

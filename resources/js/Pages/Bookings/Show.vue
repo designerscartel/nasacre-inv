@@ -128,86 +128,117 @@
                         <jet-input-error :message="updateBookingForm.error('address')" class="mt-2"/>
                     </div>
 
-                    <!-- Delegate One -->
-                    <div class="mt-2">
+                    <template v-if="!booking.data.new">
 
-                        <!-- Delegate One Name -->
-                        <jet-label for="delegate_one_name" value="Delegate One Name"/>
-                        <jet-input id="delegate_one_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_name"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_one_name')" class="mt-2"/>
+                        <!-- Delegate One -->
+                        <div class="mt-2">
 
-                        <!-- Delegate One Email -->
-                        <jet-label for="delegate_one_email" value="Delegate One Email"/>
-                        <jet-input id="delegate_one_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_email"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_one_email')" class="mt-2"/>
+                            <!-- Delegate One Name -->
+                            <jet-label for="delegate_one_name" value="Delegate One Name"/>
+                            <jet-input id="delegate_one_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_name"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_one_name')" class="mt-2"/>
 
-                        <!-- Delegate One Free -->
-                        <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_free" :label="'Delegate One Free'" :forid="'delegate_one_free'"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_one_free')" class="mt-2" />
+                            <!-- Delegate One Email -->
+                            <jet-label for="delegate_one_email" value="Delegate One Email"/>
+                            <jet-input id="delegate_one_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_email"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_one_email')" class="mt-2"/>
 
-                        <!-- Delegate One Diet -->
-                        <jet-label for="delegate_one_diet" value="Delegate One Diet"/>
-                        <jet-input id="delegate_one_diet" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_diet"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_one_diet')" class="mt-2"/>
-                    </div>
+                            <!-- Delegate One Free -->
+                            <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_free" :label="'Delegate One Free'" :forid="'delegate_one_free'"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_one_free')" class="mt-2" />
 
-
-                    <!-- Delegate Two -->
-                    <div class="mt-2">
-                        <!-- Delegate Two Name -->
-                        <jet-label for="delegate_two_name" value="Delegate Two Name"/>
-                        <jet-input id="delegate_two_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_name"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_two_name')" class="mt-2"/>
-
-                        <!-- Delegate Two Email -->
-                        <jet-label for="delegate_two_email" class="mt-2" value="Delegate Two Email"/>
-                        <jet-input id="delegate_two_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_email"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_two_email')" class="mt-2"/>
-
-                        <!-- Delegate Two Free -->
-                        <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_free" :label="'Delegate Two Free'" :forid="'delegate_two_free'"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_two_free')" class="mt-2" />
-
-                        <!-- Delegate Two Diet -->
-                        <jet-label for="delegate_two_diet" class="mt-2" value="Delegate Two Diet"/>
-                        <jet-input id="delegate_two_diet" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_diet"/>
-                        <jet-input-error :message="updateBookingForm.error('delegate_two_diet')" class="mt-2"/>
-                    </div>
+                            <!-- Delegate One Diet -->
+                            <jet-label for="delegate_one_diet" value="Delegate One Diet"/>
+                            <jet-input id="delegate_one_diet" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_one_diet"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_one_diet')" class="mt-2"/>
+                        </div>
 
 
-                    <!-- Virtual One -->
-                    <div class="mt-2">
-                        <!-- Virtual One Name -->
-                        <jet-label for="virtual_one_name" value="Virtual One Name"/>
-                        <jet-input id="virtual_one_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_name"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_one_name')" class="mt-2"/>
+                        <!-- Delegate Two -->
+                        <div class="mt-2">
+                            <!-- Delegate Two Name -->
+                            <jet-label for="delegate_two_name" value="Delegate Two Name"/>
+                            <jet-input id="delegate_two_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_name"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_two_name')" class="mt-2"/>
 
-                        <!-- Virtual One Email -->
-                        <jet-label for="virtual_one_email" value="Virtual One Email"/>
-                        <jet-input id="virtual_one_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_email"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_one_email')" class="mt-2"/>
+                            <!-- Delegate Two Email -->
+                            <jet-label for="delegate_two_email" class="mt-2" value="Delegate Two Email"/>
+                            <jet-input id="delegate_two_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_email"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_two_email')" class="mt-2"/>
 
-                        <!-- Virtual One Free -->
-                        <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_free" :label="'Virtual One Free'" :forid="'virtual_one_free'"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_one_free')" class="mt-2" />
-                    </div>
+                            <!-- Delegate Two Free -->
+                            <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_free" :label="'Delegate Two Free'" :forid="'delegate_two_free'"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_two_free')" class="mt-2" />
 
-                    <!-- Virtual Two -->
-                    <div class="mt-2">
-                        <!-- Virtual Two Name -->
-                        <jet-label for="virtual_two_name" value="Virtual Two Name"/>
-                        <jet-input id="virtual_two_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_name"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_two_name')" class="mt-2"/>
+                            <!-- Delegate Two Diet -->
+                            <jet-label for="delegate_two_diet" class="mt-2" value="Delegate Two Diet"/>
+                            <jet-input id="delegate_two_diet" type="text" class="mt-1 block w-full" v-model="updateBookingForm.delegate_two_diet"/>
+                            <jet-input-error :message="updateBookingForm.error('delegate_two_diet')" class="mt-2"/>
+                        </div>
 
-                        <!-- Virtual Two Email -->
-                        <jet-label for="virtual_two_email" value="Virtual Two Email"/>
-                        <jet-input id="virtual_two_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_email"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_two_email')" class="mt-2"/>
 
-                        <!-- Virtual Two Free -->
-                        <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_free" :label="'Virtual One Free'" :forid="'virtual_two_free'"/>
-                        <jet-input-error :message="updateBookingForm.error('virtual_two_free')" class="mt-2" />
-                    </div>
+                        <!-- Virtual One -->
+                        <div class="mt-2">
+                            <!-- Virtual One Name -->
+                            <jet-label for="virtual_one_name" value="Virtual One Name"/>
+                            <jet-input id="virtual_one_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_name"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_one_name')" class="mt-2"/>
+
+                            <!-- Virtual One Email -->
+                            <jet-label for="virtual_one_email" value="Virtual One Email"/>
+                            <jet-input id="virtual_one_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_email"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_one_email')" class="mt-2"/>
+
+                            <!-- Virtual One Free -->
+                            <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.virtual_one_free" :label="'Virtual One Free'" :forid="'virtual_one_free'"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_one_free')" class="mt-2" />
+                        </div>
+
+                        <!-- Virtual Two -->
+                        <div class="mt-2">
+                            <!-- Virtual Two Name -->
+                            <jet-label for="virtual_two_name" value="Virtual Two Name"/>
+                            <jet-input id="virtual_two_name" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_name"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_two_name')" class="mt-2"/>
+
+                            <!-- Virtual Two Email -->
+                            <jet-label for="virtual_two_email" value="Virtual Two Email"/>
+                            <jet-input id="virtual_two_email" type="text" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_email"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_two_email')" class="mt-2"/>
+
+                            <!-- Virtual Two Free -->
+                            <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateBookingForm.virtual_two_free" :label="'Virtual One Free'" :forid="'virtual_two_free'"/>
+                            <jet-input-error :message="updateBookingForm.error('virtual_two_free')" class="mt-2" />
+                        </div>
+
+                    </template>
+
+                    <template v-else>
+
+                        <div class="text-lg">
+                            Delegates
+                        </div>
+
+                        <table class="table-auto w-full">
+                            <thead class="text-left">
+                            <tr>
+                                <th class="px-8 py-2">Name</th>
+                                <th class="px-8 py-2">Email</th>
+                                <th class="px-4 py-2">Dietery</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template v-if="updateBookingForm.delegates.length">
+                                <tr v-for="delegate in updateBookingForm.delegates" :key="delegate.id">
+                                    <td class="border px-8 py-2">{{ delegate.name }}</td>
+                                    <td class="border px-8 py-2">{{ delegate.email }}</td>
+                                    <td class="border px-8 py-2">{{ delegate.diet }}</td>
+                                </tr>
+                            </template>
+                            </tbody>
+                        </table>
+
+                    </template>
 
                 </div>
 
@@ -325,6 +356,7 @@ export default {
                 virtual_two_free: '',
                 confirmed: '',
                 address: '',
+                delegates: ''
             }, {
                 bag: 'updateBookingForm',
                 resetOnSuccess: true,
@@ -385,6 +417,7 @@ export default {
             this.updateBookingForm.confirmed = booking.confirmed
             this.updateBookingForm.address = booking.address
             this.bookingId = booking.id
+            this.updateBookingForm.delegates = booking.delegates
             this.showUpdateBookingDialog = true
         },
 
