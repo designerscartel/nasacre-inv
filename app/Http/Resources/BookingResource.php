@@ -21,13 +21,17 @@ class BookingResource extends JsonResource
             'email' => $this->email,
             'subscribed' => $this->subscribed,
             'none_subscribed' => $this->none_subscribed,
-            'additional' => $this->additional,
+            'additional_amount' => $this->additional_amount,
             'date' => $this->date,
             'year' => $this->year,
             'from' => $this->from,
             'message' => $this->message,
-            'venue' => $this->message,
+            'venue' => $this->venue,
+            'new' => $this->new,
             'bookings' => \App\Http\Resources\SacreBookingAltResource::collection($this->bookings),
+            'subs' => \App\Http\Resources\BookingSubResource::collection($this->subs),
+            'memberSubs' => \App\Http\Resources\BookingMemberSubResource::collection($this->memberSubs),
+            'delegates' => \App\Http\Resources\BookingDelegateResource::collection($this->delegates),
         ];
 
     }

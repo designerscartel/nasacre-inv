@@ -39,6 +39,7 @@ class SacreBooking extends Model
         'virtual_two_free',
         'confirmed',
         'address',
+        'offer'
     ];
 
     /**
@@ -55,6 +56,15 @@ class SacreBooking extends Model
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');
+    }
+
+
+    /**
+     * Get all the booking delegates.
+     */
+    public function delegates()
+    {
+        return $this->hasMany(BookingDelegate::class,  'sacre_booking_id');
     }
 
     /**

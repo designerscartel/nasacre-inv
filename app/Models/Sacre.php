@@ -37,7 +37,7 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the contacts.
+     * Get all the contacts.
      */
     public function contacts()
     {
@@ -45,7 +45,7 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the invoices.
+     * Get all the invoices.
      */
     public function invoices()
     {
@@ -53,7 +53,7 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the bookings.
+     * Get all the bookings.
      */
     public function bookinsg()
     {
@@ -61,7 +61,7 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the files.
+     * Get all the files.
      */
     public function files()
     {
@@ -69,11 +69,19 @@ class Sacre extends Model
     }
 
     /**
-     * Get all of the shared.
+     * Get all the shared.
      */
     public function shared()
     {
         return $this->hasMany(SharedFile::class);
+    }
+
+    /**
+     * Get all the booking delegates.
+     */
+    public function delegates()
+    {
+        return $this->hasMany(BookingDelegate::class);
     }
 
     /**

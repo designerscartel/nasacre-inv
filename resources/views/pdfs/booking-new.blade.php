@@ -1,9 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+@php
+    $total = 0;
+
+    $costArray = [];
+    $subsCosts = $bookingData->booking->subs;
+    if ($bookingData->sacre->member == 1) {
+        $subsCosts = $bookingData->booking->memberSubs;
+    }
+
+    foreach ($subsCosts as $key => $cost) {
+        $costArray[] = $cost->sub;
+    }
+
+    foreach ($delegates as $key => $delegate) {
+        $total = $costArray[$key];
+    }
+
+    if($bookingData->offer != 0) {
+        $total = $total + $bookingData->booking->additional_amount;
+    }
+
+@endphp
+
+        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <title>Invoice</title>
+    <title>AGM Booking Invoice</title>
 
     <style type="text/css">
 
@@ -31,6 +54,7 @@
         table {
             width: 100%;
             border-spacing: 0;
+            border-collapse: collapse;
         }
 
         th {
@@ -50,6 +74,7 @@
         h1, h2, h3, h4, h5, h6 {
             margin: 0;
         }
+
 
         h1 {
             margin-bottom: 60px;
@@ -144,24 +169,25 @@
 
 <table class="header">
     <tr>
-        <td><h1>INVOICE</h1></td>
-        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" /></td>
+        <td><h1>NASACRE AGM INVOICE</h1></td>
+        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/></td>
     </tr>
 </table>
 
 <table class="details">
     <tr>
+        <td><p>Invoice Number:</p></td>
+        <td><p><strong>{{ $date->format('y') }}/AGM/{{ $bookingData->sacre->code }}
+                    /{{ $bookingData->sacre->short_code }}/{{ $bookingData->id }}</strong></p></td>
+    </tr>
+    <tr>
         <td><p>Invoice Date:</p></td>
         <td><p><strong>{{ $date->format('d/m/Y') }}</strong></p></td>
     </tr>
-    <tr>
-        <td><p>Invoice Number:</p></td>
-        <td><p><strong>{{ $date->format('y') }}/SUBS/{{ $sacre->code }}@if(!empty($sacre->short_code))/{{ $sacre->short_code }}@endif/{{ $invoice->id }}</strong></p></td>
-    </tr>
-    @if(!empty($invoice->po_number))
+    @if(!empty($bookingData->po_number))
         <tr>
             <td><p>PO Number</p></td>
-            <td><p><strong>{{ $invoice->po_number }}</strong></p></td>
+            <td><p><strong>{{ $bookingData->po_number }}</strong></p></td>
         </tr>
     @endif
 </table>
@@ -169,45 +195,46 @@
 
 <div class="attendance">
     <p>For:<br/>
-        <strong>NASACRE Annual Subscription: Academic Year {{ $date->format('Y') }}
-            -{{ $date->format('y') + 1 }}</strong>
-        <br/>SACRE: {{ $sacre->title }}</p>
+        <strong>Attendance at the NASACRE Conference and AGM {{ $bookingDataDate->format('Y') }}</strong><br/>
+        {{ $bookingData->booking->venue }}
+        <br/>SACRE: {{ $bookingData->sacre->title }}</p>
 </div>
 
 <div class="fao">
-    @if(!empty($sacre->address))
-        <p>Invoice Payment</p>
-        <p>{{ $sacre->address }}</p>
+    <p>Invoice Payment</p>
+    @if(!empty($bookingData->address))
+        <p>{{ $bookingData->address }}</p>
+    @else
+        @if(!empty($bookingData->sacre->address))
+            <p>{{ $bookingData->sacre->address }}</p>
+        @endif
     @endif
 </div>
 
 <table class="booking">
     <tr>
-        <th><h5>SACRE</h5></th>
-        <th><h5>Year</h5></th>
-        <th><h5>&pound;</h5></th>
+        <th><h5>Attendee(s)</h5></th>
+        <th><h5>Representing</h5></th>
     </tr>
-    <tr>
-        <td><p>{{ $sacre->title}}</p></td>
-        <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
-        <td><p>&pound;{{ $invoice->subs }}</p></td>
-    </tr>
-    @if($sacre->virtual_training == 1)
+
+    @foreach($delegates as $key => $delegate)
         <tr>
-            <td><p>Virtual Training</p></td>
-            <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
-            <td><p>&pound;60.00</p></td>
+            <td><p>{{ $delegate->name }}</p></td>
+            <td><p>{{ $bookingData->sacre->title }}</p></td>
         </tr>
-        @php
-            $invoice->subs = $invoice->subs + 60.00;
-        @endphp
+    @endforeach
+
+
+    @if($bookingData->offer != 0)
+        <tr>
+            <td><p>Bonus offer for Subscribed SACREs</p></td>
+            <td><p>&pound;{{ $bookingData->booking->additional_amount }}</p></td>
+        </tr>
     @endif
+
     <tr>
-        <td colspan="3">&nbsp;</td>
-    </tr>
-    <tr>
-        <td colspan="2"><p>TOTAL</p></td>
-        <td colspan="1"><p><strong>&pound;{{ $invoice->subs }}</strong></p></td>
+        <td colspan="1"><p>TOTAL</p></td>
+        <td colspan="1"><p><strong>&pound;{{ $total }}</strong></p></td>
     </tr>
 
 </table>

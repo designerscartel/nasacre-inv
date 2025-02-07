@@ -2,6 +2,7 @@
 
 namespace App\Actions\Booking;
 
+use App\Models\BookingDelegate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Contracts\Booking\CreatesBookingPdf;
@@ -21,13 +22,17 @@ class CreateBookingPdf implements CreatesBookingPdf
     public function create(object $bookingData)
     {
         //
+
+        $delegates = BookingDelegate::where('sacre_booking_id', $bookingData->id)->get();
+
         $data = [
             'bookingData' => $bookingData,
             'bookingDataDate' => \Carbon\Carbon::parse($bookingData->booking->date),
-            'date' => \Carbon\Carbon::parse($bookingData->date)
+            'date' => \Carbon\Carbon::parse($bookingData->date),
+            'delegates' => $delegates
         ];
 
-        $pdf = \PDF::loadView('pdfs.booking', $data);
+        $pdf = \PDF::loadView('pdfs.booking-new', $data);
 
         return $pdf;
     }

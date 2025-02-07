@@ -13,9 +13,9 @@
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="text" class="mt-1 block w-full" v-model="form.email" autocomplete="email" />
-                <jet-input-error :message="form.error('email')" class="mt-2" />
+                <jet-label for="email" value="Email"/>
+                <jet-input id="email" type="text" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
+                <jet-input-error :message="form.error('email')" class="mt-2"/>
             </div>
 
             <!-- Subscribed -->
@@ -34,15 +34,24 @@
 
             <!-- Additional -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="additional" value="Additional"/>
-                <jet-input id="additional" type="text" class="mt-1 block w-full" v-model="form.additional"/>
-                <jet-input-error :message="form.error('additional')" class="mt-2"/>
+                <jet-label for="additional_amount" value="Additional Amount"/>
+                <jet-input id="additional_amount" type="text" class="mt-1 block w-full" v-model="form.additional_amount"/>
+                <jet-input-error :message="form.error('additional_amount')" class="mt-2"/>
+            </div>
+
+            <!-- New Style -->
+            <div class="col-span-6 sm:col-span-4">
+                <label class="flex items-center w-6/12 mt-2">
+                    <input type="checkbox" class="form-checkbox" v-model="form.new">
+                    <span class="ml-2 text-sm text-gray-600">New Booking System</span>
+                </label>
             </div>
 
             <!-- Date -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="date" value="Date"/>
-                <datepicker input-class="form-input rounded-md shadow-sm mt-1 block w-full" v-model="form.date" name="date"></datepicker>
+                <datepicker input-class="form-input rounded-md shadow-sm mt-1 block w-full" v-model="form.date"
+                            name="date"></datepicker>
                 <jet-input-error :message="form.error('date')" class="mt-2"/>
             </div>
 
@@ -59,7 +68,7 @@
                 <v-md-editor v-model="form.message" class="mt-1" height="400px"
                              left-toolbar="undo redo bold italic quote ul ol link"
                 ></v-md-editor>
-                <jet-input-error :message="form.error('message')" class="mt-2" />
+                <jet-input-error :message="form.error('message')" class="mt-2"/>
             </div>
 
             <!-- Venue -->
@@ -68,8 +77,45 @@
                 <v-md-editor v-model="form.venue" class="mt-1" height="400px"
                              left-toolbar="undo redo bold italic quote ul ol link"
                 ></v-md-editor>
-                <jet-input-error :message="form.error('venue')" class="mt-2" />
+                <jet-input-error :message="form.error('venue')" class="mt-2"/>
             </div>
+
+            <!-- Member Subs -->
+            <div class="col-span-6">
+                <jet-label for="member" value="Member Price"/>
+
+                <template v-for="sub, index in form.memberSubs" :key="index">
+                    <div class="flex flex-wrap items-center">
+                        <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
+                        <div class="w-6/12 pr-3">
+                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
+                        </div>
+                        <div class="w-3/12 flex flex-wrap">
+                            <span class="text-green-500 cursor-pointer mr-3" @click="addMemberSub" >Add</span>
+                            <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeMemberSub(index)">Remove</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Subs -->
+            <div class="col-span-6">
+                <jet-label for="subs" value="None Member Price"/>
+
+                <template v-for="sub, index in form.subs" :key="index">
+                    <div class="flex flex-wrap items-center">
+                        <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
+                        <div class="w-6/12 pr-3">
+                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
+                        </div>
+                        <div class="w-3/12 flex flex-wrap">
+                            <span class="text-green-500 cursor-pointer mr-3" @click="addSub" >Add</span>
+                            <span v-show="index != 0" icon="square-minus mr-3" class="text-red-500 cursor-pointer" @click="removeSub(index)">Remove</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
 
         </template>
 
@@ -86,61 +132,78 @@
 </template>
 
 <script>
-    import JetButton from './../../Jetstream/Button'
-    import JetFormSection from './../../Jetstream/FormSection'
-    import JetInput from './../../Jetstream/Input'
-    import JetTextarea from './../../Jetstream/Textarea'
-    import JetInputError from './../../Jetstream/InputError'
-    import JetSelect from './../../Jetstream/Select'
-    import JetLabel from './../../Jetstream/Label'
-    import JetActionMessage from './../../Jetstream/ActionMessage'
-    import JetSecondaryButton from './../../Jetstream/SecondaryButton'
-    import Datepicker from 'vuejs-datepicker';
+import JetButton from './../../Jetstream/Button'
+import JetFormSection from './../../Jetstream/FormSection'
+import JetInput from './../../Jetstream/Input'
+import JetTextarea from './../../Jetstream/Textarea'
+import JetInputError from './../../Jetstream/InputError'
+import JetSelect from './../../Jetstream/Select'
+import JetLabel from './../../Jetstream/Label'
+import JetActionMessage from './../../Jetstream/ActionMessage'
+import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+import Datepicker from 'vuejs-datepicker';
 
-    export default {
-        components: {
-            JetActionMessage,
-            JetButton,
-            JetFormSection,
-            JetInput,
-            JetTextarea,
-            JetSelect,
-            JetInputError,
-            JetLabel,
-            JetSecondaryButton,
-            Datepicker,
+export default {
+    components: {
+        JetActionMessage,
+        JetButton,
+        JetFormSection,
+        JetInput,
+        JetTextarea,
+        JetSelect,
+        JetInputError,
+        JetLabel,
+        JetSecondaryButton,
+        Datepicker,
+    },
+
+    props: [
+        'invoice',
+        'Datepicker'
+    ],
+
+    data() {
+        return {
+
+            form: this.$inertia.form({
+                '_method': 'POST',
+                invoice_group_id: '',
+                email: '',
+                subscribed: '',
+                none_subscribed: '',
+                additional_amount: '',
+                date: '',
+                from: '',
+                message: '',
+                venue: '',
+                new: 0,
+                subs: [{sub: ""}],
+                memberSubs: [{sub: ""}],
+            }, {
+                bag: 'createBookingInformation',
+                resetOnSuccess: false,
+            }),
+        }
+    },
+    methods: {
+        createBookingInformation() {
+            this.form.post('/bookings', {
+                preserveScroll: true
+            });
+        },
+        addSub() {
+            this.form.subs.push({sub: ""})
+        },
+        removeSub(index) {
+            this.form.subs.splice(index, 1)
         },
 
-        props: [
-            'invoice',
-            'Datepicker'
-        ],
-
-        data() {
-            return {
-                form: this.$inertia.form({
-                    '_method': 'POST',
-                    invoice_group_id: '',
-                    email: '',
-                    subscribed: '',
-                    none_subscribed: '',
-                    additional: '',
-                    date: '',
-                    from: '',
-                    message: '',
-                    venue: '',
-                }, {
-                    bag: 'createBookingInformation',
-                    resetOnSuccess: false,
-                }),
-            }
+        addMemberSub() {
+            this.form.memberSubs.push({sub: ""})
         },
-        methods: {
-            createBookingInformation() {
-                this.form.post('/bookings', {
-                    preserveScroll: true
-                });
-            }
+        removeMemberSub(index) {
+            this.form.memberSubs.splice(index, 1)
         },
-    }
+    },
+}
 </script>

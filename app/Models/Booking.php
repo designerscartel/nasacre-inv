@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\BookingMemberSubResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,13 +20,14 @@ class Booking extends Model
         'email',
         'subscribed',
         'none_subscribed',
-        'additional',
+        'additional_amount',
         'date',
         'year',
         'from',
         'message',
         'venue',
-        'batch'
+        'batch',
+        'new'
     ];
 
     /**
@@ -48,11 +50,36 @@ class Booking extends Model
     }
 
     /**
-     * Get all of the bookings.
+     * Get all the bookings.
      */
     public function bookings()
     {
         return $this->hasMany(SacreBooking::class);
+    }
+
+    /**
+     * Get all the subs for bookings.
+     */
+    public function subs()
+    {
+        return $this->hasMany(BookingSub::class);
+    }
+
+    /**
+     * Get all the member subs for bookings.
+     */
+    public function memberSubs()
+    {
+        return $this->hasMany(BookingMemberSub::class);
+    }
+
+
+    /**
+     * Get all the booking delegates.
+     */
+    public function delegates()
+    {
+        return $this->hasMany(BookingDelegate::class);
     }
 
 }

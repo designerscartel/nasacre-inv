@@ -4,6 +4,8 @@ namespace App\Mail;
 
 use App\Models\Booking;
 use App\Models\Sacre;
+use App\Models\BookingDelegate;
+
 use App\Models\SacreBooking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -47,12 +49,15 @@ class BookingInvoiceForQueuing extends Mailable
      */
     public function build()
     {
+        $delegates = BookingDelegate::where('sacre_booking_id', $this->sacreBooking->id)->get();
+
         return $this->from('admin@nasacre.org.uk', 'NASACRE')
             ->subject('NASACRE Conference Booking')
             ->with([
                 'sacreBooking' => $this->sacreBooking,
+                'delegates' => $delegates
             ])
-            ->markdown('mails.booking-invoice')
+            ->markdown('mails.booking-invoice-new')
             ->attachData($this->pdf, 'Attendance at the NASACRE Conference and AGM.pdf', [
                 'mime' => 'application/pdf',
             ]);;

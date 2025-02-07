@@ -82,7 +82,7 @@
         }
 
         .header td {
-            text-align: right;
+            text-align: left;
             vertical-align: bottom;
         }
 
@@ -151,8 +151,8 @@
 
 <table class="header">
     <tr>
-        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" /></td>
         <td><h1>NASACRE AGM INVOICE</h1></td>
+        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" /></td>
     </tr>
 </table>
 

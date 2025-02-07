@@ -55,7 +55,7 @@ class BookingController extends Controller
         //
         $booking = app(CreateBookingInformation::class)->create($request->all());
 
-        return redirect()->route('bookings.show', ['booking' => $booking->id]);
+        return redirect()->route('bookings.edit', ['booking' => $booking->id]);
     }
 
     /**
@@ -68,10 +68,8 @@ class BookingController extends Controller
     {
         //
         $booking = $booking->with('bookings.sacre')->where('id', $booking->id)->first();
-
-        $booking = $booking->toResource();
         return Inertia::render('Bookings/Show', [
-            'booking' => $booking,
+            'booking' => $booking->toResource(),
         ]);
     }
 
@@ -84,6 +82,7 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         //
+        $booking = $booking->with('subs', 'memberSubs')->where('id', $booking->id)->first();
         return Inertia::render('Bookings/Edit', [
             'booking' => $booking->toResource(),
         ]);
