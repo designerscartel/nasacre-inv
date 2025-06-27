@@ -48,6 +48,10 @@
                                             Edit
                                         </inertia-link>
 
+                                        <a target="_blank" class="text-sm mr-2" :href="'/invoices/'+ invoice.id+'/list'">
+                                            List Invoices
+                                        </a>
+
                                         <!-- Send Invoices -->
                                         <button class="cursor-pointer text-sm text-green-500 focus:outline-none"
                                                 @click="confirmInvoiceSend(invoice)">

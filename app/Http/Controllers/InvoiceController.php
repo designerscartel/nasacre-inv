@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Actions\Invoice\CreateInvoiceInformation;
 use App\Contracts\Invoice\DeletesInvoice;
-use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Contracts\Invoice\SendsInvoiceInformation;
+use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use League\Csv\Writer;
 
 class InvoiceController extends Controller
 {
@@ -106,7 +107,7 @@ class InvoiceController extends Controller
 
         return back(303);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -120,6 +121,41 @@ class InvoiceController extends Controller
         app(DeletesInvoice::class)->delete($invoice);
 
         return back(303);
+    }
+
+    public function list(Request $request, Invoice $invoice)
+    {
+
+
+        $header = [
+            'SCARE',
+            'Invoice Number',
+        ];
+
+        $invoiceLines = [];
+
+        foreach ($invoice->invoices as $invoice) {
+            $date = \Carbon\Carbon::parse($invoice->date);
+            $invoiceNumber = $date->format('y') . '/SUBS/' . $invoice->sacre->code;
+            if (!empty($invoice->sacre->short_code)) {
+
+                $invoiceNumber = $invoiceNumber . '/' . $invoice->sacre->short_code;
+            }
+            $invoiceNumber = $invoiceNumber . '/' . $invoice->id;
+            $invoiceLines[] = [
+                $invoice->sacre->title,
+                $invoiceNumber
+            ];
+        }
+
+        $csv = Writer::createFromString();
+        //insert the header
+        $csv->insertOne($header);
+        //insert all the records
+        $csv->insertAll($invoiceLines);
+
+        echo $csv->output('invoices.csv');
+
     }
 
 }

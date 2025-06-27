@@ -6229,6 +6229,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -37841,6 +37845,25 @@ var render = function() {
                                         [
                                           _vm._v(
                                             "\n                                        Edit\n                                    "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "text-sm mr-2",
+                                          attrs: {
+                                            target: "_blank",
+                                            href:
+                                              "/invoices/" +
+                                              invoice.id +
+                                              "/list"
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        List Invoices\n                                    "
                                           )
                                         ]
                                       ),

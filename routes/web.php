@@ -90,6 +90,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/invoices/create', [\App\Http\Controllers\InvoiceController::class, 'create'])->name('invoices.create');
         Route::get('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
         Route::put('/invoices/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'update'])->name('invoices.update');
+        Route::get('/invoices/{invoice}/list', [\App\Http\Controllers\InvoiceController::class, 'list'])->name('invoices.list');
         Route::post('/invoices/{invoice}/send', [\App\Http\Controllers\InvoiceController::class, 'send'])->name('invoices.send');
 
         // Booking

@@ -33,6 +33,11 @@ class Invoice extends Model
         return new \App\Http\Resources\InvoiceResource($this);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(SacreInvoice::class);
+    }
+
     /**
      * Boot Function
      */
