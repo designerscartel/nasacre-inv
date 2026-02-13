@@ -8,17 +8,13 @@
     <style type="text/css">
 
         @page {
-            margin: 1cm;
+            margin: 1cm 1cm 1cm 1cm;
         }
 
         body {
-            background-repeat: no-repeat;
-            background-size: 100%;
-            background-position: top right;
             font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
-            margin: 1cm 0;
-            width: 100%;
-            height: 100%;
+            position: relative;
+            height: 29.7cm;
         }
 
         table, tr, td {
@@ -80,6 +76,21 @@
 
         .header td {
             text-align: left;
+            vertical-align: bottom;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 1cm;
+            margin-bottom: -4cm;
+        }
+
+        .footer td {
+            text-align: center;
             vertical-align: bottom;
         }
 
@@ -151,7 +162,7 @@
     <tr>
         <td><h1>INVOICE</h1></td>
         <td class="logo-holder">
-            <img class="logo" src="{{ public_path().'/nasacre-logo.png' }}" />
+            <img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/>
             <p class="small">Registered Charity Number: 1212494</p>
         </td>
     </tr>
@@ -164,7 +175,9 @@
     </tr>
     <tr>
         <td><p>Invoice Number:</p></td>
-        <td><p><strong>{{ $date->format('y') }}/SUBS/{{ $sacre->code }}@if(!empty($sacre->short_code))/{{ $sacre->short_code }}@endif/{{ $invoice->id }}</strong></p></td>
+        <td><p><strong>{{ $date->format('y') }}/SUBS/{{ $sacre->code }}@if(!empty($sacre->short_code))
+                        /{{ $sacre->short_code }}
+                    @endif/{{ $invoice->id }}</strong></p></td>
     </tr>
     @if(!empty($invoice->po_number))
         <tr>
@@ -275,3 +288,16 @@
         </tr>
     </table>
 </div>
+
+<table class="footer">
+    <tr>
+        <td class="">
+            <p class="small">NASACRE c/o Religious Education Council of England and Wales,<br/>Northgate House, North
+                Gate, New Basford, Nottingham, NG7 7BQ</p>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>

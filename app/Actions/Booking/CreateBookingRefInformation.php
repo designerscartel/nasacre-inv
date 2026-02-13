@@ -39,7 +39,7 @@ class CreateBookingRefInformation implements CreatesBookingRefInformation
             return response()->json($errors, 400);
         }
 
-        $bookingReference = Booking::find(3);
+        $bookingReference = Booking::find(4);
         $sacreReference = Sacre::find($input['sacre_id']);
 
         if (empty($sacreReference)) {

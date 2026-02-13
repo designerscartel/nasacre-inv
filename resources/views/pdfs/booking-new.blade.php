@@ -256,19 +256,16 @@
                             <td><p><strong>Cooperative Bank</strong></p></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><p><strong>STAFFORD</strong></p></td>
-                        </tr>
-                        <tr>
                             <td><p>Account Name:</p></td>
                             <td><p><strong>NASACRE</strong></p></td>
                         </tr>
                         <tr>
                             <td><p>Account Number:</p></td>
-                            <td><p><strong>50008450</strong></p></td>
+                            <td><p><strong>67410361</strong></p></td>
                         </tr>
                         <tr>
                             <td><p>Sort Code:</p></td>
-                            <td><p><strong>08-90-08</strong></p></td>
+                            <td><p><strong>08-92-99</strong></p></td>
                         </tr>
                     </table>
                 </div>

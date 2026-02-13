@@ -134,16 +134,16 @@ class InvoiceController extends Controller
 
         $invoiceLines = [];
 
-        foreach ($invoice->invoices as $invoice) {
-            $date = \Carbon\Carbon::parse($invoice->date);
-            $invoiceNumber = $date->format('y') . '/SUBS/' . $invoice->sacre->code;
-            if (!empty($invoice->sacre->short_code)) {
+        foreach ($invoice->invoices as $sentInvoice) {
+            $date = \Carbon\Carbon::parse($sentInvoice->date);
+            $invoiceNumber = $date->format('y') . '/SUBS/' . $sentInvoice->sacre->code;
+            if (!empty($sentInvoice->sacre->short_code)) {
 
-                $invoiceNumber = $invoiceNumber . '/' . $invoice->sacre->short_code;
+                $invoiceNumber = $invoiceNumber . '/' . $sentInvoice->sacre->short_code;
             }
             $invoiceNumber = $invoiceNumber . '/' . $invoice->id;
             $invoiceLines[] = [
-                $invoice->sacre->title,
+                $sentInvoice->sacre->title,
                 $invoiceNumber
             ];
         }

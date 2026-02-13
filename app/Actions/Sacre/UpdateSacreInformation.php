@@ -17,6 +17,7 @@ class UpdateSacreInformation implements UpdatesSacreInformation
      */
     public function update($sacre, array $input)
     {
+
         Validator::make($input, [
             'title' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
