@@ -169,8 +169,11 @@
 
 <table class="header">
     <tr>
-        <td><h1>NASACRE AGM INVOICE</h1></td>
-        <td class="logo-holder"><img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/></td>
+        <td><h1>ASACRE AGM INVOICE</h1></td>
+        <td class="logo-holder">
+            <img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/>
+            <p class="small">Registered Charity Number: 1212494</p>
+        </td>
     </tr>
 </table>
 
@@ -274,6 +277,7 @@
             </td>
 
             <td class="how-column">
+                {{--
                 <div class="well">
                     <h6>CHEQUE</h6>
                     <p>
@@ -282,14 +286,28 @@
                     </p>
                     <p>
                         Please send to:<br/>
-                        <strong>Rev. Preb. Michael Metcalf<br/>
+                        <strong>
                             NASACRE Treasurer<br/>
                             196 Stone Road,<br/>
                             Stafford<br/>
                             ST16 1NT</strong>
                     </p>
                 </div>
+                --}}
             </td>
         </tr>
     </table>
 </div>
+
+<table class="footer">
+    <tr>
+        <td class="">
+            <p class="small">NASACRE c/o Religious Education Council of England and Wales,<br/>Northgate House, North
+                Gate, New Basford, Nottingham, NG7 7BQ</p>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>
