@@ -151,7 +151,7 @@
 
 <table class="header">
     <tr>
-        <td><h1>ASACRE AGM INVOICE</h1></td>
+        <td><h1>NASACRE AGM INVOICE</h1></td>
         <td class="logo-holder">
             <img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/>
             <p class="small">Registered Charity Number: 1212494</p>
@@ -334,7 +334,7 @@
                 <div class="well">
                     <h6>BACS</h6>
                     <p>If paying by BACS, <span class="underline">please send notification</span> to<br/>
-                        email address: treasurer@nasacre.org.uk</p>
+                        email address: admin@nasacre.org.uk</p>
 
                     <table class="bank">
                         <tr>
