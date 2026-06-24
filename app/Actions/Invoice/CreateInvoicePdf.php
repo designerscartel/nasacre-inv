@@ -30,7 +30,7 @@ class CreateInvoicePdf implements CreatesInvoicePdf
             'date' => \Carbon\Carbon::parse($invoice->date)
         ];
 
-        $pdf = \PDF::loadView('pdfs.invoice', $data);
+        $pdf = \PDF::loadView('pdfs.2026-invoice', $data);
 
         return $pdf;
     }
