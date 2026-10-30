@@ -46,6 +46,13 @@
                 </label>
             </div>
 
+            <div class="col-span-6 sm:col-span-4">
+                <label class="flex items-center w-6/12 mt-2">
+                    <input type="checkbox" class="form-checkbox" v-model="form.active">
+                    <span class="ml-2 text-sm text-gray-600">Accept public bookings</span>
+                </label>
+            </div>
+
             <!-- Date -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="date" value="Date"/>
@@ -165,6 +172,7 @@
                     message: this.booking.message,
                     venue: this.booking.venue,
                     new: this.booking.new,
+                    active: this.booking.active,
                     subs: this.booking.subs,
                     memberSubs: this.booking.memberSubs,
                 }, {

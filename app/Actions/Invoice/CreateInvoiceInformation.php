@@ -18,11 +18,11 @@ class CreateInvoiceInformation implements CreatesInvoiceInformation
     public function create(array $input)
     {
         Validator::make($input, [
-            'email' => ['required', 'string', 'max:255'],
-            'subs' => ['required', 'string', 'max:255'],
-            'date' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'subs' => ['required', 'numeric', 'min:0'],
+            'date' => ['required', 'date'],
             'from' => ['required', 'string', 'max:255'],
-            'message' => ['required'],
+            'message' => ['required', 'string'],
         ])->validateWithBag('createInvoiceInformation');
 
         $invoice = new Invoice();

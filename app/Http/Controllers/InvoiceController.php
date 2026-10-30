@@ -128,14 +128,15 @@ class InvoiceController extends Controller
 
 
         $header = [
-            'SCARE',
+            'SACRE',
             'Invoice Number',
         ];
 
         $invoiceLines = [];
 
         foreach ($invoice->invoices as $sentInvoice) {
-            $date = \Carbon\Carbon::parse($sentInvoice->date);
+            $date = $sentInvoice->date ?: $invoice->date;
+            $date = \Carbon\Carbon::parse($date);
             $invoiceNumber = $date->format('y') . '/SUBS/' . $sentInvoice->sacre->code;
             if (!empty($sentInvoice->sacre->short_code)) {
 
@@ -154,7 +155,10 @@ class InvoiceController extends Controller
         //insert all the records
         $csv->insertAll($invoiceLines);
 
-        echo $csv->output('invoices.csv');
+        return response($csv->getContent(), 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="invoices.csv"',
+        ]);
 
     }
 

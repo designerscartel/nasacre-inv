@@ -104,6 +104,7 @@ class BookingController extends Controller
 
     public function amend(Request $request, Booking $booking, SacreBooking $sacreBooking)
     {
+        abort_unless($sacreBooking->booking_id === $booking->id, 404);
         app(AmendsBookingInformation::class)->update($sacreBooking, $request->all());
         return back(303);
     }
@@ -126,7 +127,7 @@ class BookingController extends Controller
 
     public function destroyBookingInformation(Request $request, Booking $booking, SacreBooking $sacreBooking)
     {
-        //
+        abort_unless($sacreBooking->booking_id === $booking->id, 404);
         app(DeletesBookingInformation::class)->delete($sacreBooking);
         return back(303);
     }
@@ -204,7 +205,10 @@ class BookingController extends Controller
         //insert all the records
         $csv->insertAll($records);
 
-        echo $csv->output('booking.csv');
+        return response((string) $csv, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="booking.csv"',
+        ]);
 
     }
 

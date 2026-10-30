@@ -48,6 +48,13 @@
                 </label>
             </div>
 
+            <div class="col-span-6 sm:col-span-4">
+                <label class="flex items-center w-6/12 mt-2">
+                    <input type="checkbox" class="form-checkbox" v-model="form.active">
+                    <span class="ml-2 text-sm text-gray-600">Accept public bookings</span>
+                </label>
+            </div>
+
             <!-- Date -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="date" value="Date"/>
@@ -89,7 +96,7 @@
                 <div class="flex flex-wrap items-center" v-for="(sub, index) in form.memberSubs" :key="index">
                     <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                     <div class="w-6/12 pr-3">
-                        <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
+                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
                     </div>
                     <div class="w-3/12 flex flex-wrap">
                         <span class="text-green-500 cursor-pointer mr-3" @click="addMemberSub">Add</span>
@@ -107,7 +114,7 @@
                 <div class="flex flex-wrap items-center" v-for="(sub, index) in form.subs" :key="index">
                     <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                     <div class="w-6/12 pr-3">
-                        <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.value"/>
+                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
                     </div>
                     <div class="w-3/12 flex flex-wrap">
                         <span class="text-green-500 cursor-pointer mr-3" @click="addSub">Add</span>
@@ -179,6 +186,7 @@ export default {
                 message: '',
                 venue: '',
                 new: 0,
+                active: false,
                 subs: [{sub: ""}],
                 memberSubs: [{sub: ""}],
             }, {

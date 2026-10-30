@@ -60,7 +60,7 @@ class InvoiceForQueuing extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@nasacre.org.uk', 'NASACRE')
+        return $this->from($this->invoice->email, $this->invoice->from)
             ->subject('NASACRE Membership Invoice ' . $this->sacre->title . ' ' . $this->invoice->year)
             ->with([
                 'invoice' => $this->invoice,

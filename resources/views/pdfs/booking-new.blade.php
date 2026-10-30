@@ -1,19 +1,5 @@
 @php
-    $total = 0;
-
-    $costArray = [];
-    $subsCosts = $bookingData->booking->subs;
-    if ($bookingData->sacre->member == 1) {
-        $subsCosts = $bookingData->booking->memberSubs;
-    }
-
-    foreach ($subsCosts as $key => $cost) {
-        $costArray[] = $cost->sub;
-    }
-
-    foreach ($delegates as $key => $delegate) {
-        $total = $costArray[$key];
-    }
+    $total = $bookingData->booking->priceForDelegateCount($delegates->count(), (bool) $bookingData->sacre->member) ?? 0;
 
     if($bookingData->offer != 0) {
         $total = $total + $bookingData->booking->additional_amount;

@@ -27,7 +27,14 @@ class Booking extends Model
         'message',
         'venue',
         'batch',
-        'new'
+        'new',
+        'active',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'new' => 'boolean',
+        'date' => 'datetime',
     ];
 
     /**
@@ -44,8 +51,12 @@ class Booking extends Model
     public static function boot()
     {
         parent::boot();
-        self::deleting(function ($booking) { // before delete() method call this
-
+        self::deleting(function ($booking) {
+            $booking->bookings()->each(function ($sacreBooking) {
+                $sacreBooking->delete();
+            });
+            $booking->subs()->delete();
+            $booking->memberSubs()->delete();
         });
     }
 
@@ -62,7 +73,7 @@ class Booking extends Model
      */
     public function subs()
     {
-        return $this->hasMany(BookingSub::class);
+        return $this->hasMany(BookingSub::class)->orderBy('id');
     }
 
     /**
@@ -70,7 +81,7 @@ class Booking extends Model
      */
     public function memberSubs()
     {
-        return $this->hasMany(BookingMemberSub::class);
+        return $this->hasMany(BookingMemberSub::class)->orderBy('id');
     }
 
 
@@ -80,6 +91,18 @@ class Booking extends Model
     public function delegates()
     {
         return $this->hasMany(BookingDelegate::class);
+    }
+
+    public function priceForDelegateCount(int $delegateCount, bool $member): ?float
+    {
+        if ($delegateCount < 1) {
+            return null;
+        }
+
+        $prices = $member ? $this->memberSubs : $this->subs;
+        $price = $prices->get($delegateCount - 1);
+
+        return $price ? (float) $price->sub : null;
     }
 
 }

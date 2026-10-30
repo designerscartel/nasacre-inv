@@ -36,6 +36,7 @@
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Booking</th>
+                                <th class="px-4 py-2">Public bookings</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
@@ -43,6 +44,10 @@
                             <template v-if="bookings.data.length">
                                 <tr v-if="bookings" v-for="booking in bookings.data" :key="booking.id">
                                     <td class="border px-8 py-2">{{ booking.year }}</td>
+                                    <td class="border px-4 py-2">
+                                        <span v-if="booking.active" class="text-green-600 font-semibold">Active</span>
+                                        <span v-else class="text-gray-500">Closed</span>
+                                    </td>
                                     <td class="border px-4 py-2">
                                         <inertia-link class="text-sm mr-2" :href="'/bookings/'+ booking.id+'/edit'">
                                             Edit
@@ -54,7 +59,7 @@
                                 </tr>
                             </template>
                             <tr v-else>
-                                <td colspan="2" class="border px-8 py-2">No Bookings</td>
+                                <td colspan="3" class="border px-8 py-2">No Bookings</td>
                             </tr>
 
                             </tbody>

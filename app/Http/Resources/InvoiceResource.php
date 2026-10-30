@@ -24,6 +24,7 @@ class InvoiceResource extends JsonResource
             'year' => $this->year,
             'from' => $this->from,
             'message' => $this->message,
+            'batch' => $this->batch,
         ];
 
     }

@@ -43,7 +43,7 @@ class SacreInvoiceControlller extends Controller
      */
     public function update(Request $request, Sacre $sacre, SacreInvoice $sacreInvoice)
     {
-        //
+        abort_unless($sacreInvoice->sacre_id === $sacre->id, 404);
         app(UpdatesSacreInvoiceInformation::class)->update($sacreInvoice, $request->all());
         return back(303);
     }
@@ -56,24 +56,26 @@ class SacreInvoiceControlller extends Controller
      */
     public function pdf(Request $request, Sacre $sacre, SacreInvoice $sacreInvoice)
     {
-        //
+        abort_unless($sacreInvoice->sacre_id === $sacre->id, 404);
+
+        $pdfSacre = $sacre->replicate();
+        $pdfInvoice = $sacreInvoice->invoice->replicate();
+
         if(!empty($sacreInvoice->address)) {
-            $sacre->address = $sacreInvoice->address;
+            $pdfSacre->address = $sacreInvoice->address;
         }
 
         if(!empty($sacreInvoice->po_number)) {
-            $sacreInvoice->invoice->po_number = $sacreInvoice->po_number;
+            $pdfInvoice->po_number = $sacreInvoice->po_number;
         }
 
         if(!empty($sacreInvoice->date)) {
-            $sacreInvoice->invoice->date = $sacreInvoice->date;
+            $pdfInvoice->date = $sacreInvoice->date;
         }
 
-        if(!empty($sacreInvoice->virtual_training)) {
-            $sacreInvoice->invoice->virtual_training = $sacreInvoice->virtual_training;
-        }
+        $pdfInvoice->virtual_training = $sacreInvoice->virtual_training;
 
-        $pdf = app(CreatesInvoicePdf::class)->inline($sacreInvoice->invoice, $sacre);
+        $pdf = app(CreatesInvoicePdf::class)->inline($pdfInvoice, $pdfSacre);
         return $pdf;
     }
 

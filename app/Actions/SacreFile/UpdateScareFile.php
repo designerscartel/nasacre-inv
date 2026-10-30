@@ -20,12 +20,12 @@ class UpdateScareFile implements UpdatesSacreFile
     {
 
         Validator::make($input, [
-            'filename' => ['required', 'string', 'max:255'],
+            'filename' => ['required', 'string', 'max:255', 'regex:/\\A[a-zA-Z0-9._() -]+\\.pdf\\z/i'],
             'year' => ['required', 'max:255'],
         ])->validateWithBag('updateFileForm');
 
         if($sacreFile->filename != $input['filename']) {
-            Storage::move('public/files/'.$sacreFile->filename, 'public/files/'.$input['filename']);
+            Storage::move('files/'.$sacreFile->filename, 'files/'.$input['filename']);
         }
 
         return $sacreFile->fill([

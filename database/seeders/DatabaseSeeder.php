@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(10)->create();
-        $this->call(UsersTableSeeder::class);
+        if (env('SEED_ADMIN_EMAIL') && env('SEED_ADMIN_PASSWORD')) {
+            $this->call(UsersTableSeeder::class);
+        }
     }
 }

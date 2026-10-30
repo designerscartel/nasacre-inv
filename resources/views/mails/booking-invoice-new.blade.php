@@ -1,19 +1,7 @@
 @php
     $date = \Carbon\Carbon::parse($sacreBooking->booking->date);
 
-    $costArray = [];
-    $subsCosts = $sacreBooking->booking->subs;
-    if ($sacreBooking->sacre->member == 1) {
-        $subsCosts = $sacreBooking->booking->memberSubs;
-    }
-
-    foreach ($subsCosts as $key => $cost) {
-        $costArray[] = $cost->sub;
-    }
-
-    foreach ($delegates as $key => $delegate) {
-        $total = $costArray[$key];
-    }
+    $total = $sacreBooking->booking->priceForDelegateCount($delegates->count(), (bool) $sacreBooking->sacre->member) ?? 0;
 
     if($sacreBooking->offer != 0) {
         $total = $total + $sacreBooking->booking->additional_amount;

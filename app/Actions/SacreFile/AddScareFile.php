@@ -5,9 +5,8 @@ namespace App\Actions\SacreFile;
 use App\Models\Sacre;
 use App\Models\SacreFile;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use App\Contracts\SacreFile\AddsSacreFile;
+use Illuminate\Support\Str;
 
 
 class AddScareFile implements AddsSacreFile
@@ -24,16 +23,15 @@ class AddScareFile implements AddsSacreFile
         $input = $request->all();
 
         Validator::make($input, [
-            'file' => ['required'],
+            'file' => ['required', 'file', 'mimes:pdf', 'mimetypes:application/pdf', 'max:10240'],
         ])->validateWithBag('addFileForm');
 
         if (!empty($input['file'])) {
             $myFile = $request->file('file');
-            $fileName = $myFile->getClientOriginalName();
-            $myFileObj = $myFile->storeAs('public/files', $fileName);
-            Storage::get($myFileObj);
+            $fileName = Str::uuid().'.pdf';
+            $myFile->storeAs('files', $fileName);
             $file = new SacreFile();
-            $file->filename = $myFile->getClientOriginalName();
+            $file->filename = $fileName;
             $sacre->files()->save($file);
         }
 

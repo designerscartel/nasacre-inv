@@ -70,7 +70,7 @@
 
             <template #content>
 
-                <input type="file" @input="addFileForm.file = $event.target.files[0]" />
+                <input type="file" accept="application/pdf,.pdf" @input="addFileForm.file = $event.target.files[0]" />
                 <progress v-if="addFileForm.progress" :value="addFileForm.progress.percentage" max="100">
                     {{ addFileForm.progress.percentage }}%
                 </progress>

@@ -42,6 +42,21 @@ class SacreBooking extends Model
         'offer'
     ];
 
+    protected $casts = [
+        'confirmed' => 'boolean',
+        'offer' => 'boolean',
+        'date' => 'datetime',
+    ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function ($booking) {
+            $booking->delegates()->delete();
+        });
+    }
+
     /**
      * Get the sacre it to.
      */

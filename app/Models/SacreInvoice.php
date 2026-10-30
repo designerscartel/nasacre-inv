@@ -21,7 +21,14 @@ class SacreInvoice extends Model
         'date',
         'sacre_id',
         'invoice_id',
-        'batch'
+        'batch',
+        'virtual_training',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
+        'batch' => 'integer',
+        'virtual_training' => 'boolean',
     ];
 
     /**

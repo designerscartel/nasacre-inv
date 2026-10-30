@@ -18,20 +18,21 @@ class UpdateSacreInvoiceInformation implements UpdatesSacreInvoiceInformation
     public function update($sacreInvoice, array $input)
     {
         Validator::make($input, [
-            'po_number' => [],
-            'address' => [],
-            'date' => [],
+            'po_number' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string'],
+            'date' => ['nullable', 'date'],
+            'virtual_training' => ['nullable', 'boolean'],
         ])->validateWithBag('updateSacreInvoiceInformation');
 
         $date = null;
-        if($input['date']) {
+        if(!empty($input['date'])) {
             $date = \Carbon\Carbon::parse($input['date'])->toDateTimeString();
         }
         $sacreInvoice->fill([
-            'po_number' => $input['po_number'],
-            'address' => $input['address'],
+            'po_number' => $input['po_number'] ?? null,
+            'address' => $input['address'] ?? null,
             'date' => $date,
-            'virtual_training' => $input['virtual_training'],
+            'virtual_training' => $input['virtual_training'] ?? false,
         ])->save();
     }
 }

@@ -28,6 +28,7 @@ class BookingResource extends JsonResource
             'message' => $this->message,
             'venue' => $this->venue,
             'new' => $this->new,
+            'active' => $this->active,
             'bookings' => \App\Http\Resources\SacreBookingAltResource::collection($this->bookings),
             'subs' => \App\Http\Resources\BookingSubResource::collection($this->subs),
             'memberSubs' => \App\Http\Resources\BookingMemberSubResource::collection($this->memberSubs),

@@ -25,6 +25,12 @@ class Invoice extends Model
         'batch'
     ];
 
+    protected $casts = [
+        'date' => 'datetime',
+        'subs' => 'decimal:2',
+        'batch' => 'integer',
+    ];
+
     /**
      * Return a Resource
      */
@@ -45,7 +51,9 @@ class Invoice extends Model
     {
         parent::boot();
         self::deleting(function ($invoice) { // before delete() method call this
-
+            $invoice->invoices()->each(function ($sacreInvoice) {
+                $sacreInvoice->delete();
+            });
         });
     }
 

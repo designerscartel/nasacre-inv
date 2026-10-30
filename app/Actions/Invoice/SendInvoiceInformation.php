@@ -5,8 +5,9 @@ namespace App\Actions\Invoice;
 use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Jobs\SendInvoice;
 use App\Models\Sacre;
+use App\Support\InvoiceContactSelector;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 /**
  * Class SendInvoiceInformation
@@ -28,70 +29,34 @@ class SendInvoiceInformation implements SendsInvoiceInformation
             'send' => ['required'],
         ])->validateWithBag('sendInvoiceInformation');
 
-        $sacres = Sacre::all();
+        $selector = new InvoiceContactSelector();
+        $recipients = Sacre::with('contacts')->get()->map(function ($sacre) use ($selector) {
+            $contact = $selector->select($sacre->contacts);
 
-        if (!empty($sacres)) {
+            return $contact ? compact('sacre', 'contact') : null;
+        })->filter()->values();
 
-            $iteration = 1;
-
-            foreach ($sacres as $scare) {
-
-                $delaySeconds = $iteration += 5;
-
-                $contact = $this->checkContact($scare->contacts);
-                $details = [
-                    'sacre' => $scare,
-                    'invoice' => $invoice,
-                    'contact' => $contact
-                ];
-                SendInvoice::dispatch($details)->delay(now()->addSeconds($delaySeconds));
-            }
-
-            $invoice->batch = ($invoice->batch + 1);
-            $invoice->save();
-
+        if ($recipients->isEmpty()) {
+            return;
         }
 
-    }
+        $batch = DB::transaction(function () use ($invoice) {
+            $lockedInvoice = $invoice->newQuery()->lockForUpdate()->findOrFail($invoice->id);
+            $lockedInvoice->batch = ((int) $lockedInvoice->batch) + 1;
+            $lockedInvoice->save();
 
+            return $lockedInvoice->batch;
+        });
 
-    /**
-     * @param $contacts
-     * @return mixed
-     */
-    private function checkContact($contacts)
-    {
-        $myContact = $contacts->where('default', 1)->first();
+        $recipients->each(function ($recipient, $iteration) use ($invoice, $batch) {
+            SendInvoice::dispatch([
+                'sacre' => $recipient['sacre'],
+                'invoice' => $invoice,
+                'contact' => $recipient['contact'],
+                'batch' => $batch,
+            ])->delay(now()->addSeconds($iteration * 5));
+        });
 
-        if (empty($myContact)) {
-            if (!empty($contacts)) {
-                foreach ($contacts as $sContact) {
-                    if ($sContact->position_id === 2) {
-                        if (!empty($sContact->email)) {
-                            $myContact = $sContact;
-                            break;
-                        }
-                    } elseif ($sContact->position_id === 3) {
-                        if (!empty($sContact->email)) {
-                            $myContact = $sContact;
-                            break;
-                        }
-                    } elseif ($sContact->position_id === 4) {
-                        if (!empty($sContact->email)) {
-                            $myContact = $sContact;
-                            break;
-                        }
-                    } elseif ($sContact->position_id === 1) {
-                        if (!empty($sContact->email)) {
-                            $myContact = $sContact;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $myContact;
     }
 
 

@@ -28,9 +28,9 @@ class SharedController extends Controller
     public function show(Sacre $sacre, SharedFile $file)
     {
         //
-        if (file_exists(storage_path('app/public/files') . '/' . $file->filename)) {
-            return \Storage::download('public/files/' . $file->filename, $file->filename, [
-                'Content-Type: ' . \Storage::mimeType('/public/files/' . $file->filename),
+        if (file_exists(storage_path('app/files') . '/' . $file->filename)) {
+            return \Storage::download('files/' . $file->filename, $file->filename, [
+                'Content-Type: ' . \Storage::mimeType('files/' . $file->filename),
             ]);
         } else {
             abort(404, 'File not found!');

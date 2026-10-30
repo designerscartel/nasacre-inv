@@ -20,7 +20,6 @@ class CreateSacreInvoicesTable extends Migration
             $table->string('po_number')->nullable($value = true);
             $table->string('address')->nullable($value = true);
             $table->timestamp('date')->nullable($value = true);
-            $table->string('po_number')->nullable($value = true);
             $table->timestamps();
             $table->softDeletes();
         });

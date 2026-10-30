@@ -19,7 +19,7 @@ class BookingDelegateResource extends JsonResource
         return [
             'id' => $this->id,
             'booking_id' => $this->booking_id,
-            'scare_id' => $this->scare_id,
+            'sacre_id' => $this->sacre_id,
             'name' => $this->name,
             'email' => $this->email,
             'diet' => $this->diet

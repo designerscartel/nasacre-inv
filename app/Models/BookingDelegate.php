@@ -37,16 +37,16 @@ class BookingDelegate extends Model
      */
     public function booking()
     {
-        return $this->belongsTo(SacreBooking::class);
+        return $this->belongsTo(SacreBooking::class, 'sacre_booking_id');
     }
 
 
     /**
      * Get all the bookings.
      */
-    public function scare()
+    public function sacre()
     {
-        return $this->belongsTo(Sacre::class);
+        return $this->belongsTo(Sacre::class, 'sacre_id');
     }
 
 }

@@ -25,7 +25,7 @@ class SharedFileController extends Controller
     public function show(Sacre $sacre, SharedFile $file)
     {
         //
-        $file = storage_path('app/public/files').'/' .$file->filename;
+        $file = storage_path('app/files').'/' .$file->filename;
         if (file_exists($file)) {
             $headers = [
                 'Content-Type' => 'application/pdf'

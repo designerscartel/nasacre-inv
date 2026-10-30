@@ -5,9 +5,8 @@ namespace App\Actions\SharedFile;
 use App\Models\Sacre;
 use App\Models\SharedFile;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use App\Contracts\SharedFile\AddsSharedFile;
+use Illuminate\Support\Str;
 
 
 class AddSharedFile implements AddsSharedFile
@@ -24,17 +23,16 @@ class AddSharedFile implements AddsSharedFile
         $input = $request->all();
 
         Validator::make($input, [
-            'file' => ['required'],
+            'file' => ['required', 'file', 'mimes:pdf', 'mimetypes:application/pdf', 'max:10240'],
         ])->validateWithBag('addFileForm');
 
         if (!empty($input['file'])) {
             $myFile = $request->file('file');
-            $fileName = $myFile->getClientOriginalName();
-            $myFileObj = $myFile->storeAs('public/files', $fileName);
-            Storage::get($myFileObj);
+            $fileName = Str::uuid().'.pdf';
+            $myFile->storeAs('files', $fileName);
             $file = new SharedFile();
-            $file->filename = $myFile->getClientOriginalName();
-            $sacre->files()->save($file);
+            $file->filename = $fileName;
+            $sacre->shared()->save($file);
         }
 
         return true;

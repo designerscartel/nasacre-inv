@@ -20,11 +20,11 @@ class UpdateSharedFile implements UpdatesSharedFile
     {
 
         Validator::make($input, [
-            'filename' => ['required', 'string', 'max:255'],
+            'filename' => ['required', 'string', 'max:255', 'regex:/\\A[a-zA-Z0-9._() -]+\\.pdf\\z/i'],
         ])->validateWithBag('updateFileForm');
 
         if($SharedFile->filename != $input['filename']) {
-            Storage::move('public/files/'.$SharedFile->filename, 'public/files/'.$input['filename']);
+            Storage::move('files/'.$SharedFile->filename, 'files/'.$input['filename']);
         }
 
         return $SharedFile->fill([

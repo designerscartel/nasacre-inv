@@ -175,7 +175,7 @@ export default {
             this.updateInvoiceForm.put('/sacres/' + this.sacre.data.id + '/invoices/' + this.invoiceId, {
                 preserveScroll: true
             }).then(() => {
-                this.InvoiceId = null;
+                this.invoiceId = null;
                 if (!this.updateInvoiceForm.hasErrors()) {
                     this.showUpdateInvoiceDialog = false
                 }

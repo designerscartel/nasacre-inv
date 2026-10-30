@@ -3,6 +3,7 @@
 namespace App\Actions\SacreFile;
 
 use App\Contracts\SacreFile\DeletesSacreFile;
+use Illuminate\Support\Facades\Storage;
 
 class DeleteScareFile implements DeletesSacreFile
 {
@@ -14,6 +15,7 @@ class DeleteScareFile implements DeletesSacreFile
      */
     public function delete($sacreFile)
     {
+        Storage::delete('files/'.$sacreFile->filename);
         $sacreFile->delete();
     }
 }

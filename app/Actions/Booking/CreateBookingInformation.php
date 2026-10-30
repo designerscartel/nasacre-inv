@@ -8,6 +8,7 @@ use App\Models\BookingMemberSub;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Contracts\Booking\CreatesBookingInformation;
+use Illuminate\Support\Facades\DB;
 
 class CreateBookingInformation implements CreatesBookingInformation
 {
@@ -21,43 +22,55 @@ class CreateBookingInformation implements CreatesBookingInformation
     {
 
         Validator::make($input, [
-            'email' => ['required', 'string', 'max:255'],
-            'subscribed' => ['required', 'string', 'max:255'],
-            'none_subscribed' => ['required', 'string', 'max:255'],
-            'additional_amount' => ['required', 'string', 'max:255'],
-            'date' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'subscribed' => ['required', 'numeric', 'min:0'],
+            'none_subscribed' => ['required', 'numeric', 'min:0'],
+            'additional_amount' => ['nullable', 'numeric', 'min:0'],
+            'date' => ['required', 'date'],
             'from' => ['required', 'string', 'max:255'],
             'message' => ['required'],
             'venue' => ['required'],
+            'new' => ['nullable', 'boolean'],
+            'active' => ['nullable', 'boolean'],
+            'subs' => ['required', 'array', 'min:1'],
+            'subs.*.sub' => ['required', 'numeric', 'min:0'],
+            'memberSubs' => ['required', 'array', 'min:1'],
+            'memberSubs.*.sub' => ['required', 'numeric', 'min:0'],
         ])->validateWithBag('createBookingInformation');
 
-        $booking = new Booking();
         $date = \Carbon\Carbon::parse($input['date']);
 
-        $bookingObject = $booking->create([
-            'email' => $input['email'],
-            'subscribed' => $input['subscribed'],
-            'none_subscribed' => $input['none_subscribed'],
-            'additional_amount' => $input['additional_amount'],
-            'date' => $date->toDateTimeString(),
-            'year' => $date->format('Y'),
-            'from' => $input['from'],
-            'message' => $input['message'],
-            'venue' => $input['venue'],
-            'new' => $input['new'],
-        ]);
+        return DB::transaction(function () use ($input, $date) {
+            $active = !empty($input['active']);
 
-        foreach ($input['subs'] as $key  => $sub ) {
-            $subObject = new BookingSub(['sub' => $sub['sub']]);
-            $bookingObject->subs()->save($subObject);
-        }
+            if ($active) {
+                Booking::query()->update(['active' => false]);
+            }
 
-        foreach ($input['memberSubs'] as $key  => $sub ) {
-            $subObject = new BookingMemberSub(['sub' => $sub['sub']]);
-            $bookingObject->memberSubs()->save($subObject);
-        }
+            $bookingObject = Booking::create([
+                'email' => $input['email'],
+                'subscribed' => $input['subscribed'],
+                'none_subscribed' => $input['none_subscribed'],
+                'additional_amount' => $input['additional_amount'] ?? 0,
+                'date' => $date->toDateTimeString(),
+                'year' => $date->format('Y'),
+                'from' => $input['from'],
+                'message' => $input['message'],
+                'venue' => $input['venue'],
+                'new' => !empty($input['new']),
+                'active' => $active,
+            ]);
 
-        return $bookingObject;
+            foreach ($input['subs'] as $sub) {
+                $bookingObject->subs()->save(new BookingSub(['sub' => $sub['sub']]));
+            }
+
+            foreach ($input['memberSubs'] as $sub) {
+                $bookingObject->memberSubs()->save(new BookingMemberSub(['sub' => $sub['sub']]));
+            }
+
+            return $bookingObject;
+        });
 
     }
 }
