@@ -22,6 +22,8 @@ class SacreInvoiceResource extends JsonResource
             'invoice' => new \App\Http\Resources\InvoiceResource($this->invoice),
             'po_number' => $this->po_number,
             'virtual_training' => $this->virtual_training,
+            'total_override' => $this->total_override,
+            'total' => $this->totalAmount(),
             'date' => $this->date,
             'address' => $this->address
         ];

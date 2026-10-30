@@ -23,12 +23,14 @@ class SacreInvoice extends Model
         'invoice_id',
         'batch',
         'virtual_training',
+        'total_override',
     ];
 
     protected $casts = [
         'date' => 'datetime',
         'batch' => 'integer',
         'virtual_training' => 'boolean',
+        'total_override' => 'decimal:2',
     ];
 
     /**
@@ -45,6 +47,17 @@ class SacreInvoice extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'invoice_id');
+    }
+
+    public function totalAmount(): float
+    {
+        if ($this->total_override !== null) {
+            return (float) $this->total_override;
+        }
+
+        $baseAmount = $this->invoice ? (float) $this->invoice->subs : 0;
+
+        return $baseAmount + ($this->virtual_training ? 60.0 : 0.0);
     }
 
     /**

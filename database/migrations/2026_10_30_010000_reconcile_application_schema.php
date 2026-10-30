@@ -143,6 +143,12 @@ class ReconcileApplicationSchema extends Migration
                 $table->boolean('virtual_training')->nullable()->after('po_number');
             });
         }
+
+        if (! Schema::hasColumn('sacre_invoices', 'total_override')) {
+            Schema::table('sacre_invoices', function (Blueprint $table) {
+                $table->decimal('total_override', 11, 2)->nullable()->after('virtual_training');
+            });
+        }
     }
 
     public function down()

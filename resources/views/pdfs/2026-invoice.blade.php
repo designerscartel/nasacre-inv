@@ -209,28 +209,28 @@
         <th><h5>&pound;</h5></th>
     </tr>
     <tr>
-        <td><p>{{ $sacre->title}} & Virtual Training</p></td>
+        <td><p>{{ $sacre->title }}</p></td>
         <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
-        <td><p>&pound;{{ $invoice->subs }}</p></td>
+        <td><p>&pound;{{ number_format((float) $invoice->subs, 2) }}</p></td>
     </tr>
-    {{--
-    @if($sacre->virtual_training == 1)
+    @php
+        $virtualTraining = $invoice->virtual_training ?? $sacre->virtual_training;
+        $calculatedTotal = (float) $invoice->subs + ($virtualTraining ? 60 : 0);
+        $total = $invoice->total_override !== null ? (float) $invoice->total_override : $calculatedTotal;
+    @endphp
+    @if($virtualTraining)
         <tr>
             <td><p>Virtual Training</p></td>
             <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
             <td><p>&pound;60.00</p></td>
         </tr>
-        @php
-            $invoice->subs = $invoice->subs + 60.00;
-        @endphp
     @endif
-    --}}
     <tr>
         <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
         <td colspan="2"><p>TOTAL</p></td>
-        <td colspan="1"><p><strong>&pound;{{ $invoice->subs }}</strong></p></td>
+        <td colspan="1"><p><strong>&pound;{{ number_format($total, 2) }}</strong></p></td>
     </tr>
 
 </table>

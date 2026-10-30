@@ -22,6 +22,7 @@ class UpdateSacreInvoiceInformation implements UpdatesSacreInvoiceInformation
             'address' => ['nullable', 'string'],
             'date' => ['nullable', 'date'],
             'virtual_training' => ['nullable', 'boolean'],
+            'total_override' => ['nullable', 'numeric', 'min:0'],
         ])->validateWithBag('updateSacreInvoiceInformation');
 
         $date = null;
@@ -33,6 +34,7 @@ class UpdateSacreInvoiceInformation implements UpdatesSacreInvoiceInformation
             'address' => $input['address'] ?? null,
             'date' => $date,
             'virtual_training' => $input['virtual_training'] ?? false,
+            'total_override' => $input['total_override'] ?? null,
         ])->save();
     }
 }

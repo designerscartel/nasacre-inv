@@ -74,6 +74,7 @@ class SacreInvoiceControlller extends Controller
         }
 
         $pdfInvoice->virtual_training = $sacreInvoice->virtual_training;
+        $pdfInvoice->total_override = $sacreInvoice->total_override;
 
         $pdf = app(CreatesInvoicePdf::class)->inline($pdfInvoice, $pdfSacre);
         return $pdf;

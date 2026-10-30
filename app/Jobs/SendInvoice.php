@@ -71,6 +71,7 @@ class SendInvoice implements ShouldQueue
             ],
             [
                 'po_number' => $this->details['sacre']->po,
+                'virtual_training' => (bool) $this->details['sacre']->virtual_training,
             ]
         );
 

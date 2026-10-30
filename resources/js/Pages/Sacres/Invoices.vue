@@ -26,6 +26,7 @@
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Invoice</th>
+                                <th class="px-4 py-2">Total</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
@@ -33,6 +34,7 @@
                             <template v-if="sacre.data.invoices.length">
                                 <tr v-for="invoice in sacre.data.invoices" :key="invoice.id">
                                     <td class="border px-8 py-2">{{ invoice.invoice.year }}</td>
+                                    <td class="border px-4 py-2">£{{ Number(invoice.total).toFixed(2) }}</td>
                                     <td class="border px-4 py-2">
                                         
                                         <button class="mr-2 text-sm text-gray-400 underline" @click="updateInvoiceDialog(invoice)">
@@ -46,7 +48,7 @@
                                 </tr>
                             </template>
                             <tr v-else>
-                                <td colspan="2" class="border px-8 py-2">No invoices</td>
+                                <td colspan="3" class="border px-8 py-2">No invoices</td>
                             </tr>
 
                             </tbody>
@@ -82,6 +84,13 @@
                 <div class="col-span-6 sm:col-span-4">
                     <jet-toggle type="toggle" class="mt-1 block w-full" v-model="updateInvoiceForm.virtual_training" :label="'Virtual Training'" :forid="'virtual_training'"/>
                     <jet-input-error :message="updateInvoiceForm.error('virtual_training')" class="mt-2" />
+                </div>
+
+                <div class="mt-4">
+                    <jet-label for="total_override" value="Final total override (£)"/>
+                    <jet-input id="total_override" type="number" min="0" step="0.01" class="mt-1 block w-full" v-model="updateInvoiceForm.total_override"/>
+                    <p class="mt-1 text-xs text-gray-500">Leave blank to use subscription plus £60 when virtual training is selected.</p>
+                    <jet-input-error :message="updateInvoiceForm.error('total_override')" class="mt-2"/>
                 </div>
 
                 <!-- Date -->
@@ -160,7 +169,8 @@ export default {
                 po_number: '',
                 address: '',
                 date: '',
-                virtual_training: ''
+                virtual_training: '',
+                total_override: ''
             }, {
                 bag: 'updateSacreInvoiceInformation',
                 resetOnSuccess: true,
@@ -187,6 +197,7 @@ export default {
             this.updateInvoiceForm.address = invoice.address
             this.updateInvoiceForm.date = invoice.date
             this.updateInvoiceForm.virtual_training = invoice.virtual_training
+            this.updateInvoiceForm.total_override = invoice.total_override
             this.invoiceId = invoice.id
             this.showUpdateInvoiceDialog = true
         },
