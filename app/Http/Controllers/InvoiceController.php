@@ -24,7 +24,7 @@ class InvoiceController extends Controller
     {
         //
         return Inertia::render('Invoices/Dashboard', [
-            'invoices' => InvoiceResource::collection($invoice::all())
+            'invoices' => InvoiceResource::collection($invoice::with('invoices.sacre')->get())
         ]);
     }
 

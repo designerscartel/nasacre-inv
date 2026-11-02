@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 /**
  * Class SendInvoice
@@ -63,18 +64,22 @@ class SendInvoice implements ShouldQueue
             ->cc($financeEmails)
             ->send($email);
 
-        SacreInvoice::updateOrCreate(
-            [
-                'sacre_id' => $this->details['sacre']->id,
-                'invoice_id' => $this->details['invoice']->id,
-                'batch' => $this->details['batch'],
-            ],
-            [
-                'po_number' => $this->details['sacre']->po,
-                'virtual_training' => (bool) $this->details['sacre']->virtual_training,
-            ]
-        );
+        SacreInvoice::whereKey($this->details['sacre_invoice_id'])->update([
+            'delivery_status' => 'sent',
+            'sent_at' => now(),
+            'failed_at' => null,
+            'failure_message' => null,
+        ]);
 
+    }
+
+    public function failed(Throwable $exception)
+    {
+        SacreInvoice::whereKey($this->details['sacre_invoice_id'])->update([
+            'delivery_status' => 'failed',
+            'failed_at' => now(),
+            'failure_message' => substr($exception->getMessage(), 0, 2000),
+        ]);
     }
 
 

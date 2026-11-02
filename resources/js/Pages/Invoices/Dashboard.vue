@@ -20,6 +20,10 @@
 
                             <div class="md:w-2/6 text-right">
 
+                                <button class="text-sm mr-4 text-gray-600 focus:outline-none" @click="refreshStatuses">
+                                    Refresh status
+                                </button>
+
                                 <inertia-link href="/invoices/create"
                                               class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                                     Create invoice
@@ -36,6 +40,7 @@
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Invoice</th>
+                                <th class="px-4 py-2">Latest Delivery</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
@@ -43,6 +48,33 @@
                             <template v-if="invoices.data.length">
                                 <tr v-if="invoices" v-for="invoice in invoices.data" :key="invoice.id">
                                     <td class="border px-8 py-2">{{ invoice.year }}</td>
+                                    <td class="border px-4 py-2">
+                                        <div v-if="invoice.delivery">
+                                            <div class="text-sm font-semibold">Batch {{ invoice.delivery.batch }}</div>
+                                            <div class="text-xs mt-1">
+                                                <span class="text-green-700 mr-3">{{ invoice.delivery.sent }} sent</span>
+                                                <span class="text-yellow-700 mr-3">{{ invoice.delivery.queued }} queued</span>
+                                                <span class="text-red-700">{{ invoice.delivery.failed }} failed</span>
+                                            </div>
+
+                                            <details v-if="invoice.delivery.queued || invoice.delivery.failed" class="mt-2 text-xs">
+                                                <summary class="cursor-pointer text-gray-700">View delivery details</summary>
+                                                <ul class="mt-2 space-y-2">
+                                                    <li v-for="recipient in invoice.delivery.recipients" :key="recipient.id">
+                                                        <span :class="deliveryStatusClass(recipient.status)" class="font-semibold uppercase">
+                                                            {{ recipient.status }}
+                                                        </span>
+                                                        — {{ recipient.sacre || 'Unknown SACRE' }}
+                                                        <span v-if="recipient.email"> ({{ recipient.email }})</span>
+                                                        <div v-if="recipient.failure_message" class="text-red-700 mt-1">
+                                                            {{ recipient.failure_message }}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                        </div>
+                                        <span v-else class="text-sm text-gray-500">Not sent</span>
+                                    </td>
                                     <td class="border px-4 py-2">
                                         <inertia-link class="text-sm mr-2" :href="'/invoices/'+ invoice.id">
                                             Edit
@@ -62,7 +94,7 @@
                                 </tr>
                             </template>
                             <tr v-else>
-                                <td colspan="2" class="border px-8 py-2">No Invoices</td>
+                                <td colspan="3" class="border px-8 py-2">No Invoices</td>
                             </tr>
 
                             </tbody>
@@ -251,6 +283,7 @@
                 previewLoading: false,
                 previewError: null,
                 recipientSelections: [],
+                statusRefreshTimer: null,
             }
         },
         methods: {
@@ -296,6 +329,20 @@
             formatDate(value) {
                 return new Date(value).toLocaleString()
             },
+            refreshStatuses() {
+                this.$inertia.reload({
+                    only: ['invoices'],
+                    preserveScroll: true,
+                    preserveState: true,
+                })
+            },
+            deliveryStatusClass(status) {
+                return {
+                    'text-green-700': status === 'sent',
+                    'text-yellow-700': status === 'queued',
+                    'text-red-700': status === 'failed',
+                }
+            },
         },
         computed: {
             selectedRecipientCount() {
@@ -307,6 +354,19 @@
                     && !this.previewLoading
                     && (!this.sendPreview.has_been_sent || this.sendInvoiceForm.confirm_resend)
             },
+            hasQueuedInvoices() {
+                return this.invoices.data.some(invoice => invoice.delivery && invoice.delivery.queued > 0)
+            },
+        },
+        mounted() {
+            this.statusRefreshTimer = window.setInterval(() => {
+                if (this.hasQueuedInvoices) {
+                    this.refreshStatuses()
+                }
+            }, 10000)
+        },
+        beforeDestroy() {
+            window.clearInterval(this.statusRefreshTimer)
         }
     }
 </script>

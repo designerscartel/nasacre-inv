@@ -25,6 +25,9 @@ class InvoiceResource extends JsonResource
             'from' => $this->from,
             'message' => $this->message,
             'batch' => $this->batch,
+            'delivery' => $this->whenLoaded('invoices', function () {
+                return $this->latestDeliverySummary();
+            }),
         ];
 
     }

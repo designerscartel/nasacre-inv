@@ -4,6 +4,7 @@ namespace App\Actions\Invoice;
 
 use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Jobs\SendInvoice;
+use App\Models\SacreInvoice;
 use App\Support\InvoiceSendPlan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -66,11 +67,31 @@ class SendInvoiceInformation implements SendsInvoiceInformation
         });
 
         $recipients->each(function ($recipient, $iteration) use ($invoice, $batch) {
+            $sacreInvoice = SacreInvoice::updateOrCreate(
+                [
+                    'sacre_id' => $recipient['sacre']->id,
+                    'invoice_id' => $invoice->id,
+                    'batch' => $batch,
+                ],
+                [
+                    'po_number' => $recipient['sacre']->po,
+                    'virtual_training' => (bool) $recipient['sacre']->virtual_training,
+                    'delivery_status' => 'queued',
+                    'recipient_name' => $recipient['contact']->name,
+                    'recipient_email' => $recipient['contact']->email,
+                    'queued_at' => now(),
+                    'sent_at' => null,
+                    'failed_at' => null,
+                    'failure_message' => null,
+                ]
+            );
+
             SendInvoice::dispatch([
                 'sacre' => $recipient['sacre'],
                 'invoice' => $invoice,
                 'contact' => $recipient['contact'],
                 'batch' => $batch,
+                'sacre_invoice_id' => $sacreInvoice->id,
             ])->delay(now()->addSeconds($iteration * 5));
         });
 

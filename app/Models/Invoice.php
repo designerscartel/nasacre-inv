@@ -44,6 +44,41 @@ class Invoice extends Model
         return $this->hasMany(SacreInvoice::class);
     }
 
+    public function latestDeliverySummary()
+    {
+        $latestBatch = max((int) $this->batch, (int) $this->invoices->max('batch'));
+        $deliveries = $this->invoices->filter(function ($sacreInvoice) use ($latestBatch) {
+            return (int) $sacreInvoice->batch === $latestBatch;
+        })->values();
+
+        if ($deliveries->isEmpty()) {
+            return null;
+        }
+
+        return [
+            'batch' => $latestBatch,
+            'total' => $deliveries->count(),
+            'queued' => $deliveries->filter(function ($delivery) {
+                return $delivery->deliveryStatus() === 'queued';
+            })->count(),
+            'sent' => $deliveries->filter(function ($delivery) {
+                return $delivery->deliveryStatus() === 'sent';
+            })->count(),
+            'failed' => $deliveries->filter(function ($delivery) {
+                return $delivery->deliveryStatus() === 'failed';
+            })->count(),
+            'recipients' => $deliveries->map(function ($delivery) {
+                return [
+                    'id' => $delivery->id,
+                    'sacre' => optional($delivery->sacre)->title,
+                    'email' => $delivery->recipient_email,
+                    'status' => $delivery->deliveryStatus(),
+                    'failure_message' => $delivery->failure_message,
+                ];
+            })->values(),
+        ];
+    }
+
     /**
      * Boot Function
      */
