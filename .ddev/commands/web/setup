@@ -1,0 +1,30 @@
+#!/bin/bash
+## Description: Install dependencies and prepare the NASACRE application
+## Usage: setup
+## Example: ddev setup
+
+set -eu
+
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
+
+composer install
+if [ -f package-lock.json ]; then
+    npm ci
+else
+    npm install
+fi
+
+if ! grep -Eq '^APP_KEY=.+$' .env; then
+    php artisan key:generate --no-interaction
+fi
+
+php artisan migrate --no-interaction
+php artisan storage:link 2>/dev/null || true
+php artisan optimize:clear
+npm run development
+
+echo "NASACRE is ready at https://nasacre-inv.ddev.site"
+echo "Mailpit is available with: ddev mailpit"
+echo "Start the queue worker with: ddev queue"

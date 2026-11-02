@@ -1,0 +1,8 @@
+#!/bin/bash
+## Description: Run the NASACRE database queue worker
+## Usage: queue [queue worker options]
+## Example: ddev queue --once
+
+set -eu
+
+php artisan queue:work --tries=3 --timeout=120 "$@"

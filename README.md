@@ -4,13 +4,40 @@ Laravel application for managing SACRE contacts, invoices, campaigns, files, and
 
 ## Requirements
 
-- PHP 7.4 or 8.0 with the extensions required by Laravel 8
+- PHP 7.4 with the extensions required by Laravel 8
 - Composer 2
 - MySQL or MariaDB
 - Node.js 14 or 16 and npm
 - `wkhtmltopdf` for PDF generation
 
-PHP 8.5 and current Node.js releases can boot the legacy application but generate compatibility warnings. Use the versions above until the framework and frontend toolchain are upgraded.
+Newer PHP and Node.js releases are outside the application's declared compatibility range. Use the versions above until the framework and frontend toolchain are upgraded.
+
+## DDEV Development
+
+The committed DDEV configuration provides PHP 7.4, Composer 2.2 LTS, Node.js 16, MariaDB 10.4, Mailpit, and the Composer-provided `wkhtmltopdf` binary. On ARM hosts, only the web container uses x86 emulation because the legacy PDF dependency is x86-64.
+
+1. Start Docker, then start and prepare the project:
+
+   ```bash
+   ddev start
+   ddev setup
+   ```
+
+2. Open the application and Mailpit:
+
+   ```bash
+   ddev launch
+   ddev mailpit
+   ```
+
+3. Run tests and the invoice queue worker:
+
+   ```bash
+   ddev test
+   ddev queue
+   ```
+
+The DDEV web environment overrides database, mail, queue, URL, and PDF binary settings without changing the ignored local `.env`. To create an administrator, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env`, run `ddev artisan db:seed`, then remove the credentials.
 
 ## Fresh Installation
 

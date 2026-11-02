@@ -1,6 +1,11 @@
 /node_modules/
+/vendor/
 /.env
 /mix-manifest.json
+/public/mix-manifest.json
+/public/js/*.LICENSE.txt
+/public/storage
 /npm-debug.log
-/package-lock.json
 /database/*.sql
+.DS_Store
+.idea/

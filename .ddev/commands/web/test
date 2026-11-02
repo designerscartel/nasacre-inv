@@ -1,0 +1,12 @@
+#!/bin/bash
+## Description: Run the NASACRE PHPUnit suite
+## Usage: test [phpunit options]
+## Example: ddev test --filter Invoice
+
+set -eu
+
+if [ "$#" -eq 0 ]; then
+    set -- tests/Unit
+fi
+
+php ./vendor/bin/phpunit "$@"
