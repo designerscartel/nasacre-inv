@@ -31,6 +31,7 @@ class SendInvoiceInformation implements SendsInvoiceInformation
             'recipients' => ['required', 'array', 'min:1'],
             'recipients.*.sacre_id' => ['required', 'integer'],
             'recipients.*.contact_id' => ['required', 'integer'],
+            'confirm_resend' => ['nullable'],
         ])->validateWithBag('sendInvoiceInformation');
 
         $sendPlan = new InvoiceSendPlan();
@@ -48,8 +49,16 @@ class SendInvoiceInformation implements SendsInvoiceInformation
             return;
         }
 
-        $batch = DB::transaction(function () use ($invoice) {
+        $batch = DB::transaction(function () use ($invoice, $input) {
             $lockedInvoice = $invoice->newQuery()->lockForUpdate()->findOrFail($invoice->id);
+            $hasBeenSent = (new InvoiceSendPlan())->hasBeenSent($lockedInvoice);
+
+            Validator::make($input, [
+                'confirm_resend' => $hasBeenSent ? ['accepted'] : ['nullable'],
+            ], [
+                'confirm_resend.accepted' => 'You must confirm that this invoice is being resent.',
+            ])->validateWithBag('sendInvoiceInformation');
+
             $lockedInvoice->batch = ((int) $lockedInvoice->batch) + 1;
             $lockedInvoice->save();
 

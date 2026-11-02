@@ -10,6 +10,8 @@ class InvoiceSendPlan
 {
     public function forInvoice($invoice)
     {
+        $invoice->loadMissing('invoices');
+
         return $this->fromSacres($invoice, Sacre::with('contacts')->orderBy('title')->get());
     }
 
@@ -39,6 +41,11 @@ class InvoiceSendPlan
 
         return [
             'batch' => ((int) $invoice->batch) + 1,
+            'has_been_sent' => ((int) $invoice->batch) > 0
+                || ($invoice->relationLoaded('invoices') && $invoice->invoices->isNotEmpty()),
+            'previous_batches' => $invoice->relationLoaded('invoices')
+                ? $this->previousBatches($invoice)
+                : collect(),
             'recipient_count' => $recipients->count(),
             'skipped_count' => $skipped->count(),
             'recipients' => $recipients,
@@ -52,6 +59,8 @@ class InvoiceSendPlan
 
         return [
             'batch' => $plan['batch'],
+            'has_been_sent' => $plan['has_been_sent'],
+            'previous_batches' => $plan['previous_batches'],
             'recipient_count' => $plan['recipient_count'],
             'skipped_count' => $plan['skipped_count'],
             'recipients' => $plan['recipients']->map(function ($recipient) {
@@ -70,6 +79,37 @@ class InvoiceSendPlan
             })->values(),
             'skipped' => $plan['skipped'],
         ];
+    }
+
+    public function previousBatches($invoice)
+    {
+        $invoicesByBatch = $invoice->invoices->groupBy('batch');
+        $highestBatch = max((int) $invoice->batch, (int) $invoicesByBatch->keys()->max());
+
+        if ($highestBatch < 1) {
+            return collect();
+        }
+
+        return collect(range(1, $highestBatch))->map(function ($batch) use ($invoicesByBatch) {
+            $invoices = $invoicesByBatch->get($batch, collect());
+
+            return [
+                'batch' => $batch,
+                'recipient_count' => $invoices->count(),
+                'sent_at' => optional($invoices->max('created_at'))->toIso8601String(),
+            ];
+        })->values();
+    }
+
+    public function hasBeenSent($invoice)
+    {
+        if ((int) $invoice->batch > 0) {
+            return true;
+        }
+
+        return $invoice->relationLoaded('invoices')
+            ? $invoice->invoices->isNotEmpty()
+            : $invoice->invoices()->exists();
     }
 
     public function selectedRecipients(array $plan, array $selections)

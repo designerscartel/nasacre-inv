@@ -55,7 +55,7 @@
                                         <!-- Send Invoices -->
                                         <button class="cursor-pointer text-sm text-green-500 focus:outline-none"
                                                 @click="confirmInvoiceSend(invoice)">
-                                            Send
+                                            {{ invoice.batch > 0 ? 'Resend' : 'Send' }}
                                         </button>
 
                                     </td>
@@ -91,7 +91,7 @@
         <!-- Send Invoice Modal -->
         <jet-dialog-modal :show="InvoiceBeingSent" @close="InvoiceBeingSent = null">
             <template #title>
-                Send Invoice
+                {{ sendPreview && sendPreview.has_been_sent ? 'Resend Invoice' : 'Send Invoice' }}
             </template>
 
             <template #content>
@@ -117,6 +117,26 @@
                             <div class="text-xs uppercase text-gray-500">Skipped</div>
                             <div class="text-lg font-semibold text-yellow-700">{{ sendPreview.skipped_count }}</div>
                         </div>
+                    </div>
+
+                    <div v-if="sendPreview.has_been_sent" class="mb-4 border border-red-300 bg-red-50 rounded p-4">
+                        <div class="font-semibold text-red-800">This invoice has already been sent</div>
+                        <div class="text-sm text-red-700 mt-1">Sending now will create batch {{ sendPreview.batch }}.</div>
+
+                        <div v-if="sendPreview.previous_batches.length" class="mt-3">
+                            <div class="text-sm font-semibold text-red-800 mb-1">Previous batches</div>
+                            <ul class="text-sm text-red-800 space-y-1">
+                                <li v-for="batch in sendPreview.previous_batches" :key="batch.batch">
+                                    Batch {{ batch.batch }} — {{ batch.recipient_count }} recorded recipient<span v-if="batch.recipient_count !== 1">s</span>
+                                    <span v-if="batch.sent_at"> — {{ formatDate(batch.sent_at) }}</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <label class="flex items-start mt-4 text-sm font-semibold text-red-900">
+                            <input type="checkbox" v-model="sendInvoiceForm.confirm_resend" class="mt-1 mr-2">
+                            <span>I understand this invoice has already been sent and want to resend it.</span>
+                        </label>
                     </div>
 
                     <div v-if="recipientSelections.length" class="mb-4">
@@ -167,7 +187,7 @@
                 <jet-confirm-button class="ml-2" @click.native="sendInvoice"
                                     :class="{ 'opacity-25': sendInvoiceForm.processing || !canSendInvoice }"
                                     :disabled="sendInvoiceForm.processing || !canSendInvoice">
-                    Send
+                    {{ sendPreview && sendPreview.has_been_sent ? 'Resend' : 'Send' }}
                 </jet-confirm-button>
             </template>
         </jet-dialog-modal>
@@ -219,6 +239,7 @@
                 sendInvoiceForm: this.$inertia.form({
                     send: '',
                     recipients: [],
+                    confirm_resend: false,
                 }, {
                     bag: 'sendInvoiceInformation',
                     resetOnSuccess: true,
@@ -238,6 +259,7 @@
                 this.InvoiceBeingSent = Invoice
                 this.sendPreview = null
                 this.recipientSelections = []
+                this.sendInvoiceForm.confirm_resend = false
                 this.previewError = null
                 this.previewLoading = true
 
@@ -271,13 +293,19 @@
                     this.InvoiceBeingSent = null
                 })
             },
+            formatDate(value) {
+                return new Date(value).toLocaleString()
+            },
         },
         computed: {
             selectedRecipientCount() {
                 return this.recipientSelections.filter(recipient => recipient.selected).length
             },
             canSendInvoice() {
-                return this.sendPreview && this.selectedRecipientCount > 0 && !this.previewLoading
+                return this.sendPreview
+                    && this.selectedRecipientCount > 0
+                    && !this.previewLoading
+                    && (!this.sendPreview.has_been_sent || this.sendInvoiceForm.confirm_resend)
             },
         }
     }

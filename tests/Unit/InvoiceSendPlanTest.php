@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Invoice;
 use App\Models\Sacre;
 use App\Models\SacreContact;
+use App\Models\SacreInvoice;
 use App\Support\InvoiceSendPlan;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
@@ -73,6 +74,32 @@ class InvoiceSendPlanTest extends TestCase
         $sendPlan->selectedRecipients($plan, [
             ['sacre_id' => 1, 'contact_id' => 20],
         ]);
+    }
+
+    public function test_it_summarises_previous_batches_and_empty_queued_batches()
+    {
+        $invoice = new Invoice(['batch' => 3]);
+        $invoice->setRelation('invoices', new Collection([
+            new SacreInvoice(['batch' => 1, 'created_at' => '2026-10-01 10:00:00']),
+            new SacreInvoice(['batch' => 1, 'created_at' => '2026-10-01 10:05:00']),
+            new SacreInvoice(['batch' => 2, 'created_at' => '2026-10-02 11:00:00']),
+        ]));
+
+        $batches = (new InvoiceSendPlan())->previousBatches($invoice);
+
+        $this->assertSame([1, 2, 3], $batches->pluck('batch')->all());
+        $this->assertSame([2, 1, 0], $batches->pluck('recipient_count')->all());
+        $this->assertNull($batches->last()['sent_at']);
+    }
+
+    public function test_an_unsent_invoice_has_no_previous_batches()
+    {
+        $invoice = new Invoice(['batch' => 0]);
+        $invoice->setRelation('invoices', new Collection());
+        $sendPlan = new InvoiceSendPlan();
+
+        $this->assertFalse($sendPlan->hasBeenSent($invoice));
+        $this->assertSame([], $sendPlan->previousBatches($invoice)->all());
     }
 
     private function sacre($id, $title, array $contacts)
