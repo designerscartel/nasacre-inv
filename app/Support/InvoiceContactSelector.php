@@ -8,6 +8,11 @@ class InvoiceContactSelector
 {
     public function select(Collection $contacts)
     {
+        return $this->eligible($contacts)->first();
+    }
+
+    public function eligible(Collection $contacts)
+    {
         return $contacts
             ->filter(function ($contact) {
                 return filter_var($contact->email, FILTER_VALIDATE_EMAIL);
@@ -18,9 +23,10 @@ class InvoiceContactSelector
                 }
 
                 $priority = [2 => 1, 3 => 2, 4 => 3, 1 => 4];
+                $positionId = $contact->position_id;
 
-                return $priority[$contact->position_id] ?? 5;
+                return $positionId === null ? 5 : ($priority[$positionId] ?? 5);
             })
-            ->first();
+            ->values();
     }
 }

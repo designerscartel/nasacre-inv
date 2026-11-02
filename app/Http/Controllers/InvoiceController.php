@@ -8,6 +8,7 @@ use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Support\InvoiceSendPlan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use League\Csv\Writer;
@@ -106,6 +107,11 @@ class InvoiceController extends Controller
         app(SendsInvoiceInformation::class)->send($invoice, $request->all());
 
         return back(303);
+    }
+
+    public function sendPreview(Invoice $invoice)
+    {
+        return response()->json((new InvoiceSendPlan())->preview($invoice));
     }
 
     /**

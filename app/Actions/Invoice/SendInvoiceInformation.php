@@ -4,10 +4,11 @@ namespace App\Actions\Invoice;
 
 use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Jobs\SendInvoice;
-use App\Models\Sacre;
-use App\Support\InvoiceContactSelector;
+use App\Support\InvoiceSendPlan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 
 /**
  * Class SendInvoiceInformation
@@ -27,14 +28,21 @@ class SendInvoiceInformation implements SendsInvoiceInformation
 
         Validator::make($input, [
             'send' => ['required'],
+            'recipients' => ['required', 'array', 'min:1'],
+            'recipients.*.sacre_id' => ['required', 'integer'],
+            'recipients.*.contact_id' => ['required', 'integer'],
         ])->validateWithBag('sendInvoiceInformation');
 
-        $selector = new InvoiceContactSelector();
-        $recipients = Sacre::with('contacts')->get()->map(function ($sacre) use ($selector) {
-            $contact = $selector->select($sacre->contacts);
+        $sendPlan = new InvoiceSendPlan();
+        $plan = $sendPlan->forInvoice($invoice);
+        try {
+            $recipients = $sendPlan->selectedRecipients($plan, $input['recipients']);
+        } catch (InvalidArgumentException $exception) {
+            $validator = Validator::make([], []);
+            $validator->errors()->add('recipients', $exception->getMessage());
 
-            return $contact ? compact('sacre', 'contact') : null;
-        })->filter()->values();
+            throw new ValidationException($validator, null, 'sendInvoiceInformation');
+        }
 
         if ($recipients->isEmpty()) {
             return;

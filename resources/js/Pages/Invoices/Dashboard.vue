@@ -95,7 +95,68 @@
             </template>
 
             <template #content>
-                Are you sure you would like to send this Invoice?
+                <div v-if="previewLoading" class="text-gray-600">
+                    Loading send preview...
+                </div>
+
+                <div v-else-if="previewError" class="text-red-600">
+                    {{ previewError }}
+                </div>
+
+                <div v-else-if="sendPreview">
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Batch</div>
+                            <div class="text-lg font-semibold">{{ sendPreview.batch }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Recipients</div>
+                            <div class="text-lg font-semibold text-green-700">{{ selectedRecipientCount }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Skipped</div>
+                            <div class="text-lg font-semibold text-yellow-700">{{ sendPreview.skipped_count }}</div>
+                        </div>
+                    </div>
+
+                    <div v-if="recipientSelections.length" class="mb-4">
+                        <div class="font-semibold mb-2">Recipients</div>
+                        <ul class="border rounded divide-y max-h-80 overflow-y-auto">
+                            <li v-for="recipient in recipientSelections" :key="recipient.sacre_id" class="px-3 py-3">
+                                <label class="flex items-start">
+                                    <input type="checkbox" v-model="recipient.selected" class="mt-1 mr-3">
+                                    <span class="flex-1">
+                                        <span class="block font-medium">{{ recipient.sacre }}</span>
+                                        <select v-model="recipient.contact_id"
+                                                :disabled="!recipient.selected"
+                                                class="form-select mt-2 block w-full text-sm">
+                                            <option v-for="contact in recipient.contacts" :key="contact.id" :value="contact.id">
+                                                {{ contact.name || contact.email }} — {{ contact.email }}
+                                            </option>
+                                        </select>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-if="sendPreview.skipped.length" class="mb-4">
+                        <div class="font-semibold mb-2">Skipped SACREs</div>
+                        <ul class="border rounded divide-y max-h-64 overflow-y-auto">
+                            <li v-for="skipped in sendPreview.skipped" :key="skipped.sacre_id" class="px-3 py-2">
+                                <div class="font-medium">{{ skipped.sacre }}</div>
+                                <div class="text-sm text-gray-600">{{ skipped.reason }}</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-if="selectedRecipientCount">
+                        Send this invoice to {{ selectedRecipientCount }} recipient<span v-if="selectedRecipientCount !== 1">s</span>?
+                    </div>
+                    <div v-else class="text-red-600 font-semibold">
+                        There are no valid recipients for this invoice.
+                    </div>
+                </div>
             </template>
 
             <template #footer>
@@ -104,8 +165,8 @@
                 </jet-secondary-button>
 
                 <jet-confirm-button class="ml-2" @click.native="sendInvoice"
-                                    :class="{ 'opacity-25': sendInvoiceForm.processing }"
-                                    :disabled="sendInvoiceForm.processing">
+                                    :class="{ 'opacity-25': sendInvoiceForm.processing || !canSendInvoice }"
+                                    :disabled="sendInvoiceForm.processing || !canSendInvoice">
                     Send
                 </jet-confirm-button>
             </template>
@@ -157,28 +218,66 @@
 
                 sendInvoiceForm: this.$inertia.form({
                     send: '',
+                    recipients: [],
                 }, {
                     bag: 'sendInvoiceInformation',
                     resetOnSuccess: true,
                 }),
 
                 InvoiceId: null,
-                InvoiceBeingSent: null
+                InvoiceBeingSent: null,
+                sendPreview: null,
+                previewLoading: false,
+                previewError: null,
+                recipientSelections: [],
             }
         },
         methods: {
             confirmInvoiceSend(Invoice) {
                 this.sendInvoiceForm.send = true
                 this.InvoiceBeingSent = Invoice
+                this.sendPreview = null
+                this.recipientSelections = []
+                this.previewError = null
+                this.previewLoading = true
+
+                axios.get('/invoices/' + Invoice.id + '/send-preview')
+                    .then(response => {
+                        this.sendPreview = response.data
+                        this.recipientSelections = response.data.recipients.map(recipient => ({
+                            ...recipient,
+                            selected: true,
+                        }))
+                    })
+                    .catch(() => {
+                        this.previewError = 'The send preview could not be loaded. Please try again.'
+                    })
+                    .then(() => {
+                        this.previewLoading = false
+                    })
             },
 
             sendInvoice() {
+                this.sendInvoiceForm.recipients = this.recipientSelections
+                    .filter(recipient => recipient.selected)
+                    .map(recipient => ({
+                        sacre_id: recipient.sacre_id,
+                        contact_id: recipient.contact_id,
+                    }))
                 this.sendInvoiceForm.post('/invoices/' +  this.InvoiceBeingSent.id + '/send', {
                     preserveScroll: true,
                     preserveState: true,
                 }).then(() => {
                     this.InvoiceBeingSent = null
                 })
+            },
+        },
+        computed: {
+            selectedRecipientCount() {
+                return this.recipientSelections.filter(recipient => recipient.selected).length
+            },
+            canSendInvoice() {
+                return this.sendPreview && this.selectedRecipientCount > 0 && !this.previewLoading
             },
         }
     }
