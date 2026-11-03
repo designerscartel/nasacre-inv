@@ -30,9 +30,8 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ### Testing and maintenance
 
-- Add feature tests for CSV downloads and PDF overrides.
 - Revisit the invoice workflow after upgrading Laravel because the current mail and queue dependencies are old and produce PHP 8.5 deprecation warnings.
 
 ## Suggested next step
 
-Add feature tests for CSV downloads and PDF overrides.
+Replace the hard-coded invoice PDF template with a reusable or configurable template.
