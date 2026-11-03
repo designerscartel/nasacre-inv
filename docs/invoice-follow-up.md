@@ -23,7 +23,6 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ### PDF and email
 
-- Move bank details, charity number, payment email, training price, and other annual values into configuration rather than embedding them in the PDF.
 - Add an invoice preview or test-email action before sending a full batch.
 - Confirm whether edited invoices should be emailed again from the SACRE invoice screen.
 
@@ -33,4 +32,4 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ## Suggested next step
 
-Move annual invoice values into configuration rather than embedding them in the PDF.
+Add an invoice preview or test-email action before sending a full batch.

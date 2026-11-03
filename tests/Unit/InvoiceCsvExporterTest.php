@@ -8,7 +8,7 @@ use App\Models\SacreInvoice;
 use App\Support\InvoiceCsvExporter;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class InvoiceCsvExporterTest extends TestCase
 {

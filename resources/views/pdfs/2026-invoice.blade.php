@@ -163,7 +163,7 @@
         <td><h1>INVOICE</h1></td>
         <td class="logo-holder">
             <img class="logo" src="{{ public_path().'/nasacre-logo.png' }}"/>
-            <p class="small">Registered Charity Number: 1212494</p>
+            <p class="small">Registered Charity Number: {{ config('invoices.charity_number') }}</p>
         </td>
     </tr>
 </table>
@@ -215,14 +215,15 @@
     </tr>
     @php
         $virtualTraining = $invoice->virtual_training ?? $sacre->virtual_training;
-        $calculatedTotal = (float) $invoice->subs + ($virtualTraining ? 60 : 0);
+        $trainingPrice = (float) config('invoices.training_price');
+        $calculatedTotal = (float) $invoice->subs + ($virtualTraining ? $trainingPrice : 0);
         $total = $invoice->total_override !== null ? (float) $invoice->total_override : $calculatedTotal;
     @endphp
     @if($virtualTraining)
         <tr>
             <td><p>Virtual Training</p></td>
             <td><p>{{ $date->format('Y') }}-{{ $date->format('y') + 1 }}</p></td>
-            <td><p>&pound;60.00</p></td>
+            <td><p>&pound;{{ number_format($trainingPrice, 2) }}</p></td>
         </tr>
     @endif
     <tr>
@@ -243,24 +244,24 @@
                 <div class="well">
                     <h6>How to pay: BACS</h6>
                     <p><span class="underline">Please send notification</span> to<br/>
-                        email address: admin@nasacre.org.uk</p>
+                        email address: {{ config('invoices.payment_email') }}</p>
 
                     <table class="bank">
                         <tr>
                             <td><p>Bank:</p></td>
-                            <td><p><strong>Cooperative Bank</strong></p></td>
+                            <td><p><strong>{{ config('invoices.bank.name') }}</strong></p></td>
                         </tr>
                         <tr>
                             <td><p>Account Name:</p></td>
-                            <td><p><strong>NASACRE</strong></p></td>
+                            <td><p><strong>{{ config('invoices.bank.account_name') }}</strong></p></td>
                         </tr>
                         <tr>
                             <td><p>Account Number:</p></td>
-                            <td><p><strong>67410361</strong></p></td>
+                            <td><p><strong>{{ config('invoices.bank.account_number') }}</strong></p></td>
                         </tr>
                         <tr>
                             <td><p>Sort Code:</p></td>
-                            <td><p><strong>08-92-99</strong></p></td>
+                            <td><p><strong>{{ config('invoices.bank.sort_code') }}</strong></p></td>
                         </tr>
                     </table>
                 </div>

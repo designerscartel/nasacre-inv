@@ -69,7 +69,7 @@ class SacreInvoice extends Model
 
         $baseAmount = $this->invoice ? (float) $this->invoice->subs : 0;
 
-        return $baseAmount + ($this->virtual_training ? 60.0 : 0.0);
+        return $baseAmount + ($this->virtual_training ? (float) config('invoices.training_price') : 0.0);
     }
 
     public function deliveryStatus(): string

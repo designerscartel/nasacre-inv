@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Invoice;
 use App\Models\SacreInvoice;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class SacreInvoicePricingTest extends TestCase
 {
@@ -33,5 +33,14 @@ class SacreInvoicePricingTest extends TestCase
         $sacreInvoice->setRelation('invoice', new Invoice(['subs' => 250]));
 
         $this->assertSame(275.0, $sacreInvoice->totalAmount());
+    }
+
+    public function test_it_uses_the_configured_training_price()
+    {
+        config(['invoices.training_price' => 75]);
+        $sacreInvoice = new SacreInvoice(['virtual_training' => true]);
+        $sacreInvoice->setRelation('invoice', new Invoice(['subs' => 185]));
+
+        $this->assertSame(260.0, $sacreInvoice->totalAmount());
     }
 }
