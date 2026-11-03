@@ -89,7 +89,8 @@ class SendInvoiceInformation implements SendsInvoiceInformation
             SendInvoice::dispatch([
                 'sacre' => $recipient['sacre'],
                 'invoice' => $invoice,
-                'contact' => $recipient['contact'],
+                'recipient_name' => $recipient['contact']->name,
+                'recipient_email' => $recipient['contact']->email,
                 'batch' => $batch,
                 'sacre_invoice_id' => $sacreInvoice->id,
             ])->delay(now()->addSeconds($iteration * 5));

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Actions\Invoice\CreateInvoiceInformation;
 use App\Contracts\Invoice\DeletesInvoice;
+use App\Contracts\Invoice\RetriesFailedInvoiceDeliveries;
 use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use App\Support\InvoiceCsvExporter;
+use App\Support\InvoiceFailedRetryPlan;
 use App\Support\InvoiceSendPlan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -113,6 +115,20 @@ class InvoiceController extends Controller
     public function sendPreview(Invoice $invoice)
     {
         return response()->json((new InvoiceSendPlan())->preview($invoice));
+    }
+
+    public function retryFailedPreview(Invoice $invoice)
+    {
+        $invoice->load('invoices.sacre');
+
+        return response()->json((new InvoiceFailedRetryPlan())->preview($invoice));
+    }
+
+    public function retryFailed(Request $request, Invoice $invoice)
+    {
+        app(RetriesFailedInvoiceDeliveries::class)->retry($invoice, $request->all());
+
+        return back(303);
     }
 
     /**

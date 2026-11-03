@@ -9,14 +9,11 @@ The invoice pricing work completed on 30 October 2026 includes:
 - A send preview with recipient and skipped-SACRE details.
 - Explicit resend confirmation and previous batch summaries.
 - Queue delivery progress and failure reporting.
+- Safe latest-batch retries for failed invoice deliveries.
 - CSV reporting for amount, batch, sent date, and delivery status.
 - Historical invoice support for soft-deleted SACREs.
 
 ## Remaining work
-
-### High priority
-
-- Add a safe way to retry only failed recipients without generating another complete batch.
 
 ### Invoice records
 
@@ -39,4 +36,4 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ## Suggested next step
 
-Add a failed-recipient retry flow, including confirmation, queue tests, and duplicate prevention.
+Add queue and mail integration tests covering successful delivery, failure, retry, and duplicate prevention.

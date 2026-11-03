@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\Invoice\CreatesInvoicePdf;
 use App\Mail\InvoiceForQueuing;
+use App\Models\SacreContact;
 use App\Models\SacreInvoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -50,8 +51,12 @@ class SendInvoice implements ShouldQueue
      */
     public function handle()
     {
+        $contact = $this->details['contact'] ?? new SacreContact([
+            'name' => $this->details['recipient_name'],
+            'email' => $this->details['recipient_email'],
+        ]);
         $pdf = app(CreatesInvoicePdf::class)->output($this->details['invoice'], $this->details['sacre']);
-        $email = new InvoiceForQueuing($this->details['invoice'], $this->details['sacre'], $this->details['contact'], $pdf);
+        $email = new InvoiceForQueuing($this->details['invoice'], $this->details['sacre'], $contact, $pdf);
         $financeEmails = collect(preg_split('/[,;]+/', (string) $this->details['sacre']->finance))
             ->map('trim')
             ->filter(function ($email) {
@@ -60,7 +65,7 @@ class SendInvoice implements ShouldQueue
             ->values()
             ->all();
 
-        Mail::to($this->details['contact']->email)
+        Mail::to($contact->email)
             ->cc($financeEmails)
             ->send($email);
 

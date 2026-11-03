@@ -90,6 +90,12 @@
                                             {{ invoice.batch > 0 ? 'Resend' : 'Send' }}
                                         </button>
 
+                                        <button v-if="invoice.delivery && invoice.delivery.failed > 0"
+                                                class="cursor-pointer text-sm text-red-600 focus:outline-none ml-2"
+                                                @click="confirmFailedRetry(invoice)">
+                                            Retry failed
+                                        </button>
+
                                     </td>
                                 </tr>
                             </template>
@@ -224,6 +230,61 @@
             </template>
         </jet-dialog-modal>
 
+        <!-- Retry Failed Invoice Deliveries Modal -->
+        <jet-dialog-modal :show="InvoiceBeingRetried" @close="closeFailedRetry">
+            <template #title>
+                Retry Failed Invoice Deliveries
+            </template>
+
+            <template #content>
+                <div v-if="retryPreviewLoading" class="text-gray-600">
+                    Loading failed deliveries...
+                </div>
+
+                <div v-else-if="retryPreviewError" class="text-red-600">
+                    {{ retryPreviewError }}
+                </div>
+
+                <div v-else-if="retryPreview">
+                    <div class="mb-4">
+                        Retry {{ retryPreview.failed_count }} failed recipient<span v-if="retryPreview.failed_count !== 1">s</span>
+                        from batch {{ retryPreview.batch }}. This does not create a new batch.
+                    </div>
+
+                    <ul v-if="retryPreview.recipients.length" class="border rounded divide-y max-h-80 overflow-y-auto mb-4">
+                        <li v-for="recipient in retryPreview.recipients" :key="recipient.id" class="px-3 py-3">
+                            <div class="font-medium">{{ recipient.sacre || 'Unknown SACRE' }}</div>
+                            <div class="text-sm text-gray-600">{{ recipient.email }}</div>
+                            <div v-if="recipient.failure_message" class="text-sm text-red-700 mt-1">
+                                {{ recipient.failure_message }}
+                            </div>
+                        </li>
+                    </ul>
+
+                    <label v-if="retryPreview.failed_count" class="flex items-start text-sm font-semibold text-red-900">
+                        <input type="checkbox" v-model="retryFailedForm.confirm_retry" class="mt-1 mr-2">
+                        <span>I confirm these failed invoice deliveries should be queued again.</span>
+                    </label>
+
+                    <div v-else class="text-gray-600">
+                        There are no failed deliveries remaining in the latest batch.
+                    </div>
+                </div>
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="closeFailedRetry">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-confirm-button class="ml-2" @click.native="retryFailedDeliveries"
+                                    :class="{ 'opacity-25': retryFailedForm.processing || !canRetryFailed }"
+                                    :disabled="retryFailedForm.processing || !canRetryFailed">
+                    Retry failed
+                </jet-confirm-button>
+            </template>
+        </jet-dialog-modal>
+
     </app-layout>
 </template>
 
@@ -277,12 +338,23 @@
                     resetOnSuccess: true,
                 }),
 
+                retryFailedForm: this.$inertia.form({
+                    confirm_retry: false,
+                }, {
+                    bag: 'retryFailedInvoiceDeliveries',
+                    resetOnSuccess: true,
+                }),
+
                 InvoiceId: null,
                 InvoiceBeingSent: null,
                 sendPreview: null,
                 previewLoading: false,
                 previewError: null,
                 recipientSelections: [],
+                InvoiceBeingRetried: null,
+                retryPreview: null,
+                retryPreviewLoading: false,
+                retryPreviewError: null,
                 statusRefreshTimer: null,
             }
         },
@@ -326,6 +398,38 @@
                     this.InvoiceBeingSent = null
                 })
             },
+            confirmFailedRetry(invoice) {
+                this.InvoiceBeingRetried = invoice
+                this.retryPreview = null
+                this.retryPreviewError = null
+                this.retryPreviewLoading = true
+                this.retryFailedForm.confirm_retry = false
+
+                axios.get('/invoices/' + invoice.id + '/retry-failed-preview')
+                    .then(response => {
+                        this.retryPreview = response.data
+                    })
+                    .catch(() => {
+                        this.retryPreviewError = 'The failed delivery preview could not be loaded. Please try again.'
+                    })
+                    .then(() => {
+                        this.retryPreviewLoading = false
+                    })
+            },
+            closeFailedRetry() {
+                this.InvoiceBeingRetried = null
+                this.retryPreview = null
+                this.retryPreviewError = null
+                this.retryFailedForm.confirm_retry = false
+            },
+            retryFailedDeliveries() {
+                this.retryFailedForm.post('/invoices/' + this.InvoiceBeingRetried.id + '/retry-failed', {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.closeFailedRetry()
+                })
+            },
             formatDate(value) {
                 return new Date(value).toLocaleString()
             },
@@ -353,6 +457,12 @@
                     && this.selectedRecipientCount > 0
                     && !this.previewLoading
                     && (!this.sendPreview.has_been_sent || this.sendInvoiceForm.confirm_resend)
+            },
+            canRetryFailed() {
+                return this.retryPreview
+                    && this.retryPreview.failed_count > 0
+                    && this.retryFailedForm.confirm_retry
+                    && !this.retryPreviewLoading
             },
             hasQueuedInvoices() {
                 return this.invoices.data.some(invoice => invoice.delivery && invoice.delivery.queued > 0)
