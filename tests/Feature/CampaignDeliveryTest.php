@@ -136,7 +136,7 @@ class CampaignDeliveryTest extends TestCase
         $this->delivery($campaign, 'failed@example.test', 'failed');
 
         $response = $this->from(route('campaigns.index'))
-            ->post(route('campaigns.retry-failed', $campaign));
+            ->post(route('campaigns.retry-failed', $campaign), ['retry_batch' => 1]);
 
         $response->assertRedirect(route('campaigns.index'));
         $response->assertSessionHasErrors(['confirm_retry'], null, 'retryFailedCampaignDeliveries');
@@ -157,6 +157,7 @@ class CampaignDeliveryTest extends TestCase
 
         $this->post(route('campaigns.retry-failed', $campaign), [
             'confirm_retry' => true,
+            'retry_batch' => 2,
         ])->assertStatus(303);
 
         $this->assertSame(3, $campaign->refresh()->batch);
@@ -185,11 +186,63 @@ class CampaignDeliveryTest extends TestCase
 
         $this->post(route('campaigns.retry-failed', $campaign), [
             'confirm_retry' => true,
+            'retry_batch' => 2,
         ])->assertStatus(303);
 
         $this->assertSame(2, $campaign->refresh()->batch);
         $this->assertSame(2, CampaignDelivery::count());
         Queue::assertNothingPushed();
+    }
+
+    public function test_it_summarises_all_campaign_batches_with_timestamps()
+    {
+        list($campaign) = $this->campaign(['batch' => 2]);
+        $old = $this->delivery($campaign, 'old@example.test', 'sent', 1);
+        $old->update(['sent_at' => now()]);
+        $failed = $this->delivery($campaign, 'failed@example.test', 'failed', 2);
+        $failed->update([
+            'failed_at' => now(),
+            'failure_message' => 'Mailbox unavailable',
+        ]);
+        $campaign->load('deliveries');
+
+        $history = $campaign->deliveryBatchHistory();
+
+        $this->assertSame([2, 1], $history->pluck('batch')->all());
+        $this->assertSame(1, $history->first()['failed']);
+        $this->assertSame(1, $history->first()['retryable_failed']);
+        $this->assertSame('Mailbox unavailable', $history->first()['recipients']->first()['failure_message']);
+        $this->assertNotNull($history->first()['recipients']->first()['failed_at']);
+        $this->assertNotNull($history->last()['recipients']->first()['sent_at']);
+    }
+
+    public function test_retrying_an_older_batch_skips_recipients_with_newer_attempts()
+    {
+        Queue::fake();
+        $this->actingAs(User::factory()->create());
+        list($campaign) = $this->campaign(['batch' => 2]);
+        $this->delivery($campaign, 'already-retried@example.test', 'failed', 1);
+        $this->delivery($campaign, 'retry-me@example.test', 'failed', 1);
+        $this->delivery($campaign, 'already-retried@example.test', 'failed', 2);
+
+        $campaign->load('deliveries');
+        $this->assertSame(1, $campaign->deliveryBatchHistory()->last()['retryable_failed']);
+
+        $this->post(route('campaigns.retry-failed', $campaign), [
+            'confirm_retry' => true,
+            'retry_batch' => 1,
+        ])->assertStatus(303);
+
+        $this->assertSame(3, $campaign->refresh()->batch);
+        $this->assertDatabaseHas('campaign_deliveries', [
+            'batch' => 3,
+            'recipient_email' => 'retry-me@example.test',
+        ]);
+        $this->assertDatabaseMissing('campaign_deliveries', [
+            'batch' => 3,
+            'recipient_email' => 'already-retried@example.test',
+        ]);
+        Queue::assertPushed(SendCampaign::class, 1);
     }
 
     private function campaign(array $attributes = [])

@@ -68,6 +68,46 @@ class Campaign extends Model
         ];
     }
 
+    public function deliveryBatchHistory()
+    {
+        $allDeliveries = $this->deliveries;
+
+        return $allDeliveries
+            ->groupBy('batch')
+            ->sortKeysDesc()
+            ->map(function ($deliveries, $batch) use ($allDeliveries) {
+                $newerRecipientEmails = $allDeliveries
+                    ->where('batch', '>', (int) $batch)
+                    ->pluck('recipient_email');
+                $retryableFailed = $deliveries
+                    ->where('delivery_status', 'failed')
+                    ->whereNotIn('recipient_email', $newerRecipientEmails)
+                    ->count();
+
+                return [
+                    'batch' => (int) $batch,
+                    'total' => $deliveries->count(),
+                    'queued' => $deliveries->where('delivery_status', 'queued')->count(),
+                    'sent' => $deliveries->where('delivery_status', 'sent')->count(),
+                    'failed' => $deliveries->where('delivery_status', 'failed')->count(),
+                    'retryable_failed' => $retryableFailed,
+                    'started_at' => optional($deliveries->min('queued_at') ?: $deliveries->min('created_at'))->toIso8601String(),
+                    'recipients' => $deliveries->map(function ($delivery) {
+                        return [
+                            'id' => $delivery->id,
+                            'name' => $delivery->recipient_name,
+                            'email' => $delivery->recipient_email,
+                            'status' => $delivery->delivery_status,
+                            'queued_at' => optional($delivery->queued_at)->toIso8601String(),
+                            'sent_at' => optional($delivery->sent_at)->toIso8601String(),
+                            'failed_at' => optional($delivery->failed_at)->toIso8601String(),
+                            'failure_message' => $delivery->failure_message,
+                        ];
+                    })->values(),
+                ];
+            })->values();
+    }
+
     /**
      * Return a Resource
      */

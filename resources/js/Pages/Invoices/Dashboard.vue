@@ -36,7 +36,12 @@
                     </div>
 
                     <div class="bg-gray-200 bg-opacity-25">
-                        <table class="table-auto w-full">
+                        <table class="table-fixed w-full">
+                            <colgroup>
+                                <col class="w-1/5">
+                                <col class="w-2/5">
+                                <col class="w-2/5">
+                            </colgroup>
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Invoice</th>
@@ -48,7 +53,7 @@
                             <template v-if="invoices.data.length">
                                 <tr v-if="invoices" v-for="invoice in invoices.data" :key="invoice.id">
                                     <td class="border px-8 py-2">{{ invoice.year }}</td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 align-top break-words">
                                         <div v-if="invoice.delivery">
                                             <div class="text-sm font-semibold">Batch {{ invoice.delivery.batch }}</div>
                                             <div class="text-xs mt-1">
@@ -57,10 +62,10 @@
                                                 <span class="text-red-700">{{ invoice.delivery.failed }} failed</span>
                                             </div>
 
-                                            <details v-if="invoice.delivery.queued || invoice.delivery.failed" class="mt-2 text-xs">
+                                            <details v-if="invoice.delivery.queued || invoice.delivery.failed" class="mt-2 text-xs min-w-0">
                                                 <summary class="cursor-pointer text-gray-700">View delivery details</summary>
                                                 <ul class="mt-2 space-y-2">
-                                                    <li v-for="recipient in invoice.delivery.recipients" :key="recipient.id">
+                                                    <li v-for="recipient in invoice.delivery.recipients" :key="recipient.id" class="break-words">
                                                         <span :class="deliveryStatusClass(recipient.status)" class="font-semibold uppercase">
                                                             {{ recipient.status }}
                                                         </span>
@@ -75,7 +80,7 @@
                                         </div>
                                         <span v-else class="text-sm text-gray-500">Not sent</span>
                                     </td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 align-top break-words">
                                         <inertia-link class="text-sm mr-2" :href="'/invoices/'+ invoice.id">
                                             Edit
                                         </inertia-link>

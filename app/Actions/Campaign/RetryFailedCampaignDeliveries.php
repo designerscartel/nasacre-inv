@@ -13,15 +13,21 @@ class RetryFailedCampaignDeliveries
     {
         Validator::make($input, [
             'confirm_retry' => ['accepted'],
+            'retry_batch' => ['required', 'integer', 'min:1'],
         ], [
             'confirm_retry.accepted' => 'You must confirm that failed campaign emails should be retried.',
         ])->validateWithBag('retryFailedCampaignDeliveries');
 
-        $deliveries = DB::transaction(function () use ($campaign) {
+        $deliveries = DB::transaction(function () use ($campaign, $input) {
             $lockedCampaign = $campaign->newQuery()->lockForUpdate()->findOrFail($campaign->id);
+            $retryBatch = (int) $input['retry_batch'];
+            $newerRecipientEmails = CampaignDelivery::where('campaign_id', $lockedCampaign->id)
+                ->where('batch', '>', $retryBatch)
+                ->pluck('recipient_email');
             $failedDeliveries = CampaignDelivery::where('campaign_id', $lockedCampaign->id)
-                ->where('batch', $lockedCampaign->batch)
+                ->where('batch', $retryBatch)
                 ->where('delivery_status', 'failed')
+                ->whereNotIn('recipient_email', $newerRecipientEmails)
                 ->get();
 
             if ($failedDeliveries->isEmpty()) {

@@ -28,6 +28,9 @@ class CampaignResource extends JsonResource
             'delivery' => $this->whenLoaded('deliveries', function () {
                 return $this->latestDeliverySummary();
             }),
+            'delivery_batches' => $this->whenLoaded('deliveries', function () {
+                return $this->deliveryBatchHistory();
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

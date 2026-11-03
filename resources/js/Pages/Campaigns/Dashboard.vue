@@ -37,7 +37,12 @@
                     </div>
 
                     <div class="bg-gray-200 bg-opacity-25">
-                        <table class="table-auto w-full">
+                        <table class="table-fixed w-full">
+                            <colgroup>
+                                <col class="w-1/4">
+                                <col class="w-1/2">
+                                <col class="w-1/4">
+                            </colgroup>
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Campaign</th>
@@ -48,8 +53,8 @@
                             <tbody>
                             <template v-if="campaigns.data.length">
                                 <tr v-if="campaigns" v-for="campaign in campaigns.data" :key="campaign.id">
-                                    <td class="border px-8 py-2">{{ campaign.subject }}</td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-8 py-2 align-top break-words">{{ campaign.subject }}</td>
+                                    <td class="border px-4 py-2 align-top break-words">
                                         <div v-if="campaign.delivery">
                                             <div class="text-sm font-semibold">Batch {{ campaign.delivery.batch }}</div>
                                             <div class="text-xs mt-1">
@@ -57,10 +62,10 @@
                                                 <span class="text-yellow-700 mr-3">{{ campaign.delivery.queued }} queued</span>
                                                 <span class="text-red-700">{{ campaign.delivery.failed }} failed</span>
                                             </div>
-                                            <details v-if="campaign.delivery.queued || campaign.delivery.failed" class="mt-2 text-xs">
+                                            <details v-if="campaign.delivery.queued || campaign.delivery.failed" class="mt-2 text-xs min-w-0">
                                                 <summary class="cursor-pointer text-gray-700">View delivery details</summary>
                                                 <ul class="mt-2 space-y-2">
-                                                    <li v-for="recipient in campaign.delivery.recipients" :key="recipient.id">
+                                                    <li v-for="recipient in campaign.delivery.recipients" :key="recipient.id" class="break-words">
                                                         <span :class="deliveryStatusClass(recipient.status)" class="font-semibold uppercase">
                                                             {{ recipient.status }}
                                                         </span>
@@ -72,10 +77,47 @@
                                                     </li>
                                                 </ul>
                                             </details>
+                                            <details v-if="campaign.delivery_batches.length" class="mt-2 text-xs min-w-0">
+                                                <summary class="cursor-pointer text-blue-700">View batch history</summary>
+                                                <div v-for="batch in campaign.delivery_batches" :key="batch.batch"
+                                                     class="mt-3 border-t border-gray-300 pt-2">
+                                                    <div class="flex flex-wrap items-center justify-between">
+                                                        <div class="min-w-0 break-words">
+                                                            <span class="font-semibold">Batch {{ batch.batch }}</span>
+                                                            <span v-if="batch.started_at"> — {{ formatDate(batch.started_at) }}</span>
+                                                        </div>
+                                                        <button v-if="batch.retryable_failed"
+                                                                class="text-red-600 focus:outline-none ml-3"
+                                                                @click="confirmFailedRetry(campaign, batch)">
+                                                            Retry {{ batch.retryable_failed }} failed
+                                                        </button>
+                                                    </div>
+                                                    <div class="mt-1">
+                                                        <span class="text-green-700 mr-2">{{ batch.sent }} sent</span>
+                                                        <span class="text-yellow-700 mr-2">{{ batch.queued }} queued</span>
+                                                        <span class="text-red-700">{{ batch.failed }} failed</span>
+                                                    </div>
+                                                    <ul class="mt-2 space-y-2">
+                                                        <li v-for="recipient in batch.recipients" :key="recipient.id" class="break-words">
+                                                            <span :class="deliveryStatusClass(recipient.status)" class="font-semibold uppercase">
+                                                                {{ recipient.status }}
+                                                            </span>
+                                                            — {{ recipient.name || recipient.email }}
+                                                            <span v-if="recipient.email"> ({{ recipient.email }})</span>
+                                                            <span v-if="deliveryTimestamp(recipient)">
+                                                                — {{ formatDate(deliveryTimestamp(recipient)) }}
+                                                            </span>
+                                                            <div v-if="recipient.failure_message" class="text-red-700 mt-1">
+                                                                {{ recipient.failure_message }}
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </details>
                                         </div>
                                         <span v-else class="text-sm text-gray-500">Not sent</span>
                                     </td>
-                                    <td class="border px-4 py-2">
+                                    <td class="border px-4 py-2 align-top break-words">
                                         <inertia-link class="text-sm mr-2" :href="'/campaigns/'+ campaign.id">
                                             Edit
                                         </inertia-link>
@@ -88,7 +130,7 @@
 
                                         <button v-if="campaign.delivery && campaign.delivery.failed"
                                                 class="cursor-pointer text-sm text-red-600 focus:outline-none ml-2"
-                                                @click="confirmFailedRetry(campaign)">
+                                                @click="confirmFailedRetry(campaign, campaign.delivery)">
                                             Retry failed
                                         </button>
 
@@ -159,8 +201,8 @@
             <template #content>
                 <div v-if="campaignBeingRetried">
                     <p>
-                        Retry {{ campaignBeingRetried.delivery.failed }} failed email(s) from batch
-                        {{ campaignBeingRetried.delivery.batch }} as a new batch?
+                        Retry {{ batchBeingRetried.retryable_failed || batchBeingRetried.failed }} failed email(s) from batch
+                        {{ batchBeingRetried.batch }} as a new batch?
                     </p>
                     <p class="mt-3 text-sm text-gray-600">
                         Successfully sent and queued recipients will not receive another email.
@@ -239,6 +281,7 @@
 
                 retryFailedForm: this.$inertia.form({
                     confirm_retry: false,
+                    retry_batch: null,
                 }, {
                     bag: 'retryFailedCampaignDeliveries',
                     resetOnSuccess: true,
@@ -246,7 +289,8 @@
 
                 campaignId: null,
                 campaignBeingSent: null,
-                campaignBeingRetried: null
+                campaignBeingRetried: null,
+                batchBeingRetried: null
             }
         },
         methods: {
@@ -264,9 +308,11 @@
                     this.campaignBeingSent = null
                 })
             },
-            confirmFailedRetry(campaign) {
+            confirmFailedRetry(campaign, batch) {
                 this.retryFailedForm.confirm_retry = false
+                this.retryFailedForm.retry_batch = batch.batch
                 this.campaignBeingRetried = campaign
+                this.batchBeingRetried = batch
             },
             retryFailed() {
                 this.retryFailedForm.post('/campaigns/' + this.campaignBeingRetried.id + '/retry-failed', {
@@ -274,7 +320,14 @@
                     preserveState: true,
                 }).then(() => {
                     this.campaignBeingRetried = null
+                    this.batchBeingRetried = null
                 })
+            },
+            formatDate(value) {
+                return value ? new Date(value).toLocaleString() : ''
+            },
+            deliveryTimestamp(recipient) {
+                return recipient.sent_at || recipient.failed_at || recipient.queued_at
             },
             deliveryStatusClass(status) {
                 return {
