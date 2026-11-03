@@ -8,6 +8,7 @@ use App\Contracts\Invoice\SendsInvoiceInformation;
 use App\Contracts\Invoice\UpdatesInvoiceInformation;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Support\InvoiceCsvExporter;
 use App\Support\InvoiceSendPlan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -129,37 +130,11 @@ class InvoiceController extends Controller
         return back(303);
     }
 
-    public function list(Request $request, Invoice $invoice)
+    public function list(Request $request, Invoice $invoice, InvoiceCsvExporter $exporter)
     {
-
-
-        $header = [
-            'SACRE',
-            'Invoice Number',
-        ];
-
-        $invoiceLines = [];
-
-        foreach ($invoice->invoices as $sentInvoice) {
-            $date = $sentInvoice->date ?: $invoice->date;
-            $date = \Carbon\Carbon::parse($date);
-            $invoiceNumber = $date->format('y') . '/SUBS/' . $sentInvoice->sacre->code;
-            if (!empty($sentInvoice->sacre->short_code)) {
-
-                $invoiceNumber = $invoiceNumber . '/' . $sentInvoice->sacre->short_code;
-            }
-            $invoiceNumber = $invoiceNumber . '/' . $invoice->id;
-            $invoiceLines[] = [
-                $sentInvoice->sacre->title,
-                $invoiceNumber
-            ];
-        }
-
         $csv = Writer::createFromString();
-        //insert the header
-        $csv->insertOne($header);
-        //insert all the records
-        $csv->insertAll($invoiceLines);
+        $csv->insertOne($exporter->header());
+        $csv->insertAll($exporter->rows($invoice));
 
         return response($csv->getContent(), 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',

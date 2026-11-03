@@ -48,7 +48,7 @@ class SacreInvoice extends Model
      */
     public function sacre()
     {
-        return $this->belongsTo(Sacre::class, 'sacre_id');
+        return $this->belongsTo(Sacre::class, 'sacre_id')->withTrashed();
     }
 
     /**
