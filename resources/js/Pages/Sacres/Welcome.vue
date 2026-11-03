@@ -2,13 +2,13 @@
     <div>
         <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
 
-            <div class="mt-8 md:flex">
+            <div class="flex flex-wrap items-center justify-between gap-4">
 
-                <h1 class="text-2xl md:w-5/6">
-                    Welcome to the NASACRE application!
+                <h1 class="text-2xl font-semibold text-gray-800">
+                    SACRE Directory
                 </h1>
 
-                <div class="md:w-1/6 text-right">
+                <div class="text-right">
                     <inertia-link href="/sacres/create"
                                   class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                         Create Sacre
@@ -17,21 +17,34 @@
 
             </div>
 
-            <p class="mt-6 text-gray-500">
-                Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel
-                is designed
-                to help you build your application using a development environment that is simple, powerful, and
-                enjoyable. We believe
-                you should love expressing your creativity through programming, so we have spent time carefully crafting
-                the Laravel
-                ecosystem to be a breath of fresh air. We hope you love it.
-            </p>
+            <p class="mt-3 text-gray-500">Manage SACRE membership, contacts, invoices, and records.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                <div class="border rounded-lg p-4 bg-gray-50">
+                    <div class="text-xs uppercase tracking-wide text-gray-500">Total SACREs</div>
+                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ sacres.data.length }}</div>
+                </div>
+                <div class="border rounded-lg p-4 bg-green-50">
+                    <div class="text-xs uppercase tracking-wide text-green-700">Current Members</div>
+                    <div class="text-2xl font-semibold text-green-800 mt-1">{{ memberCount }}</div>
+                </div>
+                <div class="border rounded-lg p-4 bg-gray-50">
+                    <div class="text-xs uppercase tracking-wide text-gray-500">Non-Members</div>
+                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ nonMemberCount }}</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label for="sacre-search" class="block text-sm font-medium text-gray-700">Find a SACRE</label>
+                <input id="sacre-search" v-model="search" type="search" placeholder="Search by name, code, or region"
+                       class="form-input mt-1 block w-full sm:max-w-md rounded-md shadow-sm">
+            </div>
 
 
         </div>
 
-        <div class="bg-gray-200 bg-opacity-25">
-            <table class="table-auto w-full">
+        <div class="bg-gray-200 bg-opacity-25 overflow-x-auto">
+            <table class="table-auto w-full" style="min-width: 800px">
                 <thead class="text-left">
                 <tr>
                     <th class="px-8 py-2">Sacre</th>
@@ -42,8 +55,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template v-if="sacres.data.length">
-                    <tr v-for="sacre in sacres.data" :key="sacre.id">
+                <template v-if="filteredSacres.length">
+                    <tr v-for="sacre in filteredSacres" :key="sacre.id">
                         <td class="border px-8 py-2">{{ sacre.title }}</td>
                         <td class="border px-4 py-2">
                             <span v-if="sacre.member"
@@ -52,8 +65,8 @@
                         </td>
                         <td class="border px-4 py-2">
                             <span v-if="sacre.past_member"
-                                  class="bg-green-200 text-white text-xs px-2 py-1 inline-block rounded-full">Past Member</span>
-                            <span v-else class="bg-gray-200 text-gray-600 text-xs px-2 py-1 inline-block rounded-full">Non-Member</span>
+                                  class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 inline-block rounded-full">Past Member</span>
+                            <span v-else class="text-gray-400 text-xs">—</span>
                         </td>
                         <td class="border px-4 py-2">{{ sacre.region.title }}</td>
                         <td class="border px-4 py-2">
@@ -71,27 +84,12 @@
                     </tr>
                 </template>
                 <tr v-else>
-                    <td colspan="4" class="border px-8 py-2">No SACRE'S</td>
+                    <td colspan="5" class="border px-8 py-4 text-center text-gray-500">No SACREs found</td>
                 </tr>
 
                 </tbody>
             </table>
         </div>
-
-        <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
-
-            <div class="md:flex md:justify-end">
-
-                <div class="md:w-1/6 text-right">
-                    <inertia-link href="/sacres/create"
-                                  class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
-                        Create Sacre
-                    </inertia-link>
-                </div>
-
-            </div>
-        </div>
-
 
         <!-- Delete Sacre Modal -->
         <jet-confirmation-modal :show="sacreBeingDeleted" @close="sacreBeingDeleted = null">
@@ -144,9 +142,32 @@
         data() {
             return {
                 deleteSacreForm: this.$inertia.form(),
-                sacreBeingDeleted: null
+                sacreBeingDeleted: null,
+                search: '',
 
             }
+        },
+        computed: {
+            memberCount() {
+                return this.sacres.data.filter(sacre => sacre.member).length
+            },
+            nonMemberCount() {
+                return this.sacres.data.length - this.memberCount
+            },
+            filteredSacres() {
+                const term = this.search.trim().toLowerCase()
+
+                if (!term) {
+                    return this.sacres.data
+                }
+
+                return this.sacres.data.filter(sacre => [
+                    sacre.title,
+                    sacre.short_code,
+                    sacre.code,
+                    sacre.region && sacre.region.title,
+                ].some(value => value && String(value).toLowerCase().includes(term)))
+            },
         },
         methods: {
 

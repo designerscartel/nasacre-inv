@@ -17,19 +17,19 @@
                             <jet-nav-link href="/dashboard" :active="$page.currentRouteName == 'dashboard'">
                                 Dashboard
                             </jet-nav-link>
-                            <jet-nav-link href="/invoices" :active="$page.currentRouteName == 'invoices.index'">
+                            <jet-nav-link href="/invoices" :active="path.startsWith('/invoices')">
                                 Invoices
                             </jet-nav-link>
-                            <jet-nav-link href="/bookings" :active="$page.currentRouteName == 'bookings.index'">
-                                Booking
+                            <jet-nav-link href="/bookings" :active="path.startsWith('/bookings')">
+                                Bookings
                             </jet-nav-link>
-                            <jet-nav-link href="/campaigns" :active="$page.currentRouteName == 'campaigns.index'">
+                            <jet-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
                                 Campaigns
                             </jet-nav-link>
-                            <jet-nav-link href="/regions" :active="$page.currentRouteName == 'regions.index'">
+                            <jet-nav-link href="/regions" :active="path.startsWith('/regions')">
                                 Regions
                             </jet-nav-link>
-                            <jet-nav-link href="/positions" :active="$page.currentRouteName == 'positions.index'">
+                            <jet-nav-link href="/positions" :active="path.startsWith('/positions')">
                                 Positions
                             </jet-nav-link>
 
@@ -127,6 +127,21 @@
                 <div class="pt-2 pb-3 space-y-1">
                     <jet-responsive-nav-link href="/dashboard" :active="$page.currentRouteName == 'dashboard'">
                         Dashboard
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/invoices" :active="path.startsWith('/invoices')">
+                        Invoices
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/bookings" :active="path.startsWith('/bookings')">
+                        Bookings
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
+                        Campaigns
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/regions" :active="path.startsWith('/regions')">
+                        Regions
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/positions" :active="path.startsWith('/positions')">
+                        Positions
                     </jet-responsive-nav-link>
                 </div>
 

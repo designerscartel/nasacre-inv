@@ -10,22 +10,15 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
-
-                        <div class="mt-8 md:flex">
-
-                            <h1 class="text-2xl md:w-5/6">
-                                NASACRE Invoices
-                            </h1>
-
-
-                            <div class="md:w-2/6 text-right">
+                        <div class="flex flex-wrap items-center justify-end gap-3">
+                            <div class="text-right">
 
                                 <button class="text-sm mr-4 text-gray-600 focus:outline-none" @click="refreshStatuses">
                                     Refresh status
                                 </button>
 
                                 <inertia-link href="/invoices/create"
-                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                              class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                                     Create invoice
                                 </inertia-link>
 
@@ -35,8 +28,8 @@
 
                     </div>
 
-                    <div class="bg-gray-200 bg-opacity-25">
-                        <table class="table-fixed w-full">
+                    <div class="bg-gray-200 bg-opacity-25 overflow-x-auto">
+                        <table class="table-fixed w-full" style="min-width: 760px">
                             <colgroup>
                                 <col class="w-1/5">
                                 <col class="w-2/5">
@@ -111,21 +104,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="p-6 sm:px-8 bg-white border-b border-gray-200">
-
-                        <div class="md:flex md:justify-end">
-
-                            <div class="md:w-1/6 text-right">
-                                <inertia-link href="/invoices/create"
-                                              class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
-                                    Create invoice
-                                </inertia-link>
-                            </div>
-
-                        </div>
-                    </div>
-
 
                 </div>
             </div>
