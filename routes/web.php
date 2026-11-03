@@ -66,6 +66,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'show'])->name('campaigns.show');
         Route::put('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'update'])->name('campaigns.update');
         Route::post('/campaigns/{campaign}/send', [\App\Http\Controllers\CampaignController::class, 'send'])->name('campaigns.send');
+        Route::post('/campaigns/{campaign}/retry-failed', [\App\Http\Controllers\CampaignController::class, 'retryFailed'])->name('campaigns.retry-failed');
         Route::post('/campaigns/{campaign}/test-email', [\App\Http\Controllers\CampaignController::class, 'sendTest'])->name('campaigns.send-test');
         
         // CampaignGroups

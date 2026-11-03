@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Campaign\CreateCampaignInformation;
+use App\Actions\Campaign\RetryFailedCampaignDeliveries;
 use App\Actions\Campaign\SendTestCampaign;
 use App\Contracts\Campaign\SendsCampaignInformation;
 use App\Contracts\Campaign\UpdatesCampaignInformation;
@@ -115,6 +116,13 @@ class CampaignController extends Controller
     public function sendTest(Request $request, Campaign $campaign)
     {
         app(SendTestCampaign::class)->send($campaign, $request->all());
+
+        return back(303);
+    }
+
+    public function retryFailed(Request $request, Campaign $campaign)
+    {
+        app(RetryFailedCampaignDeliveries::class)->retry($campaign, $request->all());
 
         return back(303);
     }

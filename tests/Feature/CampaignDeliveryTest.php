@@ -128,6 +128,70 @@ class CampaignDeliveryTest extends TestCase
         $this->assertSame(1, $summary['failed']);
     }
 
+    public function test_retrying_failed_deliveries_requires_confirmation()
+    {
+        Queue::fake();
+        $this->actingAs(User::factory()->create());
+        list($campaign) = $this->campaign(['batch' => 1]);
+        $this->delivery($campaign, 'failed@example.test', 'failed');
+
+        $response = $this->from(route('campaigns.index'))
+            ->post(route('campaigns.retry-failed', $campaign));
+
+        $response->assertRedirect(route('campaigns.index'));
+        $response->assertSessionHasErrors(['confirm_retry'], null, 'retryFailedCampaignDeliveries');
+        $this->assertSame(1, $campaign->refresh()->batch);
+        $this->assertSame(1, CampaignDelivery::count());
+        Queue::assertNothingPushed();
+    }
+
+    public function test_retrying_creates_a_new_batch_for_only_latest_failed_deliveries()
+    {
+        Queue::fake();
+        $this->actingAs(User::factory()->create());
+        list($campaign) = $this->campaign(['batch' => 2]);
+        $this->delivery($campaign, 'old-failure@example.test', 'failed', 1);
+        $this->delivery($campaign, 'sent@example.test', 'sent', 2);
+        $this->delivery($campaign, 'queued@example.test', 'queued', 2);
+        $this->delivery($campaign, 'failed@example.test', 'failed', 2);
+
+        $this->post(route('campaigns.retry-failed', $campaign), [
+            'confirm_retry' => true,
+        ])->assertStatus(303);
+
+        $this->assertSame(3, $campaign->refresh()->batch);
+        $this->assertDatabaseHas('campaign_deliveries', [
+            'campaign_id' => $campaign->id,
+            'batch' => 3,
+            'delivery_status' => 'queued',
+            'recipient_email' => 'failed@example.test',
+        ]);
+        $this->assertDatabaseMissing('campaign_deliveries', [
+            'campaign_id' => $campaign->id,
+            'batch' => 3,
+            'recipient_email' => 'sent@example.test',
+        ]);
+        $this->assertSame(1, CampaignDelivery::where('batch', 3)->count());
+        Queue::assertPushed(SendCampaign::class, 1);
+    }
+
+    public function test_retry_does_nothing_when_latest_batch_has_no_failures()
+    {
+        Queue::fake();
+        $this->actingAs(User::factory()->create());
+        list($campaign) = $this->campaign(['batch' => 2]);
+        $this->delivery($campaign, 'old-failure@example.test', 'failed', 1);
+        $this->delivery($campaign, 'sent@example.test', 'sent', 2);
+
+        $this->post(route('campaigns.retry-failed', $campaign), [
+            'confirm_retry' => true,
+        ])->assertStatus(303);
+
+        $this->assertSame(2, $campaign->refresh()->batch);
+        $this->assertSame(2, CampaignDelivery::count());
+        Queue::assertNothingPushed();
+    }
+
     private function campaign(array $attributes = [])
     {
         $group = CampaignGroup::create(['title' => 'Campaign Group']);

@@ -86,6 +86,12 @@
                                             {{ campaign.batch > 0 ? 'Resend' : 'Send' }}
                                         </button>
 
+                                        <button v-if="campaign.delivery && campaign.delivery.failed"
+                                                class="cursor-pointer text-sm text-red-600 focus:outline-none ml-2"
+                                                @click="confirmFailedRetry(campaign)">
+                                            Retry failed
+                                        </button>
+
                                     </td>
                                 </tr>
                             </template>
@@ -147,6 +153,38 @@
             </template>
         </jet-dialog-modal>
 
+        <jet-dialog-modal :show="campaignBeingRetried" @close="campaignBeingRetried = null">
+            <template #title>Retry Failed Campaign Emails</template>
+
+            <template #content>
+                <div v-if="campaignBeingRetried">
+                    <p>
+                        Retry {{ campaignBeingRetried.delivery.failed }} failed email(s) from batch
+                        {{ campaignBeingRetried.delivery.batch }} as a new batch?
+                    </p>
+                    <p class="mt-3 text-sm text-gray-600">
+                        Successfully sent and queued recipients will not receive another email.
+                    </p>
+                    <label class="flex items-start mt-4 text-sm font-semibold text-red-900">
+                        <input type="checkbox" v-model="retryFailedForm.confirm_retry" class="mt-1 mr-2">
+                        <span>I understand and want to retry only the failed emails.</span>
+                    </label>
+                </div>
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click.native="campaignBeingRetried = null">
+                    Nevermind
+                </jet-secondary-button>
+
+                <jet-confirm-button class="ml-2" @click.native="retryFailed"
+                                    :class="{ 'opacity-25': retryFailedForm.processing || !retryFailedForm.confirm_retry }"
+                                    :disabled="retryFailedForm.processing || !retryFailedForm.confirm_retry">
+                    Retry failed
+                </jet-confirm-button>
+            </template>
+        </jet-dialog-modal>
+
     </app-layout>
 </template>
 
@@ -199,8 +237,16 @@
                     resetOnSuccess: true,
                 }),
 
+                retryFailedForm: this.$inertia.form({
+                    confirm_retry: false,
+                }, {
+                    bag: 'retryFailedCampaignDeliveries',
+                    resetOnSuccess: true,
+                }),
+
                 campaignId: null,
-                campaignBeingSent: null
+                campaignBeingSent: null,
+                campaignBeingRetried: null
             }
         },
         methods: {
@@ -216,6 +262,18 @@
                     preserveState: true,
                 }).then(() => {
                     this.campaignBeingSent = null
+                })
+            },
+            confirmFailedRetry(campaign) {
+                this.retryFailedForm.confirm_retry = false
+                this.campaignBeingRetried = campaign
+            },
+            retryFailed() {
+                this.retryFailedForm.post('/campaigns/' + this.campaignBeingRetried.id + '/retry-failed', {
+                    preserveScroll: true,
+                    preserveState: true,
+                }).then(() => {
+                    this.campaignBeingRetried = null
                 })
             },
             deliveryStatusClass(status) {
