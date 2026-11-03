@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateCampaignInformation">
+    <jet-form-section sticky-actions @submitted="updateCampaignInformation">
         <template #title>
             Campaign Information
         </template>
@@ -9,6 +9,11 @@
         </template>
 
         <template #form>
+
+            <div class="col-span-6 border-b border-gray-200 pb-2">
+                <h3 class="font-semibold text-gray-800">Delivery settings</h3>
+                <p class="text-sm text-gray-500 mt-1">Choose the audience and sender details used for this campaign.</p>
+            </div>
 
             <!-- Group -->
             <div class="col-span-6 sm:col-span-4">
@@ -22,7 +27,13 @@
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="email" value="Sender email" />
                 <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email" />
+                <p class="text-xs text-gray-500 mt-1">Shown as the sender or reply address on campaign emails.</p>
                 <jet-input-error :message="form.error('email')" class="mt-2" />
+            </div>
+
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Campaign content</h3>
+                <p class="text-sm text-gray-500 mt-1">Set the email subject, destination link, and message.</p>
             </div>
 
             <!-- Subject -->
@@ -36,6 +47,7 @@
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="url" value="URL"/>
                 <jet-input id="url" type="url" class="mt-1 block w-full" v-model="form.url"/>
+                <p class="text-xs text-gray-500 mt-1">Use the full address, including https://.</p>
                 <jet-input-error :message="form.error('url')" class="mt-2"/>
             </div>
 

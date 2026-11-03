@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateBookingInformation">
+    <jet-form-section sticky-actions @submitted="updateBookingInformation">
         <template #title>
             Booking Information
         </template>
@@ -10,32 +10,16 @@
 
         <template #form>
 
+            <div class="col-span-6 border-b border-gray-200 pb-2">
+                <h3 class="font-semibold text-gray-800">Event settings</h3>
+                <p class="text-sm text-gray-500 mt-1">Configure availability, contact details, date, and sender.</p>
+            </div>
+
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="email" value="Contact email"/>
                 <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
                 <jet-input-error :message="form.error('email')" class="mt-2"/>
-            </div>
-
-            <!-- Subscribed -->
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="subscribed" value="Member price"/>
-                <jet-input id="subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.subscribed"/>
-                <jet-input-error :message="form.error('subscribed')" class="mt-2"/>
-            </div>
-
-            <!-- None Subscribed -->
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="none_subscribed" value="Non-member price"/>
-                <jet-input id="none_subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.none_subscribed"/>
-                <jet-input-error :message="form.error('none_subscribed')" class="mt-2"/>
-            </div>
-
-            <!-- Additional -->
-            <div class="col-span-6 sm:col-span-4">
-                <jet-label for="additional_amount" value="Additional Amount"/>
-                <jet-input id="additional_amount" type="number" step="0.01" class="mt-1 block w-full" v-model="form.additional_amount"/>
-                <jet-input-error :message="form.error('additional_amount')" class="mt-2"/>
             </div>
 
             <!-- New Style -->
@@ -67,7 +51,35 @@
                 <jet-input-error :message="form.error('from')" class="mt-2"/>
             </div>
 
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Base pricing</h3>
+                <p class="text-sm text-gray-500 mt-1">Set the standard member, non-member, and additional charges.</p>
+            </div>
+
+            <div class="col-span-6 sm:col-span-4">
+                <jet-label for="subscribed" value="Member price"/>
+                <jet-input id="subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.subscribed"/>
+                <jet-input-error :message="form.error('subscribed')" class="mt-2"/>
+            </div>
+
+            <div class="col-span-6 sm:col-span-4">
+                <jet-label for="none_subscribed" value="Non-member price"/>
+                <jet-input id="none_subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.none_subscribed"/>
+                <jet-input-error :message="form.error('none_subscribed')" class="mt-2"/>
+            </div>
+
+            <div class="col-span-6 sm:col-span-4">
+                <jet-label for="additional_amount" value="Additional amount"/>
+                <jet-input id="additional_amount" type="number" step="0.01" class="mt-1 block w-full" v-model="form.additional_amount"/>
+                <jet-input-error :message="form.error('additional_amount')" class="mt-2"/>
+            </div>
+
             <!-- Message -->
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Content and venue</h3>
+                <p class="text-sm text-gray-500 mt-1">Edit the public booking message and venue information.</p>
+            </div>
+
             <div class="col-span-6">
                 <jet-label for="message" value="Message"/>
                 <v-md-editor v-model="form.message" class="mt-1" height="400px" left-toolbar="undo redo bold italic quote ul ol link"
@@ -84,13 +96,18 @@
             </div>
 
             <!-- Member Subs -->
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Delegate pricing</h3>
+                <p class="text-sm text-gray-500 mt-1">Set price tiers according to the number of delegates.</p>
+            </div>
+
             <div class="col-span-6">
-                <jet-label for="member" value="Member Price"/>
+                <jet-label for="member" value="Member price tiers"/>
 
                     <div class="flex flex-wrap items-center" v-for="(sub, index) in form.memberSubs" :key="index">
                         <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                         <div class="w-6/12 pr-3">
-                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
+                            <jet-input :id="'member_price_' + index" type="number" step="0.01" class="mt-1 block w-full" v-model="sub.sub"/>
                         </div>
                         <div class="w-3/12 flex flex-wrap">
                             <span class="text-green-500 cursor-pointer mr-3" @click="addMemberSub" >Add</span>
@@ -101,12 +118,12 @@
 
             <!-- Subs -->
             <div class="col-span-6">
-                <jet-label for="subs" value="None Member Price"/>
+                <jet-label for="subs" value="Non-member price tiers"/>
 
                     <div class="flex flex-wrap items-center" v-for="(sub, index) in form.subs" :key="index">
                         <p class="w-3/12 pr-3">Up to {{ (index + 1) }} Delegates</p>
                         <div class="w-6/12 pr-3">
-                            <jet-input id="from" type="text" class="mt-1 block w-full" v-model="sub.sub"/>
+                            <jet-input :id="'non_member_price_' + index" type="number" step="0.01" class="mt-1 block w-full" v-model="sub.sub"/>
                         </div>
                         <div class="w-3/12 flex flex-wrap">
                             <span class="text-green-500 cursor-pointer mr-3" @click="addSub" >Add</span>

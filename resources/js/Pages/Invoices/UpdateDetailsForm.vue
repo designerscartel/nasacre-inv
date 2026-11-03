@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateInvoiceInformation">
+    <jet-form-section sticky-actions @submitted="updateInvoiceInformation">
         <template #title>
             Invoice Information
         </template>
@@ -10,10 +10,16 @@
 
         <template #form>
 
+            <div class="col-span-6 border-b border-gray-200 pb-2">
+                <h3 class="font-semibold text-gray-800">Invoice settings</h3>
+                <p class="text-sm text-gray-500 mt-1">Configure the sender, subscription amount, and invoice date.</p>
+            </div>
+
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="email" value="Sender email"/>
                 <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
+                <p class="text-xs text-gray-500 mt-1">Used as the sender or reply address for invoice emails.</p>
                 <jet-input-error :message="form.error('email')" class="mt-2"/>
             </div>
 
@@ -39,6 +45,11 @@
             </div>
 
             <!-- Message -->
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Invoice message</h3>
+                <p class="text-sm text-gray-500 mt-1">Edit the message included with the invoice.</p>
+            </div>
+
             <div class="col-span-6">
                 <jet-label for="message" value="Message"/>
                 <v-md-editor v-model="form.message" class="mt-1" height="400px"

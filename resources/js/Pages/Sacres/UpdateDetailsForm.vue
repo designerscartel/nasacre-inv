@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateSacreInformation">
+    <jet-form-section sticky-actions @submitted="updateSacreInformation">
         <template #title>
             SACRE Information
         </template>
@@ -9,6 +9,11 @@
         </template>
 
         <template #form>
+
+            <div class="col-span-6 border-b border-gray-200 pb-2">
+                <h3 class="font-semibold text-gray-800">Identity and region</h3>
+                <p class="text-sm text-gray-500 mt-1">Manage the SACRE name, region, codes, and address.</p>
+            </div>
 
 
             <!-- Name -->
@@ -47,6 +52,11 @@
             </div>
 
             <!-- Member -->
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Membership and services</h3>
+                <p class="text-sm text-gray-500 mt-1">Record current membership and enabled services.</p>
+            </div>
+
             <div class="col-span-6 sm:col-span-4">
                 <jet-toggle type="toggle" class="mt-1 block w-full" v-model="form.member" :label="'Member'" :forid="'member'"/>
                 <jet-input-error :message="form.error('member')" class="mt-2" />
@@ -66,6 +76,11 @@
 
 
             <!-- PO -->
+            <div class="col-span-6 border-b border-gray-200 pb-2 mt-2">
+                <h3 class="font-semibold text-gray-800">Finance details</h3>
+                <p class="text-sm text-gray-500 mt-1">Store purchase order and finance references used for invoicing.</p>
+            </div>
+
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="po" value="Purchase order reference" />
                 <jet-input id="po" type="text" class="mt-1 block w-full" v-model="form.po" />
