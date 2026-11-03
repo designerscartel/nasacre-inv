@@ -1,9 +1,16 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Edit SACRE
-            </h2>
+            <edit-page-header
+                :title="sacre.data.title"
+                description="Manage SACRE details, contacts, files, and shared resources."
+                back-href="/dashboard"
+                back-label="Back to SACRE directory">
+                <template #status>
+                    <span v-if="sacre.data.member" class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Member</span>
+                    <span v-else class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">Non-member</span>
+                </template>
+            </edit-page-header>
         </template>
 
         <div>
@@ -34,6 +41,7 @@
 
 <script>
     import AppLayout from './../../Layouts/AppLayout'
+    import EditPageHeader from './../../Components/EditPageHeader'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
     import ContactManager from "./ContactManager";
@@ -48,6 +56,7 @@
         ],
         components: {
             UpdateDetailsForm,
+            EditPageHeader,
             AppLayout,
             JetSectionBorder,
             ContactManager,

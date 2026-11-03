@@ -1,9 +1,11 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Edit Campaign
-            </h2>
+            <edit-page-header
+                :title="campaign.data.subject"
+                :description="'Edit campaign for ' + campaign.data.group.title + ' and send a test before delivery.'"
+                back-href="/campaigns"
+                back-label="Back to campaigns"/>
         </template>
 
         <div>
@@ -28,6 +30,7 @@
 
 <script>
     import AppLayout from './../../Layouts/AppLayout'
+    import EditPageHeader from './../../Components/EditPageHeader'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
     import SendTestCampaignForm from "./SendTestCampaignForm";
@@ -40,6 +43,7 @@
         components: {
             UpdateDetailsForm,
             SendTestCampaignForm,
+            EditPageHeader,
             AppLayout,
             JetSectionBorder,
         },

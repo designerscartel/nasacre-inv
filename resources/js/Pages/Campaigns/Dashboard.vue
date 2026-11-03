@@ -13,6 +13,10 @@
                         <div class="flex flex-wrap items-center justify-end gap-3">
                             <div class="text-right">
 
+                                <button class="text-sm mr-4 text-gray-600 focus:outline-none" @click="refreshStatuses">
+                                    Refresh status
+                                </button>
+
                                 <inertia-link href="/groups"
                                               class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150 mr-2">
                                     Campaign Groups
@@ -268,7 +272,8 @@
                 campaignId: null,
                 campaignBeingSent: null,
                 campaignBeingRetried: null,
-                batchBeingRetried: null
+                batchBeingRetried: null,
+                statusRefreshTimer: null
             }
         },
         methods: {
@@ -307,6 +312,13 @@
             deliveryTimestamp(recipient) {
                 return recipient.sent_at || recipient.failed_at || recipient.queued_at
             },
+            refreshStatuses() {
+                this.$inertia.reload({
+                    only: ['campaigns'],
+                    preserveScroll: true,
+                    preserveState: true,
+                })
+            },
             deliveryStatusClass(status) {
                 return {
                     'text-green-700': status === 'sent',
@@ -320,6 +332,19 @@
                 return this.campaignBeingSent
                     && (this.campaignBeingSent.batch === 0 || this.sendCampaignForm.confirm_resend)
             },
+            hasQueuedCampaigns() {
+                return this.campaigns.data.some(campaign => campaign.delivery && campaign.delivery.queued > 0)
+            },
+        },
+        mounted() {
+            this.statusRefreshTimer = window.setInterval(() => {
+                if (this.hasQueuedCampaigns) {
+                    this.refreshStatuses()
+                }
+            }, 10000)
+        },
+        beforeDestroy() {
+            window.clearInterval(this.statusRefreshTimer)
         }
     }
 </script>

@@ -1,9 +1,11 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Edit Invoice
-            </h2>
+            <edit-page-header
+                :title="'Edit invoice ' + invoice.data.year"
+                description="Update invoice content and send a safe test before delivery."
+                back-href="/invoices"
+                back-label="Back to invoices"/>
         </template>
 
         <div>
@@ -29,6 +31,7 @@
 
 <script>
     import AppLayout from './../../Layouts/AppLayout'
+    import EditPageHeader from './../../Components/EditPageHeader'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
     import SendTestInvoiceForm from "./SendTestInvoiceForm";
@@ -41,6 +44,7 @@
         components: {
             UpdateDetailsForm,
             SendTestInvoiceForm,
+            EditPageHeader,
             AppLayout,
             JetSectionBorder,
         },

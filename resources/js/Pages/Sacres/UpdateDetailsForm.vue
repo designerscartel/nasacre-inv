@@ -1,11 +1,11 @@
 <template>
     <jet-form-section @submitted="updateSacreInformation">
         <template #title>
-            Sacre Information
+            SACRE Information
         </template>
 
         <template #description>
-            Update the Sacre's information and contacts.
+            Update the SACRE's identity, region, membership, and finance details.
         </template>
 
         <template #form>
@@ -13,14 +13,14 @@
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="title" value="Title" />
+                <jet-label for="title" value="SACRE name" />
                 <jet-input id="title" type="text" class="mt-1 block w-full" v-model="form.title" autocomplete="title" />
                 <jet-input-error :message="form.error('title')" class="mt-2" />
             </div>
 
             <!-- Region -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="region_id" value="region" />
+                <jet-label for="region_id" value="Region" />
                 <jet-select id="region_id" type="select" class="mt-1 block w-full" v-model="form.region_id" :options="regions" />
                 <jet-input-error :message="form.error('region_id')" class="mt-2" />
             </div>
@@ -67,14 +67,14 @@
 
             <!-- PO -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="po" value="PO" />
+                <jet-label for="po" value="Purchase order reference" />
                 <jet-input id="po" type="text" class="mt-1 block w-full" v-model="form.po" />
                 <jet-input-error :message="form.error('po')" class="mt-2" />
             </div>
 
             <!-- Finance -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="finance" value="Finance" />
+                <jet-label for="finance" value="Finance reference" />
                 <jet-input id="finance" type="text" class="mt-1 block w-full" v-model="form.finance" />
                 <jet-input-error :message="form.error('finance')" class="mt-2" />
             </div>
@@ -88,7 +88,7 @@
             </jet-action-message>
 
             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                Save changes
             </jet-button>
         </template>
     </jet-form-section>

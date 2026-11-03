@@ -1,9 +1,16 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Edit Booking
-            </h2>
+            <edit-page-header
+                :title="'Edit booking ' + booking.data.year"
+                description="Update booking availability, pricing, venue, and attendee information."
+                back-href="/bookings"
+                back-label="Back to bookings">
+                <template #status>
+                    <span v-if="booking.data.active" class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Accepting bookings</span>
+                    <span v-else class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">Closed</span>
+                </template>
+            </edit-page-header>
         </template>
 
         <div>
@@ -18,6 +25,7 @@
 
 <script>
     import AppLayout from './../../Layouts/AppLayout'
+    import EditPageHeader from './../../Components/EditPageHeader'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
 
@@ -27,6 +35,7 @@
         ],
         components: {
             UpdateDetailsForm,
+            EditPageHeader,
             AppLayout,
             JetSectionBorder,
         },

@@ -1,40 +1,40 @@
 <template>
-    <jet-form-section @submitted="updateSacreInformation">
+    <jet-form-section @submitted="updateBookingInformation">
         <template #title>
             Booking Information
         </template>
 
         <template #description>
-            Update the Booking's information.
+            Update booking availability, pricing, venue, and attendee content.
         </template>
 
         <template #form>
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="email" value="Email"/>
-                <jet-input id="email" type="text" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
+                <jet-label for="email" value="Contact email"/>
+                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
                 <jet-input-error :message="form.error('email')" class="mt-2"/>
             </div>
 
             <!-- Subscribed -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="subscribed" value="Subscribed"/>
-                <jet-input id="subscribed" type="text" class="mt-1 block w-full" v-model="form.subscribed"/>
+                <jet-label for="subscribed" value="Member price"/>
+                <jet-input id="subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.subscribed"/>
                 <jet-input-error :message="form.error('subscribed')" class="mt-2"/>
             </div>
 
             <!-- None Subscribed -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="none_subscribed" value="None Subscribed"/>
-                <jet-input id="none_subscribed" type="text" class="mt-1 block w-full" v-model="form.none_subscribed"/>
+                <jet-label for="none_subscribed" value="Non-member price"/>
+                <jet-input id="none_subscribed" type="number" step="0.01" class="mt-1 block w-full" v-model="form.none_subscribed"/>
                 <jet-input-error :message="form.error('none_subscribed')" class="mt-2"/>
             </div>
 
             <!-- Additional -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="additional_amount" value="Additional Amount"/>
-                <jet-input id="additional_amount" type="text" class="mt-1 block w-full" v-model="form.additional_amount"/>
+                <jet-input id="additional_amount" type="number" step="0.01" class="mt-1 block w-full" v-model="form.additional_amount"/>
                 <jet-input-error :message="form.error('additional_amount')" class="mt-2"/>
             </div>
 
@@ -62,7 +62,7 @@
 
             <!-- From -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="from" value="From"/>
+                <jet-label for="from" value="Sender name"/>
                 <jet-input id="from" type="text" class="mt-1 block w-full" v-model="form.from"/>
                 <jet-input-error :message="form.error('from')" class="mt-2"/>
             </div>
@@ -123,7 +123,7 @@
             </jet-action-message>
 
             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                Save changes
             </jet-button>
         </template>
     </jet-form-section>
@@ -183,7 +183,7 @@
         },
 
         methods: {
-            updateSacreInformation() {
+            updateBookingInformation() {
                 this.form.put('/bookings/' + this.booking.id, {
                     preserveScroll: true
                 });

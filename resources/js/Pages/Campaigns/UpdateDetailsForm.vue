@@ -1,11 +1,11 @@
 <template>
-    <jet-form-section @submitted="updateSacreInformation">
+    <jet-form-section @submitted="updateCampaignInformation">
         <template #title>
             Campaign Information
         </template>
 
         <template #description>
-            Update the Campaign's information.
+            Update the campaign sender, audience, subject, and content.
         </template>
 
         <template #form>
@@ -20,8 +20,8 @@
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="text" class="mt-1 block w-full" v-model="form.email" autocomplete="email" />
+                <jet-label for="email" value="Sender email" />
+                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email" />
                 <jet-input-error :message="form.error('email')" class="mt-2" />
             </div>
 
@@ -35,7 +35,7 @@
             <!-- Url -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="url" value="URL"/>
-                <jet-input id="url" type="text" class="mt-1 block w-full" v-model="form.url"/>
+                <jet-input id="url" type="url" class="mt-1 block w-full" v-model="form.url"/>
                 <jet-input-error :message="form.error('url')" class="mt-2"/>
             </div>
 
@@ -56,7 +56,7 @@
             </jet-action-message>
 
             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                Save changes
             </jet-button>
         </template>
     </jet-form-section>
@@ -108,7 +108,7 @@
         },
 
         methods: {
-            updateSacreInformation() {
+            updateCampaignInformation() {
                 this.form.put('/campaigns/' + this.campaign.id, {
                     preserveScroll: true
                 });

@@ -1,26 +1,26 @@
 <template>
-    <jet-form-section @submitted="updateSacreInformation">
+    <jet-form-section @submitted="updateInvoiceInformation">
         <template #title>
             Invoice Information
         </template>
 
         <template #description>
-            Update the Invoice's information.
+            Update the invoice sender, subscription amount, date, and message.
         </template>
 
         <template #form>
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="email" value="Email"/>
-                <jet-input id="email" type="text" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
+                <jet-label for="email" value="Sender email"/>
+                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" autocomplete="email"/>
                 <jet-input-error :message="form.error('email')" class="mt-2"/>
             </div>
 
             <!-- Subs -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="subs" value="Subs"/>
-                <jet-input id="subs" type="text" class="mt-1 block w-full" v-model="form.subs"/>
+                <jet-label for="subs" value="Subscription amount"/>
+                <jet-input id="subs" type="number" step="0.01" class="mt-1 block w-full" v-model="form.subs"/>
                 <jet-input-error :message="form.error('subs')" class="mt-2"/>
             </div>
 
@@ -33,7 +33,7 @@
 
             <!-- From -->
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="from" value="From"/>
+                <jet-label for="from" value="Sender name"/>
                 <jet-input id="from" type="text" class="mt-1 block w-full" v-model="form.from"/>
                 <jet-input-error :message="form.error('from')" class="mt-2"/>
             </div>
@@ -55,7 +55,7 @@
             </jet-action-message>
 
             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                Save changes
             </jet-button>
         </template>
     </jet-form-section>
@@ -108,7 +108,7 @@
         },
 
         methods: {
-            updateSacreInformation() {
+            updateInvoiceInformation() {
                 this.form.put('/invoices/' + this.invoice.id, {
                     preserveScroll: true
                 });
