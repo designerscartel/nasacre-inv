@@ -39,6 +39,8 @@ The committed DDEV configuration provides PHP 7.4, Composer 2.2 LTS, Node.js 16,
 
 The DDEV web environment overrides database, mail, queue, URL, and PDF binary settings without changing the ignored local `.env`. To create an administrator, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env`, run `ddev artisan db:seed`, then remove the credentials.
 
+The invoice PDF view defaults to `pdfs.2026-invoice`. Set `INVOICE_PDF_TEMPLATE` to another Blade view name when a different invoice template is required.
+
 ## Fresh Installation
 
 1. Copy the environment template:
