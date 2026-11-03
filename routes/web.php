@@ -93,6 +93,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/invoices/{invoice}/list', [\App\Http\Controllers\InvoiceController::class, 'list'])->name('invoices.list');
         Route::get('/invoices/{invoice}/send-preview', [\App\Http\Controllers\InvoiceController::class, 'sendPreview'])->name('invoices.send-preview');
         Route::post('/invoices/{invoice}/send', [\App\Http\Controllers\InvoiceController::class, 'send'])->name('invoices.send');
+        Route::post('/invoices/{invoice}/test-email', [\App\Http\Controllers\InvoiceController::class, 'sendTest'])->name('invoices.send-test');
         Route::get('/invoices/{invoice}/retry-failed-preview', [\App\Http\Controllers\InvoiceController::class, 'retryFailedPreview'])->name('invoices.retry-failed-preview');
         Route::post('/invoices/{invoice}/retry-failed', [\App\Http\Controllers\InvoiceController::class, 'retryFailed'])->name('invoices.retry-failed');
 

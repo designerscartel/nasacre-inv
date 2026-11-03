@@ -38,19 +38,22 @@ class InvoiceForQueuing extends Mailable
      */
     protected $pdf;
 
+    protected $test;
+
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Invoice $invoice, Sacre $sacre, SacreContact $contact, $pdf)
+    public function __construct(Invoice $invoice, Sacre $sacre, SacreContact $contact, $pdf, $test = false)
     {
         //
         $this->invoice = $invoice;
         $this->sacre = $sacre;
         $this->contact = $contact;
         $this->pdf = $pdf;
+        $this->test = $test;
     }
 
     /**
@@ -61,7 +64,7 @@ class InvoiceForQueuing extends Mailable
     public function build()
     {
         return $this->from($this->invoice->email, $this->invoice->from)
-            ->subject('NASACRE Membership Invoice ' . $this->sacre->title . ' ' . $this->invoice->year)
+            ->subject(($this->test ? '[TEST] ' : '').'NASACRE Membership Invoice '.$this->sacre->title.' '.$this->invoice->year)
             ->with([
                 'invoice' => $this->invoice,
                 'sacre' => $this->sacre,

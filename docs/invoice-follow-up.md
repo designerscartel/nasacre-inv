@@ -23,7 +23,6 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ### PDF and email
 
-- Add an invoice preview or test-email action before sending a full batch.
 - Confirm whether edited invoices should be emailed again from the SACRE invoice screen.
 
 ### Testing and maintenance
@@ -32,4 +31,4 @@ The invoice pricing work completed on 30 October 2026 includes:
 
 ## Suggested next step
 
-Add an invoice preview or test-email action before sending a full batch.
+Confirm whether edited invoices should be emailed again from the SACRE invoice screen.

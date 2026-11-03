@@ -14,6 +14,12 @@
 
                 <jet-section-border />
 
+                <send-test-invoice-form
+                        :invoice="invoice.data"
+                        :sacres="sacres"/>
+
+                <jet-section-border />
+
             </div>
         </div>
 
@@ -25,13 +31,16 @@
     import AppLayout from './../../Layouts/AppLayout'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
+    import SendTestInvoiceForm from "./SendTestInvoiceForm";
 
     export default {
         props: [
             'invoice',
+            'sacres',
         ],
         components: {
             UpdateDetailsForm,
+            SendTestInvoiceForm,
             AppLayout,
             JetSectionBorder,
         },
