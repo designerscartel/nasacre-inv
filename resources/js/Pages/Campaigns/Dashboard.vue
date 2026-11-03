@@ -41,6 +41,7 @@
                             <thead class="text-left">
                             <tr>
                                 <th class="px-8 py-2">Campaign</th>
+                                <th class="px-4 py-2">Latest Delivery</th>
                                 <th class="px-4 py-2">Actions</th>
                             </tr>
                             </thead>
@@ -49,6 +50,32 @@
                                 <tr v-if="campaigns" v-for="campaign in campaigns.data" :key="campaign.id">
                                     <td class="border px-8 py-2">{{ campaign.subject }}</td>
                                     <td class="border px-4 py-2">
+                                        <div v-if="campaign.delivery">
+                                            <div class="text-sm font-semibold">Batch {{ campaign.delivery.batch }}</div>
+                                            <div class="text-xs mt-1">
+                                                <span class="text-green-700 mr-3">{{ campaign.delivery.sent }} sent</span>
+                                                <span class="text-yellow-700 mr-3">{{ campaign.delivery.queued }} queued</span>
+                                                <span class="text-red-700">{{ campaign.delivery.failed }} failed</span>
+                                            </div>
+                                            <details v-if="campaign.delivery.queued || campaign.delivery.failed" class="mt-2 text-xs">
+                                                <summary class="cursor-pointer text-gray-700">View delivery details</summary>
+                                                <ul class="mt-2 space-y-2">
+                                                    <li v-for="recipient in campaign.delivery.recipients" :key="recipient.id">
+                                                        <span :class="deliveryStatusClass(recipient.status)" class="font-semibold uppercase">
+                                                            {{ recipient.status }}
+                                                        </span>
+                                                        — {{ recipient.name || recipient.email }}
+                                                        <span v-if="recipient.email"> ({{ recipient.email }})</span>
+                                                        <div v-if="recipient.failure_message" class="text-red-700 mt-1">
+                                                            {{ recipient.failure_message }}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                        </div>
+                                        <span v-else class="text-sm text-gray-500">Not sent</span>
+                                    </td>
+                                    <td class="border px-4 py-2">
                                         <inertia-link class="text-sm mr-2" :href="'/campaigns/'+ campaign.id">
                                             Edit
                                         </inertia-link>
@@ -56,14 +83,14 @@
                                         <!-- Send Campaign -->
                                         <button class="cursor-pointer text-sm text-green-500 focus:outline-none"
                                                 @click="confirmCampaignSend(campaign)">
-                                            Send
+                                            {{ campaign.batch > 0 ? 'Resend' : 'Send' }}
                                         </button>
 
                                     </td>
                                 </tr>
                             </template>
                             <tr v-else>
-                                <td colspan="2" class="border px-8 py-2">No Campaigns</td>
+                                <td colspan="3" class="border px-8 py-2">No Campaigns</td>
                             </tr>
 
                             </tbody>
@@ -92,11 +119,19 @@
         <!-- Send Campaign Modal -->
         <jet-dialog-modal :show="campaignBeingSent" @close="campaignBeingSent = null">
             <template #title>
-                Send Campaign
+                {{ campaignBeingSent && campaignBeingSent.batch > 0 ? 'Resend Campaign' : 'Send Campaign' }}
             </template>
 
             <template #content>
-                Are you sure you would like to send this campaign?
+                <div v-if="campaignBeingSent">
+                    <p>
+                        Send this campaign to its current group as batch {{ campaignBeingSent.batch + 1 }}?
+                    </p>
+                    <label v-if="campaignBeingSent.batch > 0" class="flex items-start mt-4 text-sm font-semibold text-red-900">
+                        <input type="checkbox" v-model="sendCampaignForm.confirm_resend" class="mt-1 mr-2">
+                        <span>I understand this campaign has already been sent and want to resend it.</span>
+                    </label>
+                </div>
             </template>
 
             <template #footer>
@@ -105,9 +140,9 @@
                 </jet-secondary-button>
 
                 <jet-confirm-button class="ml-2" @click.native="sendCampaign"
-                                   :class="{ 'opacity-25': sendCampaignForm.processing }"
-                                   :disabled="sendCampaignForm.processing">
-                    Send
+                                   :class="{ 'opacity-25': sendCampaignForm.processing || !canSendCampaign }"
+                                   :disabled="sendCampaignForm.processing || !canSendCampaign">
+                    {{ campaignBeingSent && campaignBeingSent.batch > 0 ? 'Resend' : 'Send' }}
                 </jet-confirm-button>
             </template>
         </jet-dialog-modal>
@@ -158,6 +193,7 @@
 
                 sendCampaignForm: this.$inertia.form({
                     send: '',
+                    confirm_resend: false,
                 }, {
                     bag: 'sendCampaignInformation',
                     resetOnSuccess: true,
@@ -170,6 +206,7 @@
         methods: {
             confirmCampaignSend(campaign) {
                 this.sendCampaignForm.send = true
+                this.sendCampaignForm.confirm_resend = false
                 this.campaignBeingSent = campaign
             },
 
@@ -180,6 +217,19 @@
                 }).then(() => {
                     this.campaignBeingSent = null
                 })
+            },
+            deliveryStatusClass(status) {
+                return {
+                    'text-green-700': status === 'sent',
+                    'text-yellow-700': status === 'queued',
+                    'text-red-700': status === 'failed',
+                }
+            },
+        },
+        computed: {
+            canSendCampaign() {
+                return this.campaignBeingSent
+                    && (this.campaignBeingSent.batch === 0 || this.sendCampaignForm.confirm_resend)
             },
         }
     }

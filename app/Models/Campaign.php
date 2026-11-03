@@ -20,7 +20,12 @@ class Campaign extends Model
         'email',
         'subject' ,
         'url',
-        'message'
+        'message',
+        'batch',
+    ];
+
+    protected $casts = [
+        'batch' => 'integer',
     ];
 
     /**
@@ -29,6 +34,38 @@ class Campaign extends Model
     public function group()
     {
         return $this->belongsTo(CampaignGroup::class, 'campaign_group_id');
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(CampaignDelivery::class);
+    }
+
+    public function latestDeliverySummary()
+    {
+        $latestBatch = max((int) $this->batch, (int) $this->deliveries->max('batch'));
+        $deliveries = $this->deliveries->where('batch', $latestBatch)->values();
+
+        if ($deliveries->isEmpty()) {
+            return null;
+        }
+
+        return [
+            'batch' => $latestBatch,
+            'total' => $deliveries->count(),
+            'queued' => $deliveries->where('delivery_status', 'queued')->count(),
+            'sent' => $deliveries->where('delivery_status', 'sent')->count(),
+            'failed' => $deliveries->where('delivery_status', 'failed')->count(),
+            'recipients' => $deliveries->map(function ($delivery) {
+                return [
+                    'id' => $delivery->id,
+                    'name' => $delivery->recipient_name,
+                    'email' => $delivery->recipient_email,
+                    'status' => $delivery->delivery_status,
+                    'failure_message' => $delivery->failure_message,
+                ];
+            })->values(),
+        ];
     }
 
     /**

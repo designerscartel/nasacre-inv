@@ -15,6 +15,10 @@
 
                 <jet-section-border />
 
+                <send-test-campaign-form :campaign="campaign.data"/>
+
+                <jet-section-border />
+
             </div>
         </div>
 
@@ -26,6 +30,7 @@
     import AppLayout from './../../Layouts/AppLayout'
     import JetSectionBorder from './../../Jetstream/SectionBorder'
     import UpdateDetailsForm from "./UpdateDetailsForm";
+    import SendTestCampaignForm from "./SendTestCampaignForm";
 
     export default {
         props: [
@@ -34,6 +39,7 @@
         ],
         components: {
             UpdateDetailsForm,
+            SendTestCampaignForm,
             AppLayout,
             JetSectionBorder,
         },

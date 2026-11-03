@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Campaign\CreateCampaignInformation;
+use App\Actions\Campaign\SendTestCampaign;
 use App\Contracts\Campaign\SendsCampaignInformation;
 use App\Contracts\Campaign\UpdatesCampaignInformation;
 use App\Models\Campaign;
@@ -23,7 +24,7 @@ class CampaignController extends Controller
     {
         //
         return Inertia::render('Campaigns/Dashboard', [
-            'campaigns' => CampaignResource::collection($campaign::all())
+            'campaigns' => CampaignResource::collection($campaign::with('deliveries')->get())
         ]);
     }
 
@@ -107,6 +108,13 @@ class CampaignController extends Controller
     {
         //
         app(SendsCampaignInformation::class)->send($campaign, $request->all());
+
+        return back(303);
+    }
+
+    public function sendTest(Request $request, Campaign $campaign)
+    {
+        app(SendTestCampaign::class)->send($campaign, $request->all());
 
         return back(303);
     }

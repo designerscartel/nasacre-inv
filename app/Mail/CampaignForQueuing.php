@@ -17,17 +17,20 @@ class CampaignForQueuing extends Mailable
 
     protected $email;
 
+    protected $test;
+
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Campaign $campaign, CampaignEmail $email)
+    public function __construct(Campaign $campaign, CampaignEmail $email, $test = false)
     {
         //
         $this->campaign = $campaign;
         $this->email = $email;
+        $this->test = $test;
     }
 
     /**
@@ -38,7 +41,7 @@ class CampaignForQueuing extends Mailable
     public function build()
     {
         return $this->from('admin@nasacre.org.uk', 'NASACRE')
-            ->subject($this->campaign->subject)
+            ->subject(($this->test ? '[TEST] ' : '').$this->campaign->subject)
             ->with([
                 'campaign' => $this->campaign,
                 'email' => $this->email
