@@ -51,6 +51,9 @@
         </template>
 
         <template #actions>
+            <span v-if="hasUnsavedChanges" class="text-sm font-medium text-yellow-700 mr-3">
+                Unsaved changes
+            </span>
             <jet-action-message :on="form.recentlySuccessful" class="mr-3">
                 Saved.
             </jet-action-message>
@@ -72,8 +75,10 @@
     import JetLabel from './../../Jetstream/Label'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import WarnsUnsavedChanges from './../../Mixins/WarnsUnsavedChanges'
 
     export default {
+        mixins: [WarnsUnsavedChanges],
         components: {
             JetActionMessage,
             JetButton,
@@ -109,9 +114,9 @@
 
         methods: {
             updateCampaignInformation() {
-                this.form.put('/campaigns/' + this.campaign.id, {
+                this.submitWithoutUnsavedWarning(() => this.form.put('/campaigns/' + this.campaign.id, {
                     preserveScroll: true
-                });
+                }));
             },
         },
     }

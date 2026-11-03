@@ -83,6 +83,9 @@
         </template>
 
         <template #actions>
+            <span v-if="hasUnsavedChanges" class="text-sm font-medium text-yellow-700 mr-3">
+                Unsaved changes
+            </span>
             <jet-action-message :on="form.recentlySuccessful" class="mr-3">
                 Saved.
             </jet-action-message>
@@ -105,8 +108,10 @@
     import JetToggle from './../../Jetstream/Toggle'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import WarnsUnsavedChanges from './../../Mixins/WarnsUnsavedChanges'
 
     export default {
+        mixins: [WarnsUnsavedChanges],
         components: {
             JetActionMessage,
             JetButton,
@@ -145,9 +150,9 @@
 
         methods: {
             updateSacreInformation() {
-                this.form.put('/sacres/' + this.sacre.id, {
+                this.submitWithoutUnsavedWarning(() => this.form.put('/sacres/' + this.sacre.id, {
                     preserveScroll: true
-                });
+                }));
             },
         },
     }
