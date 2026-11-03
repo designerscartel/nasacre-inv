@@ -38,6 +38,8 @@ class SacreInvoice extends Model
         'queued_at' => 'datetime',
         'sent_at' => 'datetime',
         'failed_at' => 'datetime',
+        'sacre_id' => 'integer',
+        'invoice_id' => 'integer',
         'batch' => 'integer',
         'virtual_training' => 'boolean',
         'total_override' => 'decimal:2',

@@ -28,6 +28,7 @@ class Invoice extends Model
     protected $casts = [
         'date' => 'datetime',
         'subs' => 'decimal:2',
+        'year' => 'integer',
         'batch' => 'integer',
     ];
 
