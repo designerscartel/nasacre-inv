@@ -43,6 +43,36 @@ class CampaignDeliveryTest extends TestCase
         Queue::assertPushed(SendCampaign::class, 2);
     }
 
+    public function test_campaign_send_preview_lists_valid_and_skipped_recipients()
+    {
+        $this->actingAs(User::factory()->create());
+        list($campaign, $group) = $this->campaign(['batch' => 2]);
+        $this->recipient($group, 'Valid Recipient', 'valid@example.test');
+        $this->recipient($group, 'Invalid Recipient', 'invalid-email');
+
+        $response = $this->getJson(route('campaigns.send-preview', $campaign));
+
+        $response->assertOk()->assertJson([
+            'batch' => 3,
+            'has_been_sent' => true,
+            'group' => [
+                'id' => $group->id,
+                'title' => 'Campaign Group',
+            ],
+            'recipient_count' => 1,
+            'skipped_count' => 1,
+            'recipients' => [[
+                'name' => 'Valid Recipient',
+                'email' => 'valid@example.test',
+            ]],
+            'skipped' => [[
+                'name' => 'Invalid Recipient',
+                'email' => 'invalid-email',
+                'reason' => 'The email address is invalid.',
+            ]],
+        ]);
+    }
+
     public function test_resending_requires_confirmation_and_creates_a_new_batch()
     {
         Queue::fake();

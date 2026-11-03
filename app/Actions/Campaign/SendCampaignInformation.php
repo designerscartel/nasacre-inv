@@ -5,6 +5,7 @@ namespace App\Actions\Campaign;
 use App\Contracts\Campaign\SendsCampaignInformation;
 use App\Jobs\SendCampaign;
 use App\Models\CampaignDelivery;
+use App\Support\CampaignSendPlan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,9 +26,8 @@ class SendCampaignInformation implements SendsCampaignInformation
             'confirm_resend' => ['nullable'],
         ])->validateWithBag('sendCampaignInformation');
 
-        $recipients = $campaign->group->emails->filter(function ($email) {
-            return filter_var($email->email, FILTER_VALIDATE_EMAIL);
-        })->values();
+        $recipients = (new CampaignSendPlan())
+            ->forCampaign($campaign)['recipients'];
 
         if ($recipients->isEmpty()) {
             return;

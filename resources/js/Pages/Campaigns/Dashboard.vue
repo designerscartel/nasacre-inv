@@ -153,11 +153,56 @@
             </template>
 
             <template #content>
-                <div v-if="campaignBeingSent">
-                    <p>
-                        Send this campaign to its current group as batch {{ campaignBeingSent.batch + 1 }}?
-                    </p>
-                    <label v-if="campaignBeingSent.batch > 0" class="flex items-start mt-4 text-sm font-semibold text-red-900">
+                <div v-if="previewLoading" class="text-gray-600">Loading send preview...</div>
+
+                <div v-else-if="previewError" class="text-red-600">{{ previewError }}</div>
+
+                <div v-else-if="sendPreview">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Group</div>
+                            <div class="font-semibold break-words">{{ sendPreview.group.title }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Batch</div>
+                            <div class="text-lg font-semibold">{{ sendPreview.batch }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Recipients</div>
+                            <div class="text-lg font-semibold text-green-700">{{ sendPreview.recipient_count }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs uppercase text-gray-500">Skipped</div>
+                            <div class="text-lg font-semibold text-yellow-700">{{ sendPreview.skipped_count }}</div>
+                        </div>
+                    </div>
+
+                    <div v-if="sendPreview.recipients.length" class="mb-4">
+                        <div class="font-semibold mb-2">Recipients</div>
+                        <ul class="border rounded divide-y max-h-64 overflow-y-auto">
+                            <li v-for="recipient in sendPreview.recipients" :key="recipient.id" class="px-3 py-2">
+                                <div class="font-medium">{{ recipient.name || recipient.email }}</div>
+                                <div v-if="recipient.name" class="text-sm text-gray-600 break-words">{{ recipient.email }}</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-if="sendPreview.skipped.length" class="mb-4">
+                        <div class="font-semibold mb-2">Skipped addresses</div>
+                        <ul class="border rounded divide-y max-h-48 overflow-y-auto">
+                            <li v-for="recipient in sendPreview.skipped" :key="recipient.id" class="px-3 py-2">
+                                <div class="font-medium">{{ recipient.name || 'Unnamed recipient' }}</div>
+                                <div class="text-sm text-gray-600 break-words">{{ recipient.email || 'No email address' }}</div>
+                                <div class="text-sm text-yellow-700">{{ recipient.reason }}</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-if="!sendPreview.recipient_count" class="text-red-600 font-semibold mb-4">
+                        There are no valid recipients for this campaign.
+                    </div>
+
+                    <label v-if="sendPreview.has_been_sent" class="flex items-start mt-4 text-sm font-semibold text-red-900">
                         <input type="checkbox" v-model="sendCampaignForm.confirm_resend" class="mt-1 mr-2">
                         <span>I understand this campaign has already been sent and want to resend it.</span>
                     </label>
@@ -261,6 +306,10 @@
                     resetOnSuccess: true,
                 }),
 
+                sendPreview: null,
+                previewLoading: false,
+                previewError: null,
+
                 retryFailedForm: this.$inertia.form({
                     confirm_retry: false,
                     retry_batch: null,
@@ -281,6 +330,20 @@
                 this.sendCampaignForm.send = true
                 this.sendCampaignForm.confirm_resend = false
                 this.campaignBeingSent = campaign
+                this.sendPreview = null
+                this.previewError = null
+                this.previewLoading = true
+
+                axios.get('/campaigns/' + campaign.id + '/send-preview')
+                    .then(response => {
+                        this.sendPreview = response.data
+                    })
+                    .catch(() => {
+                        this.previewError = 'The send preview could not be loaded. Please try again.'
+                    })
+                    .then(() => {
+                        this.previewLoading = false
+                    })
             },
 
             sendCampaign() {
@@ -329,8 +392,10 @@
         },
         computed: {
             canSendCampaign() {
-                return this.campaignBeingSent
-                    && (this.campaignBeingSent.batch === 0 || this.sendCampaignForm.confirm_resend)
+                return this.sendPreview
+                    && this.sendPreview.recipient_count > 0
+                    && !this.previewLoading
+                    && (!this.sendPreview.has_been_sent || this.sendCampaignForm.confirm_resend)
             },
             hasQueuedCampaigns() {
                 return this.campaigns.data.some(campaign => campaign.delivery && campaign.delivery.queued > 0)

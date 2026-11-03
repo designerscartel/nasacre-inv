@@ -10,6 +10,7 @@ use App\Contracts\Campaign\UpdatesCampaignInformation;
 use App\Models\Campaign;
 use App\Models\CampaignGroup;
 use App\Http\Resources\CampaignResource;
+use App\Support\CampaignSendPlan;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -111,6 +112,11 @@ class CampaignController extends Controller
         app(SendsCampaignInformation::class)->send($campaign, $request->all());
 
         return back(303);
+    }
+
+    public function sendPreview(Campaign $campaign)
+    {
+        return response()->json((new CampaignSendPlan())->preview($campaign));
     }
 
     public function sendTest(Request $request, Campaign $campaign)
