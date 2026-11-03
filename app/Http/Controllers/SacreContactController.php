@@ -40,7 +40,7 @@ class SacreContactController extends Controller
      */
     public function update(Request $request, Sacre $sacre, SacreContact $contact)
     {
-        //
+        abort_unless((int) $contact->sacre_id === (int) $sacre->id, 404);
         app(UpdatesSacreContact::class)->update($contact, $sacre, $request->all());
 
         return back(303);
@@ -56,7 +56,7 @@ class SacreContactController extends Controller
      */
     public function destroy(Request $request, Sacre $sacre, SacreContact $contact)
     {
-        //
+        abort_unless((int) $contact->sacre_id === (int) $sacre->id, 404);
         app(DeleteSacreContact::class)->delete($contact);
 
         return back(303);

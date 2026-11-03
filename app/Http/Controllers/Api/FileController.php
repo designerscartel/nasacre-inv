@@ -18,7 +18,7 @@ class FileController extends Controller
      */
     public function show(Sacre $sacre, SacreFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         $file = storage_path('app/files').'/' .$file->filename;
         if (file_exists($file)) {
             $headers = [

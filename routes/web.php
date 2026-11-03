@@ -27,6 +27,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/dashboard', [\App\Http\Controllers\DashbordController::class, 'index'])->name('dashboard');
 
         // Sacre
+        Route::redirect('/sacres', '/dashboard')->name('sacres.index');
         Route::post('/sacres', [\App\Http\Controllers\SacreController::class, 'store'])->name('sacres.store');
         Route::get('/sacres/create', [\App\Http\Controllers\SacreController::class, 'create'])->name('sacres.create');
         Route::get('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'show'])->name('sacres.show');
@@ -41,13 +42,13 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
         // Files
         Route::post('/sacres/{sacre}/files', [\App\Http\Controllers\SacreFileController::class, 'store'])->name('sacre-files.store');
-        Route::get('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'show'])->name('sacre-files.store');
+        Route::get('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'show'])->name('sacre-files.show');
         Route::put('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'update'])->name('sacre-files.update');
         Route::delete('/sacres/{sacre}/files/{file}', [\App\Http\Controllers\SacreFileController::class, 'destroy'])->name('sacre-files.destroy');
 
         //Shared Files
         Route::post('/sacres/{sacre}/shared', [\App\Http\Controllers\SharedFileController::class, 'store'])->name('share-files.store');
-        Route::get('/sacres/{sacre}/shared/{file}', [\App\Http\Controllers\SharedFileController::class, 'show'])->name('share-files.store');
+        Route::get('/sacres/{sacre}/shared/{file}', [\App\Http\Controllers\SharedFileController::class, 'show'])->name('share-files.show');
         Route::put('/sacres/{sacre}/shared/{file}', [\App\Http\Controllers\SharedFileController::class, 'update'])->name('share-files.update');
         Route::delete('/sacres/{sacre}/shared/{file}', [\App\Http\Controllers\SharedFileController::class, 'destroy'])->name('share-files.destroy');
 
@@ -62,7 +63,6 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');
         Route::post('/campaigns', [\App\Http\Controllers\CampaignController::class, 'store'])->name('campaigns.store');
         Route::get('/campaigns/create', [\App\Http\Controllers\CampaignController::class, 'create'])->name('campaigns.create');
-        Route::post('/campaigns/send', [\App\Http\Controllers\CampaignController::class, 'send'])->name('campaigns.send');
         Route::get('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'show'])->name('campaigns.show');
         Route::put('/campaigns/{campaign}', [\App\Http\Controllers\CampaignController::class, 'update'])->name('campaigns.update');
         Route::get('/campaigns/{campaign}/send-preview', [\App\Http\Controllers\CampaignController::class, 'sendPreview'])->name('campaigns.send-preview');

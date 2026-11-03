@@ -27,7 +27,7 @@ class SharedController extends Controller
      */
     public function show(Sacre $sacre, SharedFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         if (file_exists(storage_path('app/files') . '/' . $file->filename)) {
             return \Storage::download('files/' . $file->filename, $file->filename, [
                 'Content-Type: ' . \Storage::mimeType('files/' . $file->filename),

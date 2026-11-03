@@ -22,15 +22,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                 <div class="border rounded-lg p-4 bg-gray-50">
                     <div class="text-xs uppercase tracking-wide text-gray-500">Total SACREs</div>
-                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ sacres.data.length }}</div>
+                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ summary.total }}</div>
                 </div>
                 <div class="border rounded-lg p-4 bg-green-50">
                     <div class="text-xs uppercase tracking-wide text-green-700">Current Members</div>
-                    <div class="text-2xl font-semibold text-green-800 mt-1">{{ memberCount }}</div>
+                    <div class="text-2xl font-semibold text-green-800 mt-1">{{ summary.members }}</div>
                 </div>
                 <div class="border rounded-lg p-4 bg-gray-50">
                     <div class="text-xs uppercase tracking-wide text-gray-500">Non-Members</div>
-                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ nonMemberCount }}</div>
+                    <div class="text-2xl font-semibold text-gray-800 mt-1">{{ summary.non_members }}</div>
                 </div>
             </div>
 
@@ -38,6 +38,9 @@
                 <label for="sacre-search" class="block text-sm font-medium text-gray-700">Find a SACRE</label>
                 <input id="sacre-search" v-model="search" type="search" placeholder="Search by name, code, or region"
                        class="form-input mt-1 block w-full sm:max-w-md rounded-md shadow-sm">
+                <p class="text-sm text-gray-500 mt-2">
+                    {{ sacres.meta.total }} result<span v-if="sacres.meta.total !== 1">s</span>
+                </p>
             </div>
 
 
@@ -55,8 +58,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template v-if="filteredSacres.length">
-                    <tr v-for="sacre in filteredSacres" :key="sacre.id">
+                <template v-if="sacres.data.length">
+                    <tr v-for="sacre in sacres.data" :key="sacre.id">
                         <td class="border px-8 py-2">{{ sacre.title }}</td>
                         <td class="border px-4 py-2">
                             <span v-if="sacre.member"
@@ -89,6 +92,24 @@
 
                 </tbody>
             </table>
+        </div>
+
+        <div v-if="sacres.meta.last_page > 1" class="flex items-center justify-between px-6 sm:px-8 py-4 bg-white border-t border-gray-200">
+            <inertia-link v-if="sacres.links.prev" :href="sacres.links.prev" preserve-scroll preserve-state
+                          class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                &larr; Previous
+            </inertia-link>
+            <span v-else></span>
+
+            <span class="text-sm text-gray-500">
+                Page {{ sacres.meta.current_page }} of {{ sacres.meta.last_page }}
+            </span>
+
+            <inertia-link v-if="sacres.links.next" :href="sacres.links.next" preserve-scroll preserve-state
+                          class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                Next &rarr;
+            </inertia-link>
+            <span v-else></span>
         </div>
 
         <!-- Delete Sacre Modal -->
@@ -125,6 +146,7 @@
     import JetDangerButton from "../../Jetstream/DangerButton";
     import JetSecondaryButton from "../../Jetstream/SecondaryButton";
     import JetSectionBorder from "../../Jetstream/SectionBorder";
+    import debounce from 'lodash/debounce'
 
     export default {
         components: {
@@ -138,36 +160,25 @@
         },
         props: [
             'sacres',
+            'filters',
+            'summary',
         ],
         data() {
             return {
                 deleteSacreForm: this.$inertia.form(),
                 sacreBeingDeleted: null,
-                search: '',
+                search: this.filters.search || '',
 
             }
         },
-        computed: {
-            memberCount() {
-                return this.sacres.data.filter(sacre => sacre.member).length
-            },
-            nonMemberCount() {
-                return this.sacres.data.length - this.memberCount
-            },
-            filteredSacres() {
-                const term = this.search.trim().toLowerCase()
-
-                if (!term) {
-                    return this.sacres.data
-                }
-
-                return this.sacres.data.filter(sacre => [
-                    sacre.title,
-                    sacre.short_code,
-                    sacre.code,
-                    sacre.region && sacre.region.title,
-                ].some(value => value && String(value).toLowerCase().includes(term)))
-            },
+        watch: {
+            search: debounce(function (value) {
+                this.$inertia.replace('/dashboard', {
+                    data: value ? { search: value } : {},
+                    preserveScroll: true,
+                    preserveState: true,
+                })
+            }, 300),
         },
         methods: {
 

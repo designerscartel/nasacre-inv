@@ -24,7 +24,7 @@ class SharedFileController extends Controller
      */
     public function show(Sacre $sacre, SharedFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         $file = storage_path('app/files').'/' .$file->filename;
         if (file_exists($file)) {
             $headers = [
@@ -65,7 +65,7 @@ class SharedFileController extends Controller
      */
     public function update(Request $request, Sacre $sacre, SharedFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         app(UpdatesSharedFile::class)->update($file, $sacre, $request->all());
 
         return back(303);
@@ -81,7 +81,7 @@ class SharedFileController extends Controller
      */
     public function destroy(Request $request, Sacre $sacre, SharedFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         app(DeleteSharedFile::class)->delete($file);
 
         return back(303);

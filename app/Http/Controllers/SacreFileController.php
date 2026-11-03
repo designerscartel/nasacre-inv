@@ -24,7 +24,7 @@ class SacreFileController extends Controller
      */
     public function show(Sacre $sacre, SacreFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         $file = storage_path('app/files').'/' .$file->filename;
         if (file_exists($file)) {
             $headers = [
@@ -63,7 +63,7 @@ class SacreFileController extends Controller
      */
     public function update(Request $request, Sacre $sacre, SacreFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         app(UpdatesScareFile::class)->update($file, $sacre, $request->all());
 
         return back(303);
@@ -79,7 +79,7 @@ class SacreFileController extends Controller
      */
     public function destroy(Request $request, Sacre $sacre, SacreFile $file)
     {
-        //
+        abort_unless((int) $file->sacre_id === (int) $sacre->id, 404);
         app(DeleteScareFile::class)->delete($file);
 
         return back(303);
