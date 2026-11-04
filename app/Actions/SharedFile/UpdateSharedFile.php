@@ -3,8 +3,8 @@
 namespace App\Actions\SharedFile;
 
 use App\Contracts\SharedFile\UpdatesSharedFile;
+use App\Support\UniqueStoredFilename;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -26,14 +26,11 @@ class UpdateSharedFile implements UpdatesSharedFile
 
         $originalFilename = $SharedFile->filename;
         $originalPath = 'files/'.$originalFilename;
-        $newPath = 'files/'.$input['filename'];
+        $filename = $input['filename'];
 
-        if ($SharedFile->filename != $input['filename']) {
-            if (Storage::exists($newPath)) {
-                throw ValidationException::withMessages([
-                    'filename' => 'A file with this name already exists.',
-                ])->errorBag('updateFileForm');
-            }
+        if ($originalFilename != $filename) {
+            $filename = UniqueStoredFilename::forDirectory('files', $filename);
+            $newPath = 'files/'.$filename;
 
             if (! Storage::move($originalPath, $newPath)) {
                 throw ValidationException::withMessages([
@@ -44,10 +41,10 @@ class UpdateSharedFile implements UpdatesSharedFile
 
         try {
             return $SharedFile->fill([
-                'filename' => $input['filename'],
+                'filename' => $filename,
             ])->save();
         } catch (\Throwable $exception) {
-            if ($originalFilename != $input['filename']) {
+            if ($originalFilename != $filename) {
                 Storage::move($newPath, $originalPath);
             }
 

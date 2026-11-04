@@ -21,7 +21,7 @@ class SacreFileLifecycleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_file_renames_move_the_stored_pdf_and_reject_collisions()
+    public function test_file_renames_move_the_stored_pdf_and_suffix_collisions()
     {
         Storage::fake();
         $this->actingAs(User::factory()->create());
@@ -43,18 +43,40 @@ class SacreFileLifecycleTest extends TestCase
         $this->assertSame('renamed.pdf', $file->refresh()->filename);
 
         Storage::put('files/existing.pdf', 'existing');
-        $this->from(route('sacres.show', $sacre))
-            ->put(route('sacre-files.update', [$sacre, $file]), [
-                'filename' => 'existing.pdf',
-                'year' => '2028',
-            ])
-            ->assertRedirect(route('sacres.show', $sacre))
-            ->assertSessionHasErrors(['filename'], null, 'updateFileForm');
+        Storage::put('files/existing-2.pdf', 'existing 2');
+        $this->put(route('sacre-files.update', [$sacre, $file]), [
+            'filename' => 'existing.pdf',
+            'year' => '2028',
+        ])->assertStatus(303);
 
-        Storage::assertExists('files/renamed.pdf');
+        Storage::assertMissing('files/renamed.pdf');
         Storage::assertExists('files/existing.pdf');
-        $this->assertSame('renamed.pdf', $file->refresh()->filename);
-        $this->assertSame('2027', $file->year);
+        Storage::assertExists('files/existing-2.pdf');
+        Storage::assertExists('files/existing-3.pdf');
+        $this->assertSame('existing-3.pdf', $file->refresh()->filename);
+        $this->assertSame('2028', $file->year);
+    }
+
+    public function test_shared_file_renames_suffix_collisions_in_the_common_directory()
+    {
+        Storage::fake();
+        $this->actingAs(User::factory()->create());
+        $sacre = $this->sacre();
+        $file = SharedFile::create([
+            'sacre_id' => $sacre->id,
+            'filename' => 'shared.pdf',
+        ]);
+        Storage::put('files/shared.pdf', 'shared');
+        Storage::put('files/report.pdf', 'report');
+
+        $this->put(route('share-files.update', [$sacre, $file]), [
+            'filename' => 'report.pdf',
+        ])->assertStatus(303);
+
+        Storage::assertMissing('files/shared.pdf');
+        Storage::assertExists('files/report.pdf');
+        Storage::assertExists('files/report-2.pdf');
+        $this->assertSame('report-2.pdf', $file->refresh()->filename);
     }
 
     public function test_explicit_file_deletion_removes_stored_pdfs_and_archives_records()
