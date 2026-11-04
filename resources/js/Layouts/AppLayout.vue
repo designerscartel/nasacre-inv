@@ -43,7 +43,7 @@
                             <jet-dropdown align="right" width="48">
                                 <template #trigger>
                                     <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                        <img class="h-8 w-8 rounded-full" :src="$page.user.profile_photo_url" alt="" />
+                                        <img class="h-8 w-8 rounded-full" :src="$page.auth.user.profile_photo_url" alt="" />
                                     </button>
                                 </template>
 
@@ -70,7 +70,7 @@
                                         </div>
 
                                         <!-- Team Settings -->
-                                        <jet-dropdown-link :href="'/teams/' + $page.user.current_team.id">
+                                        <jet-dropdown-link :href="'/teams/' + $page.auth.user.current_team.id">
                                             Team Settings
                                         </jet-dropdown-link>
 
@@ -85,11 +85,11 @@
                                             Switch Teams
                                         </div>
 
-                                        <template v-for="team in $page.user.all_teams">
+                                        <template v-for="team in $page.auth.user.all_teams">
                                             <form @submit.prevent="switchToTeam(team)">
                                                 <jet-dropdown-link as="button">
                                                     <div class="flex items-center">
-                                                        <svg v-if="team.id == $page.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                        <svg v-if="team.id == $page.auth.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                         <div>{{ team.name }}</div>
                                                     </div>
                                                 </jet-dropdown-link>
@@ -149,12 +149,12 @@
                 <div class="pt-4 pb-1 border-t border-gray-200">
                     <div class="flex items-center px-4">
                         <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" :src="$page.user.profile_photo_url" alt="" />
+                            <img class="h-10 w-10 rounded-full" :src="$page.auth.user.profile_photo_url" alt="" />
                         </div>
 
                         <div class="ml-3">
-                            <div class="font-medium text-base text-gray-800">{{ $page.user.name }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.user.email }}</div>
+                            <div class="font-medium text-base text-gray-800">{{ $page.auth.user.name }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ $page.auth.user.email }}</div>
                         </div>
                     </div>
 
@@ -183,7 +183,7 @@
                             </div>
 
                             <!-- Team Settings -->
-                            <jet-responsive-nav-link :href="'/teams/' + $page.user.current_team.id" :active="$page.currentRouteName == 'teams.show'">
+                            <jet-responsive-nav-link :href="'/teams/' + $page.auth.user.current_team.id" :active="$page.currentRouteName == 'teams.show'">
                                 Team Settings
                             </jet-responsive-nav-link>
 
@@ -198,11 +198,11 @@
                                 Switch Teams
                             </div>
 
-                            <template v-for="team in $page.user.all_teams">
+                            <template v-for="team in $page.auth.user.all_teams">
                                 <form @submit.prevent="switchToTeam(team)">
                                     <jet-responsive-nav-link as="button">
                                         <div class="flex items-center">
-                                            <svg v-if="team.id == $page.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <svg v-if="team.id == $page.auth.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                             <div>{{ team.name }}</div>
                                         </div>
                                     </jet-responsive-nav-link>
