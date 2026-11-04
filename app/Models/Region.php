@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Region extends Model
@@ -18,6 +20,16 @@ class Region extends Model
         'id',
         'title',
     ];
+
+    public function places(): BelongsToMany
+    {
+        return $this->belongsToMany(PlaceOfInterest::class);
+    }
+
+    public function sacres(): HasMany
+    {
+        return $this->hasMany(Sacre::class);
+    }
 
     /**
      * Return a Resource

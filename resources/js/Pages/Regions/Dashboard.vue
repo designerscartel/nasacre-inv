@@ -29,6 +29,9 @@
                     </div>
 
                     <div class="bg-gray-200 bg-opacity-25">
+                        <div v-if="$page.errors && $page.errors.region" class="m-6 rounded bg-red-50 px-4 py-3 text-sm text-red-700">
+                            {{ $page.errors.region }}
+                        </div>
                         <table class="table-auto w-full">
                             <thead class="text-left">
                             <tr>
@@ -44,6 +47,12 @@
 
                                         <button class="text-sm mr-2" @click="updateRegionDialog(region)">
                                             Edit
+                                        </button>
+
+                                        <button class="text-sm text-red-600 disabled:opacity-40"
+                                                :disabled="region.sacres_count > 0 || region.places_count > 0"
+                                                @click="deleteRegion(region)">
+                                            Delete
                                         </button>
 
                                     </td>
@@ -223,6 +232,15 @@
                 this.updateRegionForm.title = region.title
                 this.regionId = region.id
                 this.showUpdateRegionDialog = true
+            },
+            deleteRegion(region) {
+                if (region.sacres_count > 0 || region.places_count > 0 || !window.confirm('Delete ' + region.title + '?')) {
+                    return
+                }
+
+                this.$inertia.delete('/regions/' + region.id, {
+                    preserveScroll: true,
+                })
             },
         }
     }

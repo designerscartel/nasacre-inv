@@ -60,16 +60,13 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/regions/create', [\App\Http\Controllers\RegionController::class, 'create'])->name('regions.create');
         Route::get('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'show'])->name('regions.show');
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
+        Route::delete('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'destroy'])->name('regions.destroy');
 
         // Places of Interest
         Route::get('/places', [\App\Http\Controllers\PlaceOfInterestController::class, 'index'])->name('places.index');
         Route::post('/places', [\App\Http\Controllers\PlaceOfInterestController::class, 'store'])->name('places.store');
         Route::put('/places/{place}', [\App\Http\Controllers\PlaceOfInterestController::class, 'update'])->name('places.update');
         Route::delete('/places/{place}', [\App\Http\Controllers\PlaceOfInterestController::class, 'destroy'])->name('places.destroy');
-        Route::get('/place-areas', [\App\Http\Controllers\PlaceAreaController::class, 'index'])->name('place-areas.index');
-        Route::post('/place-areas', [\App\Http\Controllers\PlaceAreaController::class, 'store'])->name('place-areas.store');
-        Route::put('/place-areas/{placeArea}', [\App\Http\Controllers\PlaceAreaController::class, 'update'])->name('place-areas.update');
-        Route::delete('/place-areas/{placeArea}', [\App\Http\Controllers\PlaceAreaController::class, 'destroy'])->name('place-areas.destroy');
 
         // Campaign
         Route::get('/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('campaigns.index');

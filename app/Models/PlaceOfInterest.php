@@ -33,8 +33,8 @@ class PlaceOfInterest extends Model
         'do_not_list' => 'boolean',
     ];
 
-    public function areas(): BelongsToMany
+    public function regions(): BelongsToMany
     {
-        return $this->belongsToMany(PlaceArea::class);
+        return $this->belongsToMany(Region::class);
     }
 }

@@ -14,16 +14,16 @@
                                 <p class="mt-1 text-sm text-gray-500">Manage venues, contacts and the areas they serve.</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex items-center space-x-3">
-                                <a href="/place-areas" class="text-sm text-gray-600 hover:text-gray-900">Manage areas</a>
+                                <a href="/regions" class="text-sm text-gray-600 hover:text-gray-900">Manage regions</a>
                                 <button class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded" @click="openCreate">Add place</button>
                             </div>
                         </div>
 
                         <form class="mt-6 grid gap-3 md:grid-cols-3" @submit.prevent="filter">
                             <input v-model="search" type="search" placeholder="Search places, religion or contact" class="rounded border-gray-300 md:col-span-2" />
-                            <select v-model="area" class="rounded border-gray-300" @change="filter">
-                                <option value="">All areas</option>
-                                <option v-for="option in areas" :key="option.id" :value="option.id">{{ option.name }}</option>
+                            <select v-model="region" class="rounded border-gray-300" @change="filter">
+                                <option value="">All regions</option>
+                                <option v-for="option in regions" :key="option.id" :value="option.id">{{ option.title }}</option>
                             </select>
                         </form>
                     </div>
@@ -34,7 +34,7 @@
                                 <tr>
                                     <th class="px-6 py-3">Place</th>
                                     <th class="px-4 py-3">Religion</th>
-                                    <th class="px-4 py-3">Areas</th>
+                                    <th class="px-4 py-3">Regions</th>
                                     <th class="px-4 py-3">Contact</th>
                                     <th class="px-6 py-3 text-right">Actions</th>
                                 </tr>
@@ -47,7 +47,7 @@
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-600">{{ place.religion || '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-gray-600">
-                                        <span v-for="(placeArea, index) in place.areas" :key="placeArea.id">{{ index ? ', ' : '' }}{{ placeArea.name }}</span>
+                                        <span v-for="(placeRegion, index) in place.regions" :key="placeRegion.id">{{ index ? ', ' : '' }}{{ placeRegion.title }}</span>
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-600">
                                         <div>{{ place.contact_name || '—' }}</div>
@@ -91,12 +91,12 @@
                     <field-input id="last-training" label="Most recent training" v-model="form.last_training" :error="form.error('last_training')" />
                     <field-input id="charge" label="Charge to speak" v-model="form.charge_to_speak" :error="form.error('charge_to_speak')" />
                     <div class="md:col-span-2">
-                        <jet-label for="areas" value="Areas" />
-                        <select id="areas" v-model="form.area_ids" multiple class="mt-1 block w-full rounded border-gray-300 h-32">
-                            <option v-for="option in areas" :key="option.id" :value="option.id">{{ option.name }}</option>
+                        <jet-label for="regions" value="Regions" />
+                        <select id="regions" v-model="form.region_ids" multiple class="mt-1 block w-full rounded border-gray-300 h-32">
+                            <option v-for="option in regions" :key="option.id" :value="option.id">{{ option.title }}</option>
                         </select>
-                        <p class="mt-1 text-xs text-gray-500">Hold Ctrl or Command to select multiple areas.</p>
-                        <jet-input-error :message="form.error('area_ids')" class="mt-2" />
+                        <p class="mt-1 text-xs text-gray-500">Hold Ctrl or Command to select multiple regions.</p>
+                        <jet-input-error :message="form.error('region_ids')" class="mt-2" />
                     </div>
                     <div class="md:col-span-2">
                         <jet-label for="notes" value="Notes" />
@@ -134,16 +134,16 @@ const FieldInput = {
 
 const emptyPlace = () => ({
     name: '', religion: '', contact_name: '', organisation_email: '', personal_email: '', phone: '', website: '',
-    last_training: '', charge_to_speak: '', notes: '', do_not_list: false, area_ids: [],
+    last_training: '', charge_to_speak: '', notes: '', do_not_list: false, region_ids: [],
 })
 
 export default {
-    props: ['places', 'areas', 'filters'],
+    props: ['places', 'regions', 'filters'],
     components: { AppLayout, FieldInput, JetButton, JetDialogModal, JetInput, JetInputError, JetLabel, JetSecondaryButton },
     data() {
         return {
             search: this.filters.search,
-            area: this.filters.area,
+            region: this.filters.region,
             editingId: null,
             showDialog: false,
             form: this.$inertia.form(emptyPlace(), { bag: 'placeForm' }),
@@ -151,7 +151,7 @@ export default {
     },
     methods: {
         filter() {
-            this.$inertia.get('/places', { search: this.search, area: this.area }, { preserveState: true })
+            this.$inertia.get('/places', { search: this.search, region: this.region }, { preserveState: true })
         },
         openCreate() {
             this.editingId = null
@@ -161,7 +161,7 @@ export default {
         openEdit(place) {
             this.editingId = place.id
             Object.keys(emptyPlace()).forEach(key => {
-                this.form[key] = key === 'area_ids' ? place.areas.map(area => area.id) : (place[key] || (key === 'do_not_list' ? false : ''))
+                this.form[key] = key === 'region_ids' ? place.regions.map(region => region.id) : (place[key] || (key === 'do_not_list' ? false : ''))
             })
             this.showDialog = true
         },

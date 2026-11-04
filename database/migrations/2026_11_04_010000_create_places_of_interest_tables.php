@@ -8,13 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('place_areas', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
         Schema::create('places_of_interest', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -33,17 +26,16 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('place_area_place_of_interest', function (Blueprint $table) {
-            $table->foreignId('place_area_id')->constrained()->cascadeOnDelete();
+        Schema::create('place_of_interest_region', function (Blueprint $table) {
+            $table->foreignId('region_id')->constrained()->cascadeOnDelete();
             $table->foreignId('place_of_interest_id')->constrained('places_of_interest')->cascadeOnDelete();
-            $table->primary(['place_area_id', 'place_of_interest_id'], 'place_area_place_primary');
+            $table->primary(['region_id', 'place_of_interest_id'], 'place_region_primary');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('place_area_place_of_interest');
+        Schema::dropIfExists('place_of_interest_region');
         Schema::dropIfExists('places_of_interest');
-        Schema::dropIfExists('place_areas');
     }
 };

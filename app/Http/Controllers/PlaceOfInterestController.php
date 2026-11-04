@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PlaceArea;
 use App\Models\PlaceOfInterest;
+use App\Models\Region;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,11 +15,11 @@ class PlaceOfInterestController extends Controller
     {
         $filters = $request->validate([
             'search' => ['nullable', 'string', 'max:255'],
-            'area' => ['nullable', 'integer', 'exists:place_areas,id'],
+            'region' => ['nullable', 'integer', 'exists:regions,id'],
         ]);
 
         $places = PlaceOfInterest::query()
-            ->with('areas:id,name')
+            ->with('regions:id,title')
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")
@@ -27,8 +27,8 @@ class PlaceOfInterestController extends Controller
                         ->orWhere('contact_name', 'like', "%{$search}%");
                 });
             })
-            ->when($filters['area'] ?? null, function ($query, $area) {
-                $query->whereHas('areas', fn ($query) => $query->whereKey($area));
+            ->when($filters['region'] ?? null, function ($query, $region) {
+                $query->whereHas('regions', fn ($query) => $query->whereKey($region));
             })
             ->orderBy('name')
             ->paginate(25)
@@ -36,10 +36,10 @@ class PlaceOfInterestController extends Controller
 
         return Inertia::render('Places/Index', [
             'places' => $places,
-            'areas' => PlaceArea::query()->orderBy('name')->get(['id', 'name']),
+            'regions' => Region::query()->orderBy('title')->get(['id', 'title']),
             'filters' => [
                 'search' => $filters['search'] ?? '',
-                'area' => $filters['area'] ?? '',
+                'region' => $filters['region'] ?? '',
             ],
         ]);
     }
@@ -47,11 +47,11 @@ class PlaceOfInterestController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validatePlace($request);
-        $areaIds = $data['area_ids'];
-        unset($data['area_ids']);
+        $regionIds = $data['region_ids'];
+        unset($data['region_ids']);
 
         $place = PlaceOfInterest::create($data);
-        $place->areas()->sync($areaIds);
+        $place->regions()->sync($regionIds);
 
         return back(303)->with('success', 'Place created.');
     }
@@ -59,18 +59,18 @@ class PlaceOfInterestController extends Controller
     public function update(Request $request, PlaceOfInterest $place): RedirectResponse
     {
         $data = $this->validatePlace($request);
-        $areaIds = $data['area_ids'];
-        unset($data['area_ids']);
+        $regionIds = $data['region_ids'];
+        unset($data['region_ids']);
 
         $place->update($data);
-        $place->areas()->sync($areaIds);
+        $place->regions()->sync($regionIds);
 
         return back(303)->with('success', 'Place updated.');
     }
 
     public function destroy(PlaceOfInterest $place): RedirectResponse
     {
-        $place->areas()->detach();
+        $place->regions()->detach();
         $place->delete();
 
         return back(303)->with('success', 'Place deleted.');
@@ -90,8 +90,8 @@ class PlaceOfInterestController extends Controller
             'charge_to_speak' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'do_not_list' => ['required', 'boolean'],
-            'area_ids' => ['required', 'array', 'min:1'],
-            'area_ids.*' => ['integer', 'exists:place_areas,id'],
+            'region_ids' => ['required', 'array', 'min:1'],
+            'region_ids.*' => ['integer', 'exists:regions,id'],
         ]);
     }
 }

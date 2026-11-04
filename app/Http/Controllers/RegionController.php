@@ -21,7 +21,7 @@ class RegionController extends Controller
     {
         //
         return Inertia::render('Regions/Dashboard', [
-            'regions' => RegionResource::collection($region::all())
+            'regions' => RegionResource::collection($region::withCount(['sacres', 'places'])->get())
         ]);
     }
 
@@ -97,8 +97,16 @@ class RegionController extends Controller
      * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Regions $region)
+    public function destroy(Region $region)
     {
-        //
+        if ($region->sacres()->exists() || $region->places()->exists()) {
+            return back(303)->withErrors([
+                'region' => 'Move this region’s SACREs and places before deleting it.',
+            ]);
+        }
+
+        $region->delete();
+
+        return back(303);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\PlaceArea;
 use App\Models\PlaceOfInterest;
+use App\Models\Region;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -86,13 +86,13 @@ class ImportPlacesOfInterest extends Command
                         $place->restore();
                     }
 
-                    $areaIds = collect(explode(',', $this->value($row, $indexes, 'Hub')))
-                        ->map(fn ($area) => trim($area))
+                    $regionIds = collect(explode(',', $this->value($row, $indexes, 'Hub')))
+                        ->map(fn ($region) => trim($region))
                         ->filter()
                         ->unique()
-                        ->map(fn ($area) => PlaceArea::firstOrCreate(['name' => $area])->id);
+                        ->map(fn ($region) => Region::firstOrCreate(['title' => $region])->id);
 
-                    $place->areas()->sync($areaIds);
+                    $place->regions()->sync($regionIds);
                     $imported++;
                 });
             }

@@ -19,6 +19,8 @@ class RegionResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'sacres_count' => $this->whenCounted('sacres'),
+            'places_count' => $this->whenCounted('places'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
