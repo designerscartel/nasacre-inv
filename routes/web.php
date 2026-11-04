@@ -30,6 +30,8 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::redirect('/sacres', '/dashboard')->name('sacres.index');
         Route::post('/sacres', [\App\Http\Controllers\SacreController::class, 'store'])->name('sacres.store');
         Route::get('/sacres/create', [\App\Http\Controllers\SacreController::class, 'create'])->name('sacres.create');
+        Route::get('/sacres/archived', [\App\Http\Controllers\SacreController::class, 'archived'])->name('sacres.archived');
+        Route::post('/sacres/archived/{sacre}/restore', [\App\Http\Controllers\SacreController::class, 'restore'])->name('sacres.restore');
         Route::get('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'show'])->name('sacres.show');
         Route::put('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'update'])->name('sacres.update');
         Route::delete('/sacres/{sacre}', [\App\Http\Controllers\SacreController::class, 'destroy'])->name('sacres.destroy');

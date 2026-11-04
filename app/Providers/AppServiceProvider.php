@@ -12,6 +12,7 @@ use App\Actions\Booking\CreateBookingRefInformation;
 use App\Actions\Sacre\UpdateSacreInformation;
 use App\Actions\Sacre\CreateSacreInformation;
 use App\Actions\Sacre\DeleteSacre;
+use App\Actions\Sacre\RestoreSacre;
 use App\Contracts\Booking\AmendsBookingInformation;
 use App\Contracts\Booking\CreatesBookingInformation;
 use App\Contracts\Booking\CreatesBookingPdf;
@@ -22,6 +23,7 @@ use App\Contracts\Booking\UpdatesBookingInformation;
 use App\Contracts\Sacre\UpdatesSacreInformation;
 use App\Contracts\Sacre\CreatesSacreInformation;
 use App\Contracts\Sacre\DeletesSacre;
+use App\Contracts\Sacre\RestoresSacre;
 
 use App\Actions\SacreContact\AddSacreContact;
 use App\Actions\SacreContact\UpdateSacreContact;
@@ -120,6 +122,7 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(CreatesSacreInformation::class, CreateSacreInformation::class);
         app()->singleton(UpdatesSacreInformation::class, UpdateSacreInformation::class);
         app()->singleton(DeletesSacre::class, DeleteSacre::class);
+        app()->singleton(RestoresSacre::class, RestoreSacre::class);
 
         app()->singleton(AddsSacreContact::class, AddSacreContact::class);
         app()->singleton(UpdatesSacreContact::class, UpdateSacreContact::class);

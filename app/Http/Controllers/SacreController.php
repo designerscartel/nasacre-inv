@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\Sacre\CreateSacreInformation;
 use App\Contracts\Sacre\DeletesSacre;
+use App\Contracts\Sacre\RestoresSacre;
 use App\Contracts\Sacre\UpdatesSacreInformation;
+use App\Http\Resources\SacreDirectoryResource;
 use App\Models\Sacre;
 use App\Models\Region;
 use App\Models\ContactPosition;
@@ -105,6 +107,32 @@ class SacreController extends Controller
         app(DeletesSacre::class)->delete($sacre);
 
         return back(303);
+    }
+
+    public function archived(Request $request)
+    {
+        $search = trim((string) $request->input('search'));
+        $sacres = Sacre::onlyTrashed()
+            ->with('region')
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'like', '%'.$search.'%');
+            })
+            ->orderByDesc('deleted_at')
+            ->paginate(50)
+            ->appends(['search' => $search]);
+
+        return Inertia::render('Sacres/Archived', [
+            'sacres' => SacreDirectoryResource::collection($sacres),
+            'filters' => ['search' => $search],
+        ]);
+    }
+
+    public function restore($sacre)
+    {
+        $sacre = Sacre::onlyTrashed()->findOrFail($sacre);
+        app(RestoresSacre::class)->restore($sacre);
+
+        return redirect()->route('sacres.archived', [], 303);
     }
 
 }

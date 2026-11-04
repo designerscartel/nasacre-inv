@@ -15,6 +15,7 @@ class SacreDirectoryResource extends JsonResource
             'past_member' => $this->past_member,
             'short_code' => $this->short_code,
             'code' => $this->code,
+            'archived_at' => optional($this->deleted_at)->toIso8601String(),
             'region' => new RegionResource($this->whenLoaded('region')),
         ];
     }

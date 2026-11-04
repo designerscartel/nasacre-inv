@@ -105,10 +105,16 @@ class SacreFileLifecycleTest extends TestCase
         $this->assertSoftDeleted('shared_files', ['id' => $sharedFile->id]);
     }
 
-    public function test_deleting_a_sacre_archives_child_records_but_preserves_files_and_history()
+    public function test_archived_sacre_can_be_restored_with_child_records_files_and_history()
     {
         Storage::fake();
-        $this->actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        $team = $user->ownedTeams()->create([
+            'name' => 'Test Team',
+            'personal_team' => true,
+        ]);
+        $user->forceFill(['current_team_id' => $team->id])->save();
+        $this->actingAs($user);
         $sacre = $this->sacre();
         $position = ContactPosition::create(['title' => 'Officer']);
         $contact = SacreContact::create([
@@ -159,6 +165,19 @@ class SacreFileLifecycleTest extends TestCase
         $this->assertSoftDeleted('sacre_contacts', ['id' => $contact->id]);
         $this->assertSoftDeleted('sacre_files', ['id' => $file->id]);
         $this->assertSoftDeleted('shared_files', ['id' => $sharedFile->id]);
+        Storage::assertExists('files/report.pdf');
+        Storage::assertExists('files/shared.pdf');
+        $this->assertDatabaseHas('sacre_invoices', ['id' => $sacreInvoice->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('sacre_bookings', ['id' => $sacreBooking->id, 'deleted_at' => null]);
+
+        $this->get(route('sacres.archived'))->assertOk();
+        $this->post(route('sacres.restore', $sacre->id))
+            ->assertRedirect(route('sacres.archived'));
+
+        $this->assertDatabaseHas('sacres', ['id' => $sacre->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('sacre_contacts', ['id' => $contact->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('sacre_files', ['id' => $file->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('shared_files', ['id' => $sharedFile->id, 'deleted_at' => null]);
         Storage::assertExists('files/report.pdf');
         Storage::assertExists('files/shared.pdf');
         $this->assertDatabaseHas('sacre_invoices', ['id' => $sacreInvoice->id, 'deleted_at' => null]);

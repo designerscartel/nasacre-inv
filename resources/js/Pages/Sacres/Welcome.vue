@@ -9,8 +9,12 @@
                 </h1>
 
                 <div class="text-right">
+                    <inertia-link href="/sacres/archived"
+                                  class="text-sm text-gray-600 hover:text-gray-900 mr-4">
+                        Archived SACREs
+                    </inertia-link>
                     <inertia-link href="/sacres/create"
-                                  class="bg-gray-800 hover:bg-gray-7000 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
+                                  class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded transition ease-in-out duration-150">
                         Create Sacre
                     </inertia-link>
                 </div>
@@ -81,7 +85,7 @@
                             </inertia-link>
                             <button class="cursor-pointer text-sm text-red-500 focus:outline-none"
                                     @click="confirmSacreDeletion(sacre)">
-                                Delete
+                                Archive
                             </button>
                         </td>
                     </tr>
@@ -112,14 +116,14 @@
             <span v-else></span>
         </div>
 
-        <!-- Delete Sacre Modal -->
+        <!-- Archive Sacre Modal -->
         <jet-confirmation-modal :show="sacreBeingDeleted" @close="sacreBeingDeleted = null">
             <template #title>
-                Delete SACRE
+                Archive SACRE
             </template>
 
             <template #content>
-                Are you sure you would like to delete this SACRE?
+                Archive this SACRE? Its contacts and file records can be restored later, and stored PDFs will be preserved.
             </template>
 
             <template #footer>
@@ -130,7 +134,7 @@
                 <jet-danger-button class="ml-2" @click.native="deleteSacre"
                                    :class="{ 'opacity-25': deleteSacreForm.processing }"
                                    :disabled="deleteSacreForm.processing">
-                    Delete
+                    Archive
                 </jet-danger-button>
             </template>
         </jet-confirmation-modal>
