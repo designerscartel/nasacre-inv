@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Region;
 use App\Http\Resources\RegionResource;
-use Illuminate\Http\Request;
+use App\Http\Resources\PlaceOfInterestResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class RegionController extends Controller
 {
@@ -14,11 +15,26 @@ class RegionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Region $region)
+    public function index(): AnonymousResourceCollection
     {
-        //
-        return RegionResource::collection($region::all());
+        $regions = Region::query()
+            ->withCount([
+                'places' => fn ($query) => $query->where('do_not_list', false),
+            ])
+            ->orderBy('title')
+            ->get();
+
+        return RegionResource::collection($regions);
     }
 
+    public function places(Region $region): AnonymousResourceCollection
+    {
+        $places = $region->places()
+            ->where('do_not_list', false)
+            ->with(['religion:id,name', 'regions:id,title'])
+            ->orderBy('name')
+            ->get();
 
+        return PlaceOfInterestResource::collection($places);
+    }
 }

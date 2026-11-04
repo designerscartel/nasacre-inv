@@ -19,6 +19,7 @@ Route::get('/database/{sacre}/files/{file}', [\App\Http\Controllers\Api\FileCont
 Route::get('/database/{term}', [\App\Http\Controllers\Api\DatabaseController::class, 'show'])->name('api.search');
 Route::get('/database', [\App\Http\Controllers\Api\DatabaseController::class, 'index'])->name('api.database');
 Route::get('/regions', [\App\Http\Controllers\Api\RegionController::class, 'index'])->name('api.region');
+Route::get('/regions/{region}/places', [\App\Http\Controllers\Api\RegionController::class, 'places'])->name('api.region.places');
 
 Route::get('/shared/{term}', [\App\Http\Controllers\Api\SharedController::class, 'shared'])->name('api.shared.search');
 Route::get('/shared', [\App\Http\Controllers\Api\SharedController::class, 'index'])->name('api.shared');
