@@ -57,6 +57,11 @@ class Sacre extends Model
      */
     public function bookinsg()
     {
+        return $this->bookings();
+    }
+
+    public function bookings()
+    {
         return $this->hasMany(SacreBooking::class);
     }
 
@@ -102,6 +107,12 @@ class Sacre extends Model
         self::deleting(function ($sacre) { // before delete() method call this
             $sacre->contacts()->each(function ($contact) {
                 $contact->delete(); // <-- direct deletion
+            });
+            $sacre->files()->each(function ($file) {
+                $file->delete();
+            });
+            $sacre->shared()->each(function ($file) {
+                $file->delete();
             });
         });
     }

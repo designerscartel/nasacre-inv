@@ -4,6 +4,7 @@ namespace App\Actions\SharedFile;
 
 use App\Contracts\SharedFile\DeletesSharedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class DeleteSharedFile implements DeletesSharedFile
 {
@@ -15,7 +16,14 @@ class DeleteSharedFile implements DeletesSharedFile
      */
     public function delete($SharedFile)
     {
-        Storage::delete('files/'.$SharedFile->filename);
+        $path = 'files/'.$SharedFile->filename;
+
+        if (Storage::exists($path) && ! Storage::delete($path)) {
+            throw ValidationException::withMessages([
+                'file' => 'The stored file could not be deleted.',
+            ])->errorBag('deleteFileForm');
+        }
+
         $SharedFile->delete();
     }
 }

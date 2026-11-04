@@ -4,6 +4,7 @@ namespace App\Actions\SacreFile;
 
 use App\Contracts\SacreFile\DeletesSacreFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class DeleteScareFile implements DeletesSacreFile
 {
@@ -15,7 +16,14 @@ class DeleteScareFile implements DeletesSacreFile
      */
     public function delete($sacreFile)
     {
-        Storage::delete('files/'.$sacreFile->filename);
+        $path = 'files/'.$sacreFile->filename;
+
+        if (Storage::exists($path) && ! Storage::delete($path)) {
+            throw ValidationException::withMessages([
+                'file' => 'The stored file could not be deleted.',
+            ])->errorBag('deleteFileForm');
+        }
+
         $sacreFile->delete();
     }
 }
