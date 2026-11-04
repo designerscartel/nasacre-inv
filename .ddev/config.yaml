@@ -1,7 +1,7 @@
 name: nasacre-inv
 type: laravel
 docroot: public
-php_version: "7.4"
+php_version: "8.3"
 webserver_type: nginx-fpm
 xdebug_enabled: false
 additional_hostnames: []
@@ -12,7 +12,7 @@ database:
 webimage_extra_packages: []
 use_dns_when_possible: true
 timezone: Europe/London
-composer_version: "2.2"
+composer_version: "2"
 web_environment:
     - APP_ENV=local
     - APP_DEBUG=true

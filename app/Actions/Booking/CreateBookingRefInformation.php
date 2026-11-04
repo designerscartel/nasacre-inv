@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\booking;
+namespace App\Actions\Booking;
 
 use App\Contracts\Booking\CreatesBookingRefInformation;
 use App\Models\Booking;

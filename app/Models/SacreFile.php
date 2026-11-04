@@ -32,7 +32,7 @@ class SacreFile extends Model
     /**
      * Return a Resource
      */
-    public function toResource()
+    public function toResource(?string $resourceClass = null): \Illuminate\Http\Resources\Json\JsonResource
     {
         return new \App\Http\Resources\SacreFileResource($this);
     }

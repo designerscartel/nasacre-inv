@@ -51,6 +51,9 @@ class SacreDirectoryTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonPath('props.filters.search', 'North');
+        $response->assertJsonPath('props.auth.user.id', $user->id);
+        $response->assertJsonPath('props.auth.user.current_team.id', $team->id);
+        $this->assertNotEmpty($response->json('props.auth.user.profile_photo_url'));
         $response->assertJsonPath('props.summary.total', 2);
         $response->assertJsonPath('props.summary.members', 1);
         $response->assertJsonPath('props.sacres.meta.total', 1);
