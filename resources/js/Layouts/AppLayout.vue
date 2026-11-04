@@ -23,6 +23,9 @@
                             <jet-nav-link href="/bookings" :active="path.startsWith('/bookings')">
                                 Bookings
                             </jet-nav-link>
+                            <jet-nav-link href="/places" :active="path.startsWith('/places')">
+                                Places
+                            </jet-nav-link>
                             <jet-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
                                 Campaigns
                             </jet-nav-link>
@@ -31,9 +34,6 @@
                             </jet-nav-link>
                             <jet-nav-link href="/religions" :active="path.startsWith('/religions')">
                                 Religions
-                            </jet-nav-link>
-                            <jet-nav-link href="/places" :active="path.startsWith('/places')">
-                                Places
                             </jet-nav-link>
                             <jet-nav-link href="/positions" :active="path.startsWith('/positions')">
                                 Positions
@@ -140,6 +140,9 @@
                     <jet-responsive-nav-link href="/bookings" :active="path.startsWith('/bookings')">
                         Bookings
                     </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/places" :active="path.startsWith('/places')">
+                        Places
+                    </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
                         Campaigns
                     </jet-responsive-nav-link>
@@ -148,9 +151,6 @@
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/religions" :active="path.startsWith('/religions')">
                         Religions
-                    </jet-responsive-nav-link>
-                    <jet-responsive-nav-link href="/places" :active="path.startsWith('/places')">
-                        Places
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/positions" :active="path.startsWith('/positions')">
                         Positions

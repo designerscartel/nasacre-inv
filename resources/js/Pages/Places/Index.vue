@@ -20,13 +20,24 @@
                             </div>
                         </div>
 
-                        <form class="mt-6 grid gap-3 md:grid-cols-3" @submit.prevent="filter">
-                            <input v-model="search" type="search" placeholder="Search places, religion or contact" class="rounded border-gray-300 md:col-span-2" />
-                            <select v-model="region" class="rounded border-gray-300" @change="filter">
-                                <option value="">All regions</option>
-                                <option v-for="option in regions" :key="option.id" :value="option.id">{{ option.title }}</option>
-                            </select>
-                        </form>
+                        <div class="mt-6 flex flex-col gap-4 md:flex-row md:items-end">
+                            <div class="flex-1">
+                                <label for="place-search" class="block text-sm font-medium text-gray-700">Find a place</label>
+                                <input id="place-search" v-model="search" type="search"
+                                       placeholder="Search by place, religion, or contact"
+                                       class="form-input mt-1 block w-full rounded-md shadow-sm" />
+                            </div>
+                            <div class="md:w-64">
+                                <label for="place-region" class="block text-sm font-medium text-gray-700">Region</label>
+                                <select id="place-region" v-model="region" class="form-select mt-1 block w-full rounded-md shadow-sm" @change="filter">
+                                    <option value="">All regions</option>
+                                    <option v-for="option in regions" :key="option.id" :value="option.id">{{ option.title }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">
+                            {{ places.total }} result<span v-if="places.total !== 1">s</span>
+                        </p>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -133,6 +144,7 @@ import JetInput from './../../Jetstream/Input'
 import JetInputError from './../../Jetstream/InputError'
 import JetLabel from './../../Jetstream/Label'
 import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+import debounce from 'lodash/debounce'
 
 const FieldInput = {
     props: ['id', 'label', 'value', 'error', 'type'],
@@ -157,9 +169,22 @@ export default {
             form: this.$inertia.form(emptyPlace(), { bag: 'placeForm' }),
         }
     },
+    watch: {
+        search: debounce(function () {
+            this.filter()
+        }, 300),
+    },
     methods: {
         filter() {
-            this.$inertia.get('/places', { search: this.search, region: this.region }, { preserveState: true })
+            const data = {}
+            if (this.search) data.search = this.search
+            if (this.region) data.region = this.region
+
+            this.$inertia.replace('/places', {
+                data,
+                preserveScroll: true,
+                preserveState: true,
+            })
         },
         openCreate() {
             this.editingId = null
