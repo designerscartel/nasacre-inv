@@ -62,6 +62,12 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::put('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'update'])->name('regions.update');
         Route::delete('/regions/{region}', [\App\Http\Controllers\RegionController::class, 'destroy'])->name('regions.destroy');
 
+        // Religions
+        Route::get('/religions', [\App\Http\Controllers\ReligionController::class, 'index'])->name('religions.index');
+        Route::post('/religions', [\App\Http\Controllers\ReligionController::class, 'store'])->name('religions.store');
+        Route::put('/religions/{religion}', [\App\Http\Controllers\ReligionController::class, 'update'])->name('religions.update');
+        Route::delete('/religions/{religion}', [\App\Http\Controllers\ReligionController::class, 'destroy'])->name('religions.destroy');
+
         // Places of Interest
         Route::get('/places', [\App\Http\Controllers\PlaceOfInterestController::class, 'index'])->name('places.index');
         Route::post('/places', [\App\Http\Controllers\PlaceOfInterestController::class, 'store'])->name('places.store');

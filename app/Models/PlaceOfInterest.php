@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlaceOfInterest extends Model
@@ -16,7 +17,7 @@ class PlaceOfInterest extends Model
 
     protected $fillable = [
         'name',
-        'religion',
+        'religion_id',
         'contact_name',
         'organisation_email',
         'personal_email',
@@ -36,5 +37,10 @@ class PlaceOfInterest extends Model
     public function regions(): BelongsToMany
     {
         return $this->belongsToMany(Region::class);
+    }
+
+    public function religion(): BelongsTo
+    {
+        return $this->belongsTo(Religion::class);
     }
 }

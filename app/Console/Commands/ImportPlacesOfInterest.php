@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\PlaceOfInterest;
 use App\Models\Region;
+use App\Models\Religion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -55,6 +56,15 @@ class ImportPlacesOfInterest extends Command
                     $name = $this->value($row, $indexes, 'Place of Interest Address, if applicable')
                         ?: $this->value($row, $indexes, 'Name');
                     $religion = $this->value($row, $indexes, 'Religion & Belief system');
+                    $religionRecord = $religion !== ''
+                        ? Religion::withTrashed()->firstOrCreate(['name' => $religion])
+                        : null;
+
+                    if ($religionRecord?->trashed()) {
+                        $religionRecord->restore();
+                    }
+
+                    $religionId = $religionRecord?->id;
                     $organisationEmail = $this->value($row, $indexes, 'Organisation Email');
                     $personalEmail = $this->value($row, $indexes, 'Personal Email');
                     $sourceKey = hash('sha256', strtolower(implode('|', [
@@ -68,7 +78,7 @@ class ImportPlacesOfInterest extends Command
                         ['source_key' => $sourceKey],
                         [
                             'name' => $name,
-                            'religion' => $religion ?: null,
+                            'religion_id' => $religionId,
                             'contact_name' => $this->value($row, $indexes, 'Name') ?: null,
                             'organisation_email' => $organisationEmail ?: null,
                             'personal_email' => $personalEmail ?: null,

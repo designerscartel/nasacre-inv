@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlaceOfInterest;
 use App\Models\Region;
+use App\Models\Religion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,11 +20,11 @@ class PlaceOfInterestController extends Controller
         ]);
 
         $places = PlaceOfInterest::query()
-            ->with('regions:id,title')
+            ->with(['regions:id,title', 'religion:id,name'])
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('religion', 'like', "%{$search}%")
+                        ->orWhereHas('religion', fn ($query) => $query->where('name', 'like', "%{$search}%"))
                         ->orWhere('contact_name', 'like', "%{$search}%");
                 });
             })
@@ -37,6 +38,7 @@ class PlaceOfInterestController extends Controller
         return Inertia::render('Places/Index', [
             'places' => $places,
             'regions' => Region::query()->orderBy('title')->get(['id', 'title']),
+            'religions' => Religion::query()->orderBy('name')->get(['id', 'name']),
             'filters' => [
                 'search' => $filters['search'] ?? '',
                 'region' => $filters['region'] ?? '',
@@ -80,7 +82,7 @@ class PlaceOfInterestController extends Controller
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'religion' => ['nullable', 'string', 'max:255'],
+            'religion_id' => ['nullable', 'integer', 'exists:religions,id'],
             'contact_name' => ['nullable', 'string', 'max:255'],
             'organisation_email' => ['nullable', 'email', 'max:255'],
             'personal_email' => ['nullable', 'email', 'max:255'],

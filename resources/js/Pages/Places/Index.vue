@@ -14,6 +14,7 @@
                                 <p class="mt-1 text-sm text-gray-500">Manage venues, contacts and the areas they serve.</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                                <a href="/religions" class="text-sm text-gray-600 hover:text-gray-900">Manage religions</a>
                                 <a href="/regions" class="text-sm text-gray-600 hover:text-gray-900">Manage regions</a>
                                 <button class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded" @click="openCreate">Add place</button>
                             </div>
@@ -45,7 +46,7 @@
                                         <div class="font-medium">{{ place.name }}</div>
                                         <span v-if="place.do_not_list" class="inline-block mt-1 rounded bg-red-100 px-2 py-1 text-xs text-red-700">Do not list</span>
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-600">{{ place.religion || '—' }}</td>
+                                    <td class="px-4 py-4 text-sm text-gray-600">{{ place.religion ? place.religion.name : '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-gray-600">
                                         <span v-for="(placeRegion, index) in place.regions" :key="placeRegion.id">{{ index ? ', ' : '' }}{{ placeRegion.title }}</span>
                                     </td>
@@ -82,7 +83,14 @@
                         <jet-input id="place-name" v-model="form.name" class="mt-1 block w-full" />
                         <jet-input-error :message="form.error('name')" class="mt-2" />
                     </div>
-                    <field-input id="religion" label="Religion or belief" v-model="form.religion" :error="form.error('religion')" />
+                    <div>
+                        <jet-label for="religion" value="Religion or belief" />
+                        <select id="religion" v-model="form.religion_id" class="mt-1 block w-full rounded border-gray-300">
+                            <option value="">No religion selected</option>
+                            <option v-for="religion in religions" :key="religion.id" :value="religion.id">{{ religion.name }}</option>
+                        </select>
+                        <jet-input-error :message="form.error('religion_id')" class="mt-2" />
+                    </div>
                     <field-input id="contact-name" label="Contact name" v-model="form.contact_name" :error="form.error('contact_name')" />
                     <field-input id="organisation-email" label="Organisation email" type="email" v-model="form.organisation_email" :error="form.error('organisation_email')" />
                     <field-input id="personal-email" label="Personal email" type="email" v-model="form.personal_email" :error="form.error('personal_email')" />
@@ -133,12 +141,12 @@ const FieldInput = {
 }
 
 const emptyPlace = () => ({
-    name: '', religion: '', contact_name: '', organisation_email: '', personal_email: '', phone: '', website: '',
+    name: '', religion_id: '', contact_name: '', organisation_email: '', personal_email: '', phone: '', website: '',
     last_training: '', charge_to_speak: '', notes: '', do_not_list: false, region_ids: [],
 })
 
 export default {
-    props: ['places', 'regions', 'filters'],
+    props: ['places', 'regions', 'religions', 'filters'],
     components: { AppLayout, FieldInput, JetButton, JetDialogModal, JetInput, JetInputError, JetLabel, JetSecondaryButton },
     data() {
         return {

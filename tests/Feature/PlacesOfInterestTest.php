@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\PlaceOfInterest;
 use App\Models\Region;
+use App\Models\Religion;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,6 +21,8 @@ class PlacesOfInterestTest extends TestCase
 
         $this->assertDatabaseCount('places_of_interest', 41);
         $this->assertDatabaseHas('regions', ['title' => 'London']);
+        $this->assertDatabaseCount('religions', 7);
+        $this->assertDatabaseHas('religions', ['name' => 'Humanism']);
         $this->assertTrue(PlaceOfInterest::query()->where('do_not_list', true)->exists());
         $this->assertTrue(PlaceOfInterest::query()->whereHas('regions', fn ($query) => $query->where('title', 'London'))->exists());
         $this->assertSame(4, PlaceOfInterest::query()->has('regions', '>', 1)->count());
@@ -38,7 +41,7 @@ class PlacesOfInterestTest extends TestCase
 
         $this->post(route('places.store'), [
             'name' => 'Test Centre',
-            'religion' => 'Humanism',
+            'religion_id' => Religion::create(['name' => 'Humanism'])->id,
             'contact_name' => 'Alex Example',
             'organisation_email' => 'hello@example.com',
             'personal_email' => null,
@@ -56,7 +59,7 @@ class PlacesOfInterestTest extends TestCase
 
         $this->put(route('places.update', $place), [
             'name' => 'Updated Centre',
-            'religion' => null,
+            'religion_id' => null,
             'contact_name' => null,
             'organisation_email' => null,
             'personal_email' => null,
@@ -115,6 +118,27 @@ class PlacesOfInterestTest extends TestCase
         $place->regions()->detach();
         $this->delete(route('regions.destroy', $region))->assertRedirect();
         $this->assertSoftDeleted($region);
+    }
+
+    public function test_authenticated_user_can_manage_religions(): void
+    {
+        $this->actingAs($this->userWithTeam());
+
+        $this->post(route('religions.store'), ['name' => 'Humanism'])->assertRedirect();
+        $religion = Religion::firstOrFail();
+
+        $this->put(route('religions.update', $religion), ['name' => 'Humanist'])->assertRedirect();
+        $this->assertDatabaseHas('religions', ['id' => $religion->id, 'name' => 'Humanist']);
+
+        $place = PlaceOfInterest::create([
+            'name' => 'Test Centre',
+            'religion_id' => $religion->id,
+        ]);
+        $this->delete(route('religions.destroy', $religion))->assertSessionHasErrors('religion');
+
+        $place->update(['religion_id' => null]);
+        $this->delete(route('religions.destroy', $religion))->assertRedirect();
+        $this->assertSoftDeleted($religion);
     }
 
     private function userWithTeam(): User

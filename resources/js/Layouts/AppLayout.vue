@@ -29,6 +29,9 @@
                             <jet-nav-link href="/regions" :active="path.startsWith('/regions')">
                                 Regions
                             </jet-nav-link>
+                            <jet-nav-link href="/religions" :active="path.startsWith('/religions')">
+                                Religions
+                            </jet-nav-link>
                             <jet-nav-link href="/places" :active="path.startsWith('/places')">
                                 Places
                             </jet-nav-link>
@@ -142,6 +145,9 @@
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/regions" :active="path.startsWith('/regions')">
                         Regions
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link href="/religions" :active="path.startsWith('/religions')">
+                        Religions
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/places" :active="path.startsWith('/places')">
                         Places
