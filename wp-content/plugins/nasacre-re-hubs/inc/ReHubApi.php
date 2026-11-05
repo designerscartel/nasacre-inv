@@ -23,12 +23,12 @@ class ReHubApi
         ], static fn ($value) => $value !== ''));
     }
 
-    public function regions($type)
+    public function regions($type, $search = '')
     {
         if ($type === 'all') {
             return $this->mergeRegions(
-                $this->regions('places'),
-                $this->regions('speakers')
+                $this->regions('places', $search),
+                $this->regions('speakers', $search)
             );
         }
 
@@ -36,7 +36,9 @@ class ReHubApi
             ? 'regions/school-speakers'
             : 'regions/places-of-interest';
 
-        return $this->request($endpoint);
+        return $this->request($endpoint, array_filter([
+            'search' => $search,
+        ], static fn ($value) => $value !== ''));
     }
 
     private function request($endpoint, array $query = [])
