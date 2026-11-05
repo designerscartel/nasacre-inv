@@ -2,7 +2,7 @@
 /**
  * Plugin Name: NASACRE RE Hubs
  * Description: Provides searchable RE Hubs directories with the [re_hubs] and [re_hub_regions] shortcodes.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Matt Tullett
  */
 
@@ -148,6 +148,7 @@ function nasacre_re_hub_regions_shortcode($atts)
         'show_filters' => 'true',
         'show_type_filter' => 'true',
         'show_type_badges' => 'true',
+        'search_mode' => 'entries',
     ], $atts, 're_hub_regions');
 
     $allowedTypes = ['all', 'places', 'speakers'];
@@ -155,6 +156,10 @@ function nasacre_re_hub_regions_shortcode($atts)
     $showFilters = filter_var($atts['show_filters'], FILTER_VALIDATE_BOOLEAN);
     $showTypeFilter = $showFilters && filter_var($atts['show_type_filter'], FILTER_VALIDATE_BOOLEAN);
     $showTypeBadges = filter_var($atts['show_type_badges'], FILTER_VALIDATE_BOOLEAN);
+    $allowedSearchModes = ['none', 'entries', 'regions'];
+    $searchMode = in_array($atts['search_mode'], $allowedSearchModes, true)
+        ? $atts['search_mode']
+        : 'entries';
     $requestedType = $showTypeFilter && isset($_GET['re_hub_type'])
         ? sanitize_key(wp_unslash($_GET['re_hub_type']))
         : $defaultType;
@@ -164,7 +169,7 @@ function nasacre_re_hub_regions_shortcode($atts)
         ? sanitize_text_field(wp_unslash($_GET['re_hub_search']))
         : '';
     $api = new ReHubApi();
-    $regions = $api->regions($type, $region ? '' : $search);
+    $regions = $api->regions($type, ! $region && $searchMode === 'regions' ? $search : '');
     $selectedRegion = null;
 
     if ($region) {
@@ -181,12 +186,37 @@ function nasacre_re_hub_regions_shortcode($atts)
         $search = '';
     }
 
+    if (! $region && $search !== '' && $searchMode === 'entries') {
+        $matchingEntries = $api->entries($type, ['search' => $search]);
+        $matchingRegionIds = [];
+
+        foreach ($matchingEntries as $matchingEntry) {
+            foreach (($matchingEntry['regions'] ?? []) as $matchingRegion) {
+                $matchingRegionIds[] = absint($matchingRegion['id'] ?? 0);
+            }
+        }
+
+        $matchingRegionIds = array_unique(array_filter($matchingRegionIds));
+        $regions = array_values(array_filter($regions, static fn ($regionOption) => in_array(
+            absint($regionOption['id'] ?? 0),
+            $matchingRegionIds,
+            true
+        )));
+    }
+
     $entries = $region ? $api->entries($type, [
-        'search' => $search,
+        'search' => $searchMode === 'entries' ? $search : '',
         'region' => $region,
     ]) : [];
     $instanceId = wp_unique_id('nasacre-re-hub-regions-');
     $baseUrl = get_permalink();
+    $backArgs = ['re_hub_type' => $type];
+    if ($searchMode === 'entries' && $search !== '') {
+        $backArgs['re_hub_search'] = $search;
+    }
+    $showSearch = $showFilters
+        && $searchMode !== 'none'
+        && (! $selectedRegion || $searchMode === 'entries');
 
     ob_start();
     ?>
@@ -204,7 +234,7 @@ function nasacre_re_hub_regions_shortcode($atts)
 
         <?php if ($selectedRegion) : ?>
             <p class="nasacre-re-hubs__back">
-                <a href="<?php echo esc_url(add_query_arg(['re_hub_type' => $type], $baseUrl)); ?>">&larr; Back to all regions</a>
+                <a href="<?php echo esc_url(add_query_arg($backArgs, $baseUrl)); ?>">&larr; Back to all regions</a>
             </p>
         <?php endif; ?>
 
@@ -216,10 +246,12 @@ function nasacre_re_hub_regions_shortcode($atts)
                 <?php if (! $showTypeFilter) : ?>
                     <input type="hidden" name="re_hub_type" value="<?php echo esc_attr($type); ?>">
                 <?php endif; ?>
-                <div class="nasacre-re-hubs__field nasacre-re-hubs__field--search">
-                    <label for="<?php echo esc_attr($instanceId); ?>-search"><?php echo $selectedRegion ? 'Search entries' : 'Search regions'; ?></label>
-                    <input id="<?php echo esc_attr($instanceId); ?>-search" type="search" name="re_hub_search" value="<?php echo esc_attr($search); ?>" placeholder="<?php echo $selectedRegion ? 'Name, religion, belief, or contact' : 'Region name'; ?>">
-                </div>
+                <?php if ($showSearch) : ?>
+                    <div class="nasacre-re-hubs__field nasacre-re-hubs__field--search">
+                        <label for="<?php echo esc_attr($instanceId); ?>-search"><?php echo $searchMode === 'entries' ? 'Search entries' : 'Search regions'; ?></label>
+                        <input id="<?php echo esc_attr($instanceId); ?>-search" type="search" name="re_hub_search" value="<?php echo esc_attr($search); ?>" placeholder="<?php echo $searchMode === 'entries' ? 'Name, religion, belief, or contact' : 'Region name'; ?>">
+                    </div>
+                <?php endif; ?>
                 <?php if ($showTypeFilter) : ?>
                     <div class="nasacre-re-hubs__field">
                         <label for="<?php echo esc_attr($instanceId); ?>-type">Directory type</label>
@@ -243,10 +275,16 @@ function nasacre_re_hub_regions_shortcode($atts)
             <?php if ($regions) : ?>
                 <nav class="nasacre-re-hubs__region-grid" aria-label="RE Hub regions">
                     <?php foreach ($regions as $regionOption) : ?>
-                        <a class="nasacre-re-hubs__region" href="<?php echo esc_url(add_query_arg([
+                        <?php
+                        $regionUrlArgs = [
                             're_hub_region' => absint($regionOption['id'] ?? 0),
                             're_hub_type' => $type,
-                        ], $baseUrl)); ?>">
+                        ];
+                        if ($searchMode === 'entries' && $search !== '') {
+                            $regionUrlArgs['re_hub_search'] = $search;
+                        }
+                        ?>
+                        <a class="nasacre-re-hubs__region" href="<?php echo esc_url(add_query_arg($regionUrlArgs, $baseUrl)); ?>">
                             <span><?php echo esc_html($regionOption['title'] ?? ''); ?></span>
                             <span aria-hidden="true">&rarr;</span>
                         </a>
