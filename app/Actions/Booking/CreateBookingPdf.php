@@ -2,6 +2,7 @@
 
 namespace App\Actions\Booking;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\BookingDelegate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class CreateBookingPdf implements CreatesBookingPdf
             'delegates' => $delegates
         ];
 
-        $pdf = \PDF::loadView('pdfs.booking-new', $data);
+        $pdf = Pdf::loadView('pdfs.booking-new', $data);
 
         return $pdf;
     }
@@ -67,6 +68,6 @@ class CreateBookingPdf implements CreatesBookingPdf
     {
         //
         $pdf = $this->create($bookingData);
-        return $pdf->inline($bookingData->name.'.pdf');
+        return $pdf->stream($bookingData->name.'.pdf');
     }
 }

@@ -4,17 +4,14 @@ Laravel application for managing SACRE contacts, invoices, campaigns, files, and
 
 ## Requirements
 
-- PHP 7.4 with the extensions required by Laravel 8
+- PHP 8.4 with the extensions required by Laravel 13 and Dompdf
 - Composer 2
 - MySQL or MariaDB
 - Node.js 14 or 16 and npm
-- `wkhtmltopdf` for PDF generation
-
-Newer PHP and Node.js releases are outside the application's declared compatibility range. Use the versions above until the framework and frontend toolchain are upgraded.
 
 ## DDEV Development
 
-The committed DDEV configuration provides PHP 7.4, Composer 2.2 LTS, Node.js 16, MariaDB 10.4, Mailpit, and the Composer-provided `wkhtmltopdf` binary. On ARM hosts, only the web container uses x86 emulation because the legacy PDF dependency is x86-64.
+The committed DDEV configuration provides PHP 8.4, Composer 2, Node.js 16, MariaDB 10.4, and Mailpit. PDFs are generated in PHP with Dompdf, so no external PDF binary is required.
 
 1. Start Docker, then start and prepare the project:
 
@@ -37,7 +34,7 @@ The committed DDEV configuration provides PHP 7.4, Composer 2.2 LTS, Node.js 16,
    ddev queue
    ```
 
-The DDEV web environment overrides database, mail, queue, URL, and PDF binary settings without changing the ignored local `.env`. To create an administrator, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env`, run `ddev artisan db:seed`, then remove the credentials.
+The DDEV web environment overrides database, mail, queue, and URL settings without changing the ignored local `.env`. To create an administrator, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env`, run `ddev artisan db:seed`, then remove the credentials.
 
 Invoice PDF settings are configured with the `INVOICE_*` values in `.env`. These control the Blade template, training price, charity number, payment email, and bank details while retaining the current values as defaults.
 

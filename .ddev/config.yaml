@@ -29,7 +29,6 @@ web_environment:
     - MAIL_ENCRYPTION=null
     - QUEUE_CONNECTION=database
     - SESSION_DRIVER=database
-    - WKHTML_PDF_BINARY=/var/www/html/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
 nodejs_version: "16"
 corepack_enable: false
 

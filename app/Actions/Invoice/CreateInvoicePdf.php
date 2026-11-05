@@ -2,6 +2,7 @@
 
 namespace App\Actions\Invoice;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,7 @@ class CreateInvoicePdf implements CreatesInvoicePdf
             'date' => \Carbon\Carbon::parse($invoice->date)
         ];
 
-        $pdf = \PDF::loadView(config('invoices.pdf_template'), $data);
+        $pdf = Pdf::loadView(config('invoices.pdf_template'), $data);
 
         return $pdf;
     }
@@ -68,6 +69,6 @@ class CreateInvoicePdf implements CreatesInvoicePdf
     {
         //
         $pdf = $this->create($invoice, $sacre);
-        return $pdf->inline($invoice->year . '-' . $sacre->short_code . '.pdf');
+        return $pdf->stream($invoice->year . '-' . $sacre->short_code . '.pdf');
     }
 }

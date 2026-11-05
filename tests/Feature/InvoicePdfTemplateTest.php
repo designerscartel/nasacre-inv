@@ -5,8 +5,9 @@ namespace Tests\Feature;
 use App\Actions\Invoice\CreateInvoicePdf;
 use App\Models\Invoice;
 use App\Models\Sacre;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as Dompdf;
 use Carbon\Carbon;
-use PDF;
 use Tests\TestCase;
 
 class InvoicePdfTemplateTest extends TestCase
@@ -15,8 +16,8 @@ class InvoicePdfTemplateTest extends TestCase
     {
         config(['invoices.pdf_template' => 'pdfs.2026-invoice']);
         list($invoice, $sacre) = $this->invoiceData();
-        $pdf = new \stdClass();
-        PDF::shouldReceive('loadView')->once()->withArgs(function ($view, $data) use ($invoice, $sacre) {
+        $pdf = \Mockery::mock(Dompdf::class);
+        Pdf::shouldReceive('loadView')->once()->withArgs(function ($view, $data) use ($invoice, $sacre) {
             return $view === 'pdfs.2026-invoice'
                 && $data['invoice'] === $invoice
                 && $data['sacre'] === $sacre
@@ -32,8 +33,8 @@ class InvoicePdfTemplateTest extends TestCase
     {
         config(['invoices.pdf_template' => 'pdfs.invoice']);
         list($invoice, $sacre) = $this->invoiceData();
-        $pdf = new \stdClass();
-        PDF::shouldReceive('loadView')->once()->with('pdfs.invoice', \Mockery::type('array'))->andReturn($pdf);
+        $pdf = \Mockery::mock(Dompdf::class);
+        Pdf::shouldReceive('loadView')->once()->with('pdfs.invoice', \Mockery::type('array'))->andReturn($pdf);
 
         $result = (new CreateInvoicePdf())->create($invoice, $sacre);
 
