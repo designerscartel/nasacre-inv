@@ -93,6 +93,8 @@ use App\Contracts\Invoice\CreatesInvoicePdf;
 use App\Actions\SacreInvoice\UpdateSacreInvoiceInformation;
 use App\Contracts\SacreInvoice\UpdatesSacreInvoiceInformation;
 
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -118,6 +120,10 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
+
+        Event::listen(MessageSending::class, function (MessageSending $event) {
+            $event->message->getHeaders()->addTextHeader('X-PM-Message-Stream', 'nasacre');
+        });
 
         app()->singleton(CreatesSacreInformation::class, CreateSacreInformation::class);
         app()->singleton(UpdatesSacreInformation::class, UpdateSacreInformation::class);
