@@ -2,7 +2,7 @@
 Contributors: matttullett
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 
 Provides a searchable RE Hubs directory backed by the NASACRE database API.
 

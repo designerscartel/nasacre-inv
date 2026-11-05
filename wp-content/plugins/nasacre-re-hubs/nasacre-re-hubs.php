@@ -2,7 +2,7 @@
 /**
  * Plugin Name: NASACRE RE Hubs
  * Description: Provides searchable RE Hubs directories with the [re_hubs] and [re_hub_regions] shortcodes.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Matt Tullett
  */
 
