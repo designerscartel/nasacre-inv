@@ -49,6 +49,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "pre-autoload-dump": [
+            "@php -r \"foreach (['bootstrap/cache/packages.php', 'bootstrap/cache/services.php'] as \\$file) { if (file_exists(\\$file)) unlink(\\$file); }\""
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
