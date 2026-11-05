@@ -15,6 +15,11 @@
     cursor: pointer;
 }
 
+.nasacre-database-results .result-header:focus-visible {
+    outline: 3px solid var(--global-palette1, #3182CE);
+    outline-offset: 3px;
+}
+
 
 .nasacre-database-results .result {
     padding-bottom: 5px;

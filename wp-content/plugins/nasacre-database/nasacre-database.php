@@ -1,133 +1,175 @@
 <?php
 /**
  * Plugin Name: Nasacre Database
- * Description: Provides a [database_items] shortcode with styles.
- * Version: 1.0
+ * Description: Provides a searchable SACRE directory with the [database_items] shortcode.
+ * Version: 1.1.0
  * Author: Matt Tullett
  */
 
 use inc\Database;
 
-if (!defined('ABSPATH')) exit; // Prevent direct access
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-// Load your Database class
 require_once plugin_dir_path(__FILE__) . 'inc/Database.php';
 
-// Shortcode function
-function nasacre_database_shortcode($atts) {
+function nasacre_database_shortcode($atts)
+{
+    $search = isset($_GET['search'])
+        ? sanitize_text_field(wp_unslash($_GET['search']))
+        : '';
+    $sacres = (new Database())->getSacres($search);
+    $reportApiUrl = untrailingslashit(apply_filters(
+        'nasacre_database_report_api_url',
+        'https://database.nasacre.org.uk/api/database'
+    ));
+    $memberIconUrl = apply_filters(
+        'nasacre_database_member_icon_url',
+        get_theme_file_uri('assets/img/flower.svg')
+    );
+    $pastMemberIconUrl = apply_filters(
+        'nasacre_database_past_member_icon_url',
+        get_theme_file_uri('assets/img/flower-gray.svg')
+    );
 
-    $database = new Database();
-    $sacres = $database->getSacres($_GET['search']);
+    ob_start();
+    ?>
+    <div class="nasacre-database-search">
+        <form method="get" action="<?php echo esc_url(home_url('/database/')); ?>">
+            <div class="search-form">
+                <label class="screen-reader-text" for="nasacre-database-search">Search the SACRE database</label>
+                <input
+                    id="nasacre-database-search"
+                    name="search"
+                    class="search-input"
+                    type="search"
+                    value="<?php echo esc_attr($search); ?>"
+                    placeholder="Search Database"
+                >
+                <button type="submit" class="submit" aria-label="Search database">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
 
-    // Start output buffering
-    $output = '';
+    <?php if ($sacres) : ?>
+        <div class="nasacre-database-results">
+            <?php foreach ($sacres as $sacre) : ?>
+                <?php
+                $sacreId = absint($sacre['id'] ?? 0);
+                $panelId = 'nasacre-sacre-' . $sacreId;
+                $contacts = is_array($sacre['contacts'] ?? null) ? $sacre['contacts'] : [];
+                $files = is_array($sacre['files'] ?? null) ? $sacre['files'] : [];
+                $positions = [1 => 'Chair', 2 => 'Clerk', 3 => 'LA', 4 => 'Adviser'];
+                ?>
+                <div class="result">
+                    <div
+                        class="result-header"
+                        role="button"
+                        tabindex="0"
+                        aria-expanded="false"
+                        aria-controls="<?php echo esc_attr($panelId); ?>"
+                    >
+                        <div class="details">
+                            <p class="region"><?php echo esc_html($sacre['region']['title'] ?? ''); ?></p>
+                            <h3><?php echo esc_html($sacre['title'] ?? ''); ?></h3>
+                        </div>
 
-    // Search form
-    $output .= '<div class="nasacre-database-search">';
-    $output .= '<form method="get" action="/database">';
-    $output .= '<div class="search-form">';
-    $output .= '<input name="search" class="search-input" placeholder="Search Database">';
-    $output .= '<button type="submit" id="sacresubmit" class="submit">';
-    $output .= '<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">';
-    $output .= '<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />';
-    $output .= '</svg>';
-    $output .= '</button>';
-    $output .= '</form>';
-    $output .= '</div>';
+                        <?php if (! empty($sacre['member'])) : ?>
+                            <div class="member">
+                                <img alt="Current NASACRE member" src="<?php echo esc_url($memberIconUrl); ?>">
+                            </div>
+                        <?php elseif (! empty($sacre['past_member'])) : ?>
+                            <div class="member past">
+                                <img alt="Past NASACRE member" src="<?php echo esc_url($pastMemberIconUrl); ?>">
+                            </div>
+                        <?php endif; ?>
+                    </div>
 
-    // Results
-    if (!empty($sacres)) {
-        $output .= '<div class="nasacre-database-results">';
+                    <div class="result-body" id="<?php echo esc_attr($panelId); ?>" hidden>
+                        <?php if ($contacts) : ?>
+                            <div class="contacts">
+                                <h3>Contacts</h3>
+                                <ul>
+                                    <?php foreach ($contacts as $contact) : ?>
+                                        <?php
+                                        $position = is_array($contact['position'] ?? null) ? $contact['position'] : [];
+                                        $positionId = absint($position['id'] ?? 0);
+                                        $positionTitle = (string) ($position['title'] ?? 'Contact');
+                                        $email = sanitize_email($contact['email'] ?? '');
+                                        $hideEmail = in_array(strtolower($positionTitle), ['chair', 'advisor', 'adviser'], true);
+                                        unset($positions[$positionId]);
+                                        ?>
+                                        <li class="flex justify-between border-b border-blue-900 py-2">
+                                            <p><strong><?php echo esc_html($positionTitle); ?></strong> <?php echo esc_html($contact['name'] ?? ''); ?></p>
+                                            <?php if (! $hideEmail && is_email($email)) : ?>
+                                                <p><a class="cursor-pointer hover:text-orange-900" href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></p>
+                                            <?php endif; ?>
+                                        </li>
+                                    <?php endforeach; ?>
 
-        foreach ($sacres as $key => $sacre) {
-            $output .= '<div class="result">';
+                                    <?php foreach ($positions as $position) : ?>
+                                        <li class="flex justify-between border-b border-blue-900 py-2"><p><strong><?php echo esc_html($position); ?></strong></p></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
 
-                $output .= '<div class="result-header">';
+                        <?php if ($files) : ?>
+                            <div class="files">
+                                <h3 class="text-2xl mb-4">Reports</h3>
+                                <ul class="border-t border-blue-900">
+                                    <?php foreach ($files as $file) : ?>
+                                        <?php $reportUrl = $reportApiUrl . '/' . $sacreId . '/files/' . absint($file['id'] ?? 0); ?>
+                                        <li class="flex justify-between border-b border-blue-900 py-2">
+                                            <a target="_blank" rel="noopener noreferrer" class="block w-full cursor-pointer hover:text-orange-900" href="<?php echo esc_url($reportUrl); ?>">
+                                                View <?php echo esc_html($file['year'] ?? ''); ?> Report
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php elseif ($search !== '') : ?>
+        <p class="nasacre-database-empty">No SACREs matched your search.</p>
+    <?php endif; ?>
+    <?php
 
-                    $output .= '<div class="details">';
-                        $output .= '<p class="region">' . esc_html($sacre['region']['title']) . '</p>';
-                        $output .= '<h3 class="">' . esc_html($sacre['title']) . '</h3>';
-                    $output .= '</div>';
-
-                    if ($sacre['member'] == 1) {
-                        $output .= '<div class="member"><img alt="member" src="/wp-content/themes/nasacre/assets/img/flower.svg"></div>';
-                    } elseif (!empty($sacre['past_member']) && $sacre['past_member'] == 1) {
-                        $output .= '<div class="member past"><img alt="past_member" src="/wp-content/themes/nasacre/assets/img/flower-gray.svg"></div>';
-                    }
-
-                $output .= '</div>';
-
-
-                // Positions
-                $positions = [1=>'Chair',2=>'Clerk',3=>'LA',4=>'Adviser'];
-
-                $output .= '<div class="result-body" id="sacre_' . $key . '">';
-                    if (!empty($sacre['contacts'])) {
-                        $output .= '<div class="contacts">';
-                        $output .= '<h3 class="">Contacts</h3>';
-                        $output .= '<ul class="">';
-                        foreach ($sacre['contacts'] as $ckey => $contact) {
-                            $position_title = $contact['position']['title'];
-                            $hide_email = in_array(strtolower($position_title), ['chair', 'advisor', 'adviser'], true);
-
-                            $output .= '<li class="flex justify-between border-b border-blue-900 py-2">';
-                            $output .= '<p><strong>'.esc_html($position_title).'</strong> '.esc_html($contact['name']).'</p>';
-                            if (!$hide_email) {
-                                $output .= '<p><a class="cursor-pointer hover:text-orange-900" href="mailto:'.esc_attr($contact['email']).'">'.esc_html($contact['email']).'</a></p>';
-                            }
-                            $output .= '</li>';
-                            if (array_key_exists($contact['position']['id'], $positions)) {
-                                unset($positions[$contact['position']['id']]);
-                            }
-                        }
-                        foreach ($positions as $pos) {
-                            $output .= '<li class="flex justify-between border-b border-blue-900 py-2"><p><strong>'.esc_html($pos).'</strong></p></li>';
-                        }
-                        $output .= '</ul>';
-                        $output .= '</div>';
-                    }
-
-                    if (!empty($sacre['files'])) {
-                        $output .= '<div class="files">';
-                        $output .= '<h3 class="text-2xl mb-4">Reports</h3><ul class="border-t border-blue-900">';
-                        foreach ($sacre['files'] as $file) {
-                            $output .= '<li class="flex justify-between border-b border-blue-900 py-2">';
-                            $output .= '<a target="_blank" class="block w-full cursor-pointer hover:text-orange-900" href="https://database.nasacre.org.uk/api/database/'.esc_attr($sacre['id']).'/files/'.esc_attr($file['id']).'">View '.esc_html($file['year']).' Report</a></li>';
-                        }
-                        $output .= '</ul>';
-                        $output .= '</div>';
-                    }
-
-                $output .= '</div>'; // sacre div
-
-            $output .= '</div>'; // border div
-        }
-
-        $output .= '</div>'; // close wrappers
-    }
-
-    return $output;
+    return ob_get_clean();
 }
 add_shortcode('database_items', 'nasacre_database_shortcode');
 
-// Enqueue styles
-function nasacre_database_enqueue_styles() {
+function nasacre_database_enqueue_assets()
+{
+    global $post;
+
+    if (! $post instanceof WP_Post || ! has_shortcode($post->post_content, 'database_items')) {
+        return;
+    }
+
+    $cssPath = plugin_dir_path(__FILE__) . 'assets/css/database.css';
+    $jsPath = plugin_dir_path(__FILE__) . 'assets/js/database.js';
+
     wp_enqueue_style(
         'nasacre-database-style',
         plugin_dir_url(__FILE__) . 'assets/css/database.css',
         [],
-        '1.2.4'
+        (string) filemtime($cssPath)
     );
-}
-add_action('wp_enqueue_scripts', 'nasacre_database_enqueue_styles');
-
-function nasacre_database_enqueue_scripts() {
     wp_enqueue_script(
         'nasacre-database-script',
         plugin_dir_url(__FILE__) . 'assets/js/database.js',
         [],
-        '1.0.0',
-        true // load in footer
+        (string) filemtime($jsPath),
+        true
     );
 }
-add_action('wp_enqueue_scripts', 'nasacre_database_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'nasacre_database_enqueue_assets');

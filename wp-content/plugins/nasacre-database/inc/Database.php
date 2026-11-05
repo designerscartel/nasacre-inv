@@ -1,47 +1,62 @@
 <?php
 
 namespace inc;
+
 class Database
 {
+    private const CACHE_TTL = 12 * MINUTE_IN_SECONDS;
 
-    protected $databseUrl = 'https://database.nasacre.org.uk/api/database';
-
-
-    function getSacres($term = null)
+    public function getSacres($term = null)
     {
-        $termName = '';
-        if ($term !== null) {
-            $termName = '_' . htmlspecialchars(strtolower(trim($term)));
-            $content = get_transient('database_results' . $termName);
-        } else {
-            $content = get_transient('database_results');
+        $term = sanitize_text_field((string) $term);
+        $cacheKey = 'nasacre_database_v2_' . md5(strtolower($term));
+        $cached = get_transient($cacheKey);
+
+        if (is_array($cached)) {
+            return $cached;
         }
 
-        if (false === $content) {
+        $baseUrl = apply_filters('nasacre_database_api_url', 'https://database.nasacre.org.uk/api/database');
+        $url = untrailingslashit($baseUrl);
 
-            $response = wp_remote_request($this->databseUrl . '/' . $term, array(
-                'ssl_verify' => false,
-                'sslverify' => false,
-                'timeout' => 45,
-            ));
-
-            is_wp_error($response) and printf(
-                'There was an ERROR in your request.<br />Code: %s<br />Message: %s',
-                $response->get_error_code(),
-                $response->get_error_message()
-            );
-
-            $content = trim(wp_remote_retrieve_body($response));
-            if (strstr(wp_remote_retrieve_header($response, 'content-type'), 'json')) {
-                set_transient('database_results' . $termName, $content, 12 * MINUTE_IN_SECONDS);
-            }
+        if ($term !== '') {
+            $url .= '/' . rawurlencode($term);
         }
 
-        $data = json_decode($content, true);
-        usort($data['data'], function ($item1, $item2) {
-            return $item1['title'] <=> $item2['title'];
-        });
-        return $data['data'];
+        $response = wp_remote_get($url, [
+            'timeout' => 15,
+            'sslverify' => true,
+            'headers' => ['Accept' => 'application/json'],
+        ]);
+
+        if (is_wp_error($response)) {
+            $this->logError($response->get_error_message());
+            return [];
+        }
+
+        $status = wp_remote_retrieve_response_code($response);
+        if ($status < 200 || $status >= 300) {
+            $this->logError("API returned HTTP {$status}.");
+            return [];
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($response), true);
+        if (! is_array($data) || ! isset($data['data']) || ! is_array($data['data'])) {
+            $this->logError('API returned an invalid directory response.');
+            return [];
+        }
+
+        $sacres = $data['data'];
+        usort($sacres, fn ($first, $second) => strcasecmp($first['title'] ?? '', $second['title'] ?? ''));
+        set_transient($cacheKey, $sacres, self::CACHE_TTL);
+
+        return $sacres;
     }
 
+    private function logError($message)
+    {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('NASACRE Database: ' . $message);
+        }
+    }
 }
