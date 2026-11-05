@@ -1,0 +1,90 @@
+.nasacre-database-results {
+
+}
+
+.nasacre-database-results {
+    padding-top: 5px;
+    border-top:1px solid var(--global-palette1, #3182CE);
+}
+
+.nasacre-database-results .result-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.nasacre-database-results .result {
+    padding-bottom: 5px;
+    border-bottom:1px solid var(--global-palette1, #3182CE);
+    margin-bottom: 5px;
+}
+
+
+.nasacre-database-results .result-header .member {
+    width: 30px;
+}
+
+.nasacre-database-results .result-header .region,
+.nasacre-database-results .result-body p{
+    margin: 0;
+}
+
+.nasacre-database-results .result-body .contacts,
+.nasacre-database-results .result-body .files{
+    padding: 20px;
+    background: #eeeeee;
+    margin-bottom: 20px;
+}
+
+
+.nasacre-database-results .result .result-body {
+    display: none;
+}
+
+.nasacre-database-results .result.open .result-body {
+    display: block;
+}
+
+.nasacre-database-search .search-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nasacre-database-search .search-input {
+    border:1px solid var(--global-palette1, #3182CE);
+    width: 100%;
+    padding: 30px;
+}
+
+.nasacre-database-search .search-form .submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+}
+
+.nasacre-database-search .search-form .submit svg {
+    width: 30px;
+}
+
+
+.gsc-control-cse.gsc-control-cse-en {
+    padding: 0;
+}
+
+.gsc-control-wrapper-cse {
+    background: #f9f9f9;
+}
+
+form.gsc-search-box{
+    max-width: 1248px !important;
+    margin: 0 auto !important;
+}
+
+form.gsc-search-box table {
+    margin: 0;
+}

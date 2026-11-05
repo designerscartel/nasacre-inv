@@ -57,4 +57,92 @@ class PlacesOfInterestApiTest extends TestCase
             ->assertJsonMissing(['name' => 'Hidden Centre'])
             ->assertJsonMissing(['name' => 'Wales Centre']);
     }
+
+    public function test_re_hub_region_endpoints_list_only_regions_with_the_requested_entry_type(): void
+    {
+        $london = Region::create(['title' => 'London']);
+        $wales = Region::create(['title' => 'Wales']);
+        $empty = Region::create(['title' => 'North East']);
+        $place = PlaceOfInterest::create(['name' => 'London Centre', 'is_place_of_interest' => true]);
+        $speaker = PlaceOfInterest::create(['name' => 'Welsh Speaker', 'is_school_speaker' => true]);
+        $both = PlaceOfInterest::create([
+            'name' => 'Shared Entry',
+            'is_place_of_interest' => true,
+            'is_school_speaker' => true,
+        ]);
+        $london->places()->attach([$place->id, $both->id]);
+        $wales->places()->attach([$speaker->id, $both->id]);
+
+        $this->getJson(route('api.re-hubs.regions.places-of-interest'))
+            ->assertOk()
+            ->assertJsonPath('type', 'place_of_interest')
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.title', 'London')
+            ->assertJsonPath('data.0.entries_count', 2)
+            ->assertJsonMissing(['title' => $empty->title]);
+
+        $this->getJson(route('api.re-hubs.regions.school-speakers', ['search' => 'Wal']))
+            ->assertOk()
+            ->assertJsonPath('type', 'school_speaker')
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Wales')
+            ->assertJsonPath('data.0.entries_count', 2);
+    }
+
+    public function test_re_hub_entry_endpoints_are_searchable_and_filterable(): void
+    {
+        $london = Region::create(['title' => 'London']);
+        $wales = Region::create(['title' => 'Wales']);
+        $humanism = Religion::create(['name' => 'Humanism']);
+        $christianity = Religion::create(['name' => 'Christianity']);
+        $speaker = PlaceOfInterest::create([
+            'name' => 'Alex Morgan',
+            'is_school_speaker' => true,
+            'religion_id' => $humanism->id,
+            'organisation_email' => 'alex@example.com',
+        ]);
+        $otherSpeaker = PlaceOfInterest::create([
+            'name' => 'Chris Jones',
+            'is_school_speaker' => true,
+            'religion_id' => $christianity->id,
+        ]);
+        $place = PlaceOfInterest::create([
+            'name' => 'London Faith Centre',
+            'is_place_of_interest' => true,
+            'religion_id' => $humanism->id,
+        ]);
+        $hidden = PlaceOfInterest::create([
+            'name' => 'Hidden Speaker',
+            'is_school_speaker' => true,
+            'do_not_list' => true,
+        ]);
+        $london->places()->attach([$speaker->id, $place->id, $hidden->id]);
+        $wales->places()->attach($otherSpeaker);
+
+        $this->getJson(route('api.re-hubs.school-speakers', [
+            'search' => 'alex@example.com',
+            'region' => $london->id,
+            'religion' => $humanism->id,
+        ]))
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.name', 'Alex Morgan')
+            ->assertJsonMissing(['name' => 'Hidden Speaker']);
+
+        $this->getJson(route('api.re-hubs.places-of-interest', ['search' => 'Humanism']))
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.name', 'London Faith Centre');
+    }
+
+    public function test_re_hub_filters_are_validated(): void
+    {
+        $this->getJson(route('api.re-hubs.school-speakers', ['region' => 999]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('region');
+
+        $this->getJson(route('api.re-hubs.regions.places-of-interest', ['religion' => 999]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('religion');
+    }
 }
