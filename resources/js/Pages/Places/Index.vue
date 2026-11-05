@@ -1,7 +1,7 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Places of Interest</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">RE Hubs</h2>
         </template>
 
         <div class="py-12">
@@ -10,21 +10,21 @@
                     <div class="p-6 sm:px-8 border-b border-gray-200">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div>
-                                <h1 class="text-2xl">Places of Interest</h1>
-                                <p class="mt-1 text-sm text-gray-500">Manage venues, contacts and the areas they serve.</p>
+                                <h1 class="text-2xl">RE Hubs</h1>
+                                <p class="mt-1 text-sm text-gray-500">Manage places of interest, school speakers and the regions they serve.</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex items-center space-x-3">
                                 <a href="/religions" class="text-sm text-gray-600 hover:text-gray-900">Manage religions</a>
                                 <a href="/regions" class="text-sm text-gray-600 hover:text-gray-900">Manage regions</a>
-                                <button class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded" @click="openCreate">Add place</button>
+                                <button class="bg-gray-800 hover:bg-gray-700 text-xs text-white font-semibold py-2 px-4 rounded" @click="openCreate">Add entry</button>
                             </div>
                         </div>
 
                         <div class="mt-6 flex flex-col gap-4 md:flex-row md:items-end">
                             <div class="flex-1">
-                                <label for="place-search" class="block text-sm font-medium text-gray-700">Find a place</label>
+                                <label for="place-search" class="block text-sm font-medium text-gray-700">Find an entry</label>
                                 <input id="place-search" v-model="search" type="search"
-                                       placeholder="Search by place, religion, or contact"
+                                       placeholder="Search by name, religion, or contact"
                                        class="form-input mt-1 block w-full rounded-md shadow-sm" />
                             </div>
                             <div class="md:w-64">
@@ -32,6 +32,14 @@
                                 <select id="place-region" v-model="region" class="form-select mt-1 block w-full rounded-md shadow-sm" @change="filter">
                                     <option value="">All regions</option>
                                     <option v-for="option in regions" :key="option.id" :value="option.id">{{ option.title }}</option>
+                                </select>
+                            </div>
+                            <div class="md:w-56">
+                                <label for="place-type" class="block text-sm font-medium text-gray-700">Type</label>
+                                <select id="place-type" v-model="type" class="form-select mt-1 block w-full rounded-md shadow-sm" @change="filter">
+                                    <option value="">All types</option>
+                                    <option value="poi">Places of interest</option>
+                                    <option value="speaker">School speakers</option>
                                 </select>
                             </div>
                         </div>
@@ -44,7 +52,8 @@
                         <table class="table-auto w-full min-w-full">
                             <thead class="bg-gray-50 text-left text-sm text-gray-600">
                                 <tr>
-                                    <th class="px-6 py-3">Place</th>
+                                    <th class="px-6 py-3">Entry</th>
+                                    <th class="px-4 py-3">Type</th>
                                     <th class="px-4 py-3">Religion</th>
                                     <th class="px-4 py-3">Regions</th>
                                     <th class="px-4 py-3">Contact</th>
@@ -56,6 +65,10 @@
                                     <td class="px-6 py-4">
                                         <div class="font-medium">{{ place.name }}</div>
                                         <span v-if="place.do_not_list" class="inline-block mt-1 rounded bg-red-100 px-2 py-1 text-xs text-red-700">Do not list</span>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm">
+                                        <span v-if="place.is_place_of_interest" class="inline-block mr-1 mb-1 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">Place of interest</span>
+                                        <span v-if="place.is_school_speaker" class="inline-block mb-1 rounded bg-green-100 px-2 py-1 text-xs text-green-700">School speaker</span>
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-600">{{ place.religion ? place.religion.name : '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-gray-600">
@@ -71,7 +84,7 @@
                                     </td>
                                 </tr>
                                 <tr v-if="!places.data.length">
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">No places match these filters.</td>
+                                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">No RE Hub entries match these filters.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -86,13 +99,27 @@
         </div>
 
         <jet-dialog-modal :show="showDialog" @close="showDialog = false">
-            <template #title>{{ editingId ? 'Edit place' : 'Add place' }}</template>
+            <template #title>{{ editingId ? 'Edit RE Hub entry' : 'Add RE Hub entry' }}</template>
             <template #content>
                 <div class="grid gap-4 md:grid-cols-2">
                     <div class="md:col-span-2">
-                        <jet-label for="place-name" value="Place name" />
+                        <jet-label for="place-name" value="Entry name" />
                         <jet-input id="place-name" v-model="form.name" class="mt-1 block w-full" />
                         <jet-input-error :message="form.error('name')" class="mt-2" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <jet-label value="Entry type" />
+                        <div class="mt-2 flex flex-wrap gap-5 text-sm text-gray-700">
+                            <label class="flex items-center">
+                                <input v-model="form.is_place_of_interest" type="checkbox" class="rounded border-gray-300 mr-2" />
+                                Place of interest
+                            </label>
+                            <label class="flex items-center">
+                                <input v-model="form.is_school_speaker" type="checkbox" class="rounded border-gray-300 mr-2" />
+                                School speaker
+                            </label>
+                        </div>
+                        <jet-input-error :message="form.error('is_place_of_interest') || form.error('is_school_speaker')" class="mt-2" />
                     </div>
                     <div>
                         <jet-label for="religion" value="Religion or belief" />
@@ -124,7 +151,7 @@
                     </div>
                     <label class="md:col-span-2 flex items-center text-sm text-gray-700">
                         <input v-model="form.do_not_list" type="checkbox" class="rounded border-gray-300 mr-2" />
-                        Do not include this place in public lists
+                        Do not include this entry in public lists
                     </label>
                 </div>
             </template>
@@ -153,7 +180,7 @@ const FieldInput = {
 }
 
 const emptyPlace = () => ({
-    name: '', religion_id: '', contact_name: '', organisation_email: '', personal_email: '', phone: '', website: '',
+    name: '', is_place_of_interest: false, is_school_speaker: false, religion_id: '', contact_name: '', organisation_email: '', personal_email: '', phone: '', website: '',
     last_training: '', charge_to_speak: '', notes: '', do_not_list: false, region_ids: [],
 })
 
@@ -164,6 +191,7 @@ export default {
         return {
             search: this.filters.search,
             region: this.filters.region,
+            type: this.filters.type,
             editingId: null,
             showDialog: false,
             form: this.$inertia.form(emptyPlace(), { bag: 'placeForm' }),
@@ -179,6 +207,7 @@ export default {
             const data = {}
             if (this.search) data.search = this.search
             if (this.region) data.region = this.region
+            if (this.type) data.type = this.type
 
             this.$inertia.replace('/places', {
                 data,
@@ -194,7 +223,9 @@ export default {
         openEdit(place) {
             this.editingId = place.id
             Object.keys(emptyPlace()).forEach(key => {
-                this.form[key] = key === 'region_ids' ? place.regions.map(region => region.id) : (place[key] || (key === 'do_not_list' ? false : ''))
+                this.form[key] = key === 'region_ids'
+                    ? place.regions.map(region => region.id)
+                    : (place[key] || (['do_not_list', 'is_place_of_interest', 'is_school_speaker'].includes(key) ? false : ''))
             })
             this.showDialog = true
         },

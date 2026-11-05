@@ -24,7 +24,7 @@
                                 Bookings
                             </jet-nav-link>
                             <jet-nav-link href="/places" :active="path.startsWith('/places')">
-                                Places
+                                RE Hubs
                             </jet-nav-link>
                             <jet-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
                                 Campaigns
@@ -141,7 +141,7 @@
                         Bookings
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/places" :active="path.startsWith('/places')">
-                        Places
+                        RE Hubs
                     </jet-responsive-nav-link>
                     <jet-responsive-nav-link href="/campaigns" :active="path.startsWith('/campaigns') || path.startsWith('/groups')">
                         Campaigns

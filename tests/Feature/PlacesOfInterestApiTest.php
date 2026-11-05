@@ -15,9 +15,10 @@ class PlacesOfInterestApiTest extends TestCase
     public function test_regions_include_public_place_counts(): void
     {
         $region = Region::create(['title' => 'London']);
-        $publicPlace = PlaceOfInterest::create(['name' => 'Public Centre']);
-        $privatePlace = PlaceOfInterest::create(['name' => 'Private Centre', 'do_not_list' => true]);
-        $region->places()->attach([$publicPlace->id, $privatePlace->id]);
+        $publicPlace = PlaceOfInterest::create(['name' => 'Public Centre', 'is_place_of_interest' => true]);
+        $privatePlace = PlaceOfInterest::create(['name' => 'Private Centre', 'is_place_of_interest' => true, 'do_not_list' => true]);
+        $speaker = PlaceOfInterest::create(['name' => 'School Speaker', 'is_school_speaker' => true]);
+        $region->places()->attach([$publicPlace->id, $privatePlace->id, $speaker->id]);
 
         $this->getJson(route('api.region'))
             ->assertOk()
@@ -33,13 +34,15 @@ class PlacesOfInterestApiTest extends TestCase
         $religion = Religion::create(['name' => 'Humanism']);
         $londonPlace = PlaceOfInterest::create([
             'name' => 'London Centre',
+            'is_place_of_interest' => true,
             'religion_id' => $religion->id,
             'personal_email' => 'private@example.com',
             'notes' => 'Internal notes',
         ]);
-        $privatePlace = PlaceOfInterest::create(['name' => 'Hidden Centre', 'do_not_list' => true]);
-        $walesPlace = PlaceOfInterest::create(['name' => 'Wales Centre']);
-        $london->places()->attach([$londonPlace->id, $privatePlace->id]);
+        $privatePlace = PlaceOfInterest::create(['name' => 'Hidden Centre', 'is_place_of_interest' => true, 'do_not_list' => true]);
+        $speaker = PlaceOfInterest::create(['name' => 'London Speaker', 'is_school_speaker' => true]);
+        $walesPlace = PlaceOfInterest::create(['name' => 'Wales Centre', 'is_place_of_interest' => true]);
+        $london->places()->attach([$londonPlace->id, $privatePlace->id, $speaker->id]);
         $wales->places()->attach($walesPlace);
 
         $response = $this->getJson(route('api.region.places', $london));

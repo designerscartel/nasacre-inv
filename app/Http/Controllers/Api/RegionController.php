@@ -19,7 +19,9 @@ class RegionController extends Controller
     {
         $regions = Region::query()
             ->withCount([
-                'places' => fn ($query) => $query->where('do_not_list', false),
+                'places' => fn ($query) => $query
+                    ->where('do_not_list', false)
+                    ->where('is_place_of_interest', true),
             ])
             ->orderBy('title')
             ->get();
@@ -31,6 +33,7 @@ class RegionController extends Controller
     {
         $places = $region->places()
             ->where('do_not_list', false)
+            ->where('is_place_of_interest', true)
             ->with(['religion:id,name', 'regions:id,title'])
             ->orderBy('name')
             ->get();

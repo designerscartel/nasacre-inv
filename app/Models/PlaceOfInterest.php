@@ -17,6 +17,8 @@ class PlaceOfInterest extends Model
 
     protected $fillable = [
         'name',
+        'is_place_of_interest',
+        'is_school_speaker',
         'religion_id',
         'contact_name',
         'organisation_email',
@@ -32,6 +34,8 @@ class PlaceOfInterest extends Model
 
     protected $casts = [
         'do_not_list' => 'boolean',
+        'is_place_of_interest' => 'boolean',
+        'is_school_speaker' => 'boolean',
     ];
 
     public function regions(): BelongsToMany

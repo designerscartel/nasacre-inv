@@ -7,6 +7,7 @@ use App\Models\Region;
 use App\Models\Religion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,6 +18,7 @@ class PlaceOfInterestController extends Controller
         $filters = $request->validate([
             'search' => ['nullable', 'string', 'max:255'],
             'region' => ['nullable', 'integer', 'exists:regions,id'],
+            'type' => ['nullable', 'in:poi,speaker'],
         ]);
 
         $places = PlaceOfInterest::query()
@@ -31,6 +33,9 @@ class PlaceOfInterestController extends Controller
             ->when($filters['region'] ?? null, function ($query, $region) {
                 $query->whereHas('regions', fn ($query) => $query->whereKey($region));
             })
+            ->when($filters['type'] ?? null, function ($query, $type) {
+                $query->where($type === 'poi' ? 'is_place_of_interest' : 'is_school_speaker', true);
+            })
             ->orderBy('name')
             ->paginate(25)
             ->withQueryString();
@@ -42,6 +47,7 @@ class PlaceOfInterestController extends Controller
             'filters' => [
                 'search' => $filters['search'] ?? '',
                 'region' => $filters['region'] ?? '',
+                'type' => $filters['type'] ?? '',
             ],
         ]);
     }
@@ -55,7 +61,7 @@ class PlaceOfInterestController extends Controller
         $place = PlaceOfInterest::create($data);
         $place->regions()->sync($regionIds);
 
-        return back(303)->with('success', 'Place created.');
+        return back(303)->with('success', 'RE Hub entry created.');
     }
 
     public function update(Request $request, PlaceOfInterest $place): RedirectResponse
@@ -67,7 +73,7 @@ class PlaceOfInterestController extends Controller
         $place->update($data);
         $place->regions()->sync($regionIds);
 
-        return back(303)->with('success', 'Place updated.');
+        return back(303)->with('success', 'RE Hub entry updated.');
     }
 
     public function destroy(PlaceOfInterest $place): RedirectResponse
@@ -75,13 +81,15 @@ class PlaceOfInterestController extends Controller
         $place->regions()->detach();
         $place->delete();
 
-        return back(303)->with('success', 'Place deleted.');
+        return back(303)->with('success', 'RE Hub entry deleted.');
     }
 
     private function validatePlace(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'is_place_of_interest' => ['required', 'boolean'],
+            'is_school_speaker' => ['required', 'boolean'],
             'religion_id' => ['nullable', 'integer', 'exists:religions,id'],
             'contact_name' => ['nullable', 'string', 'max:255'],
             'organisation_email' => ['nullable', 'email', 'max:255'],
@@ -95,5 +103,13 @@ class PlaceOfInterestController extends Controller
             'region_ids' => ['required', 'array', 'min:1'],
             'region_ids.*' => ['integer', 'exists:regions,id'],
         ]);
+
+        if (! $data['is_place_of_interest'] && ! $data['is_school_speaker']) {
+            throw ValidationException::withMessages([
+                'is_place_of_interest' => 'Select at least one entry type.',
+            ]);
+        }
+
+        return $data;
     }
 }

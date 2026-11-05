@@ -16,20 +16,22 @@ class PlacesOfInterestTest extends TestCase
     public function test_csv_import_creates_places_regions_and_multi_region_links(): void
     {
         $this->artisan('places:import')
-            ->expectsOutput('Imported 41 places of interest.')
+            ->expectsOutput('Imported 110 RE Hub entries.')
             ->assertSuccessful();
 
-        $this->assertDatabaseCount('places_of_interest', 41);
+        $this->assertDatabaseCount('places_of_interest', 110);
         $this->assertDatabaseHas('regions', ['title' => 'London']);
-        $this->assertDatabaseCount('religions', 7);
+        $this->assertDatabaseCount('religions', 13);
         $this->assertDatabaseHas('religions', ['name' => 'Humanism']);
         $this->assertTrue(PlaceOfInterest::query()->where('do_not_list', true)->exists());
         $this->assertTrue(PlaceOfInterest::query()->whereHas('regions', fn ($query) => $query->where('title', 'London'))->exists());
-        $this->assertSame(4, PlaceOfInterest::query()->has('regions', '>', 1)->count());
+        $this->assertSame(11, PlaceOfInterest::query()->where('is_place_of_interest', true)->where('is_school_speaker', false)->count());
+        $this->assertSame(69, PlaceOfInterest::query()->where('is_place_of_interest', false)->where('is_school_speaker', true)->count());
+        $this->assertSame(30, PlaceOfInterest::query()->where('is_place_of_interest', true)->where('is_school_speaker', true)->count());
 
         $regionCount = Region::count();
         $this->artisan('places:import')->assertSuccessful();
-        $this->assertDatabaseCount('places_of_interest', 41);
+        $this->assertDatabaseCount('places_of_interest', 110);
         $this->assertSame($regionCount, Region::count());
     }
 
@@ -41,6 +43,8 @@ class PlacesOfInterestTest extends TestCase
 
         $this->post(route('places.store'), [
             'name' => 'Test Centre',
+            'is_place_of_interest' => true,
+            'is_school_speaker' => true,
             'religion_id' => Religion::create(['name' => 'Humanism'])->id,
             'contact_name' => 'Alex Example',
             'organisation_email' => 'hello@example.com',
@@ -59,6 +63,8 @@ class PlacesOfInterestTest extends TestCase
 
         $this->put(route('places.update', $place), [
             'name' => 'Updated Centre',
+            'is_place_of_interest' => false,
+            'is_school_speaker' => true,
             'religion_id' => null,
             'contact_name' => null,
             'organisation_email' => null,
@@ -69,6 +75,8 @@ class PlacesOfInterestTest extends TestCase
             'charge_to_speak' => null,
             'notes' => null,
             'do_not_list' => true,
+            'is_place_of_interest' => false,
+            'is_school_speaker' => true,
             'region_ids' => [$london->id],
         ])->assertRedirect();
 
@@ -103,6 +111,39 @@ class PlacesOfInterestTest extends TestCase
         $response->assertJsonPath('props.filters.region', (string) $london->id);
         $response->assertJsonCount(1, 'props.places.data');
         $response->assertJsonPath('props.places.data.0.name', 'London Centre');
+    }
+
+    public function test_re_hub_directory_can_be_filtered_by_entry_type(): void
+    {
+        $this->actingAs($this->userWithTeam());
+        $region = Region::create(['title' => 'London']);
+        $place = PlaceOfInterest::create(['name' => 'London Centre', 'is_place_of_interest' => true]);
+        $speaker = PlaceOfInterest::create(['name' => 'Alex Speaker', 'is_school_speaker' => true]);
+        $region->places()->attach([$place->id, $speaker->id]);
+
+        $response = $this->get(route('places.index', ['type' => 'speaker']), [
+            'X-Inertia' => 'true',
+            'X-Requested-With' => 'XMLHttpRequest',
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonPath('props.filters.type', 'speaker');
+        $response->assertJsonCount(1, 'props.places.data');
+        $response->assertJsonPath('props.places.data.0.name', 'Alex Speaker');
+    }
+
+    public function test_re_hub_entry_requires_at_least_one_type(): void
+    {
+        $this->actingAs($this->userWithTeam());
+        $region = Region::create(['title' => 'London']);
+
+        $this->post(route('places.store'), [
+            'name' => 'Unclassified entry',
+            'is_place_of_interest' => false,
+            'is_school_speaker' => false,
+            'do_not_list' => false,
+            'region_ids' => [$region->id],
+        ])->assertSessionHasErrors('is_place_of_interest');
     }
 
     public function test_region_with_places_cannot_be_deleted(): void

@@ -11,9 +11,9 @@ use RuntimeException;
 
 class ImportPlacesOfInterest extends Command
 {
-    protected $signature = 'places:import {path=storage/RE-Hubs.csv}';
+    protected $signature = 'places:import {path=storage/RE-Hubs-updated.csv}';
 
-    protected $description = 'Import places of interest and their areas from the RE Hubs CSV';
+    protected $description = 'Import places of interest and school speakers from the RE Hubs CSV';
 
     public function handle(): int
     {
@@ -47,12 +47,17 @@ class ImportPlacesOfInterest extends Command
             }
 
             $imported = 0;
+            $sourceKeys = [];
             while (($row = fgetcsv($handle, null, ',', '"', '')) !== false) {
-                if (! str_contains(strtoupper($this->value($row, $indexes, 'POI or SS')), 'POI')) {
+                $types = strtoupper($this->value($row, $indexes, 'POI or SS'));
+                $isPlaceOfInterest = str_contains($types, 'POI');
+                $isSchoolSpeaker = str_contains($types, 'SS');
+
+                if (! $isPlaceOfInterest && ! $isSchoolSpeaker) {
                     continue;
                 }
 
-                DB::transaction(function () use ($row, $indexes, &$imported) {
+                DB::transaction(function () use ($row, $indexes, $isPlaceOfInterest, $isSchoolSpeaker, &$imported, &$sourceKeys) {
                     $name = $this->value($row, $indexes, 'Place of Interest Address, if applicable')
                         ?: $this->value($row, $indexes, 'Name');
                     $religion = $this->value($row, $indexes, 'Religion & Belief system');
@@ -73,11 +78,14 @@ class ImportPlacesOfInterest extends Command
                         $organisationEmail,
                         $personalEmail,
                     ])));
+                    $sourceKeys[] = $sourceKey;
 
                     $place = PlaceOfInterest::withTrashed()->updateOrCreate(
                         ['source_key' => $sourceKey],
                         [
                             'name' => $name,
+                            'is_place_of_interest' => $isPlaceOfInterest,
+                            'is_school_speaker' => $isSchoolSpeaker,
                             'religion_id' => $religionId,
                             'contact_name' => $this->value($row, $indexes, 'Name') ?: null,
                             'organisation_email' => $organisationEmail ?: null,
@@ -107,7 +115,12 @@ class ImportPlacesOfInterest extends Command
                 });
             }
 
-            $this->info("Imported {$imported} places of interest.");
+            PlaceOfInterest::query()
+                ->whereNotNull('source_key')
+                ->whereNotIn('source_key', $sourceKeys)
+                ->delete();
+
+            $this->info("Imported {$imported} RE Hub entries.");
             return self::SUCCESS;
         } catch (RuntimeException $exception) {
             $this->error($exception->getMessage());
