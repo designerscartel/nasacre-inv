@@ -22,6 +22,7 @@ class PlacesOfInterestApiTest extends TestCase
 
         $this->getJson(route('api.region'))
             ->assertOk()
+            ->assertJsonMissing(['title' => 'Wales'])
             ->assertJsonPath('data.0.id', $region->id)
             ->assertJsonPath('data.0.title', 'London')
             ->assertJsonPath('data.0.places_count', 1);
@@ -76,17 +77,16 @@ class PlacesOfInterestApiTest extends TestCase
         $this->getJson(route('api.re-hubs.regions.places-of-interest'))
             ->assertOk()
             ->assertJsonPath('type', 'place_of_interest')
-            ->assertJsonCount(2, 'data')
+            ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.title', 'London')
-            ->assertJsonPath('data.0.entries_count', 2)
+            ->assertJsonPath('data.0.entries_count', 1)
+            ->assertJsonMissing(['title' => 'Wales'])
             ->assertJsonMissing(['title' => $empty->title]);
 
         $this->getJson(route('api.re-hubs.regions.school-speakers', ['search' => 'Wal']))
             ->assertOk()
             ->assertJsonPath('type', 'school_speaker')
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.title', 'Wales')
-            ->assertJsonPath('data.0.entries_count', 2);
+            ->assertJsonCount(0, 'data');
     }
 
     public function test_re_hub_entry_endpoints_are_searchable_and_filterable(): void
@@ -133,6 +133,14 @@ class PlacesOfInterestApiTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.name', 'London Faith Centre');
+
+        $this->getJson(route('api.re-hubs.school-speakers'))
+            ->assertOk()
+            ->assertJsonMissing(['name' => 'Chris Jones']);
+
+        $this->getJson(route('api.region.places', $wales))
+            ->assertOk()
+            ->assertJsonCount(0, 'data');
     }
 
     public function test_re_hub_filters_are_validated(): void

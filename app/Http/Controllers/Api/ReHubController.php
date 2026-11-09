@@ -14,6 +14,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ReHubController extends Controller
 {
+    private const EXCLUDED_REGION = 'Wales';
+
     public function placeRegions(Request $request): AnonymousResourceCollection
     {
         return $this->regions($request, 'is_place_of_interest', 'place_of_interest');
@@ -37,6 +39,7 @@ class ReHubController extends Controller
     public function legacyRegions(): AnonymousResourceCollection
     {
         $regions = Region::query()
+            ->where('title', '!=', self::EXCLUDED_REGION)
             ->withCount([
                 'places' => fn (Builder $query) => $this->publicEntries($query, 'is_place_of_interest'),
             ])
@@ -49,8 +52,7 @@ class ReHubController extends Controller
     public function legacyRegionPlaces(Region $region): AnonymousResourceCollection
     {
         $places = $region->places()
-            ->where('do_not_list', false)
-            ->where('is_place_of_interest', true)
+            ->tap(fn (Builder $query) => $this->publicEntries($query, 'is_place_of_interest'))
             ->with(['religion:id,name', 'regions:id,title'])
             ->orderBy('name')
             ->get();
@@ -69,6 +71,7 @@ class ReHubController extends Controller
         $matchingEntries = fn (Builder $query) => $this->filterEntries($query, $entryFilters, $typeColumn);
 
         $regions = Region::query()
+            ->where('title', '!=', self::EXCLUDED_REGION)
             ->whereHas('places', $matchingEntries)
             ->withCount(['places as entries_count' => $matchingEntries])
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query
@@ -117,6 +120,8 @@ class ReHubController extends Controller
     {
         return $query
             ->where('do_not_list', false)
-            ->where($typeColumn, true);
+            ->where($typeColumn, true)
+            ->whereDoesntHave('regions', fn (Builder $query) => $query
+                ->where('title', self::EXCLUDED_REGION));
     }
 }
