@@ -9,7 +9,7 @@ class Database
     public function getSacres($term = null)
     {
         $term = sanitize_text_field((string) $term);
-        $cacheKey = 'nasacre_database_v2_' . md5(strtolower($term));
+        $cacheKey = 'nasacre_database_v3_' . md5(strtolower($term));
         $cached = get_transient($cacheKey);
 
         if (is_array($cached)) {

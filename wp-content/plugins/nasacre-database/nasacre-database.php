@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nasacre Database
  * Description: Provides a searchable SACRE directory with the [database_items] shortcode.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Matt Tullett
  */
 
@@ -124,10 +124,15 @@ function nasacre_database_shortcode($atts)
                                 <h3 class="text-2xl mb-4">Reports</h3>
                                 <ul class="border-t border-blue-900">
                                     <?php foreach ($files as $file) : ?>
-                                        <?php $reportUrl = $reportApiUrl . '/' . $sacreId . '/files/' . absint($file['id'] ?? 0); ?>
+                                        <?php
+                                        $reportUrl = $reportApiUrl . '/' . $sacreId . '/files/' . absint($file['id'] ?? 0);
+                                        $displayName = trim((string) ($file['display_name'] ?? ''));
+                                        $fileName = trim((string) ($file['filename'] ?? ''));
+                                        $linkText = $displayName !== '' ? $displayName : $fileName;
+                                        ?>
                                         <li class="flex justify-between border-b border-blue-900 py-2">
                                             <a target="_blank" rel="noopener noreferrer" class="block w-full cursor-pointer hover:text-orange-900" href="<?php echo esc_url($reportUrl); ?>">
-                                                View <?php echo esc_html($file['year'] ?? ''); ?> Report
+                                                <?php echo esc_html($linkText); ?>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>

@@ -21,6 +21,7 @@ class SacreFileResource extends JsonResource
             'id' => $this->id,
             'sacre_id' => $this->sacre_id,
             'filename' => $this->filename,
+            'display_name' => $this->display_name ?: $this->filename,
             'year' => $this->year,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

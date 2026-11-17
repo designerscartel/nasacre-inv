@@ -21,7 +21,8 @@
 
                         <div class="flex items-center">
                             <div class="ml-4 align-middle">
-                                {{ file.year }} - {{ file.filename }}
+                                <div>{{ file.year }} - {{ file.display_name }}</div>
+                                <div class="text-xs text-gray-400">{{ file.filename }}</div>
                             </div>
                         </div>
 
@@ -70,7 +71,15 @@
 
             <template #content>
 
-                <input type="file" accept="application/pdf,.pdf" @input="addFileForm.file = $event.target.files[0]" />
+                <div class="mb-4">
+                    <jet-label for="new-display-name" value="Readable name"/>
+                    <jet-input id="new-display-name" type="text" class="mt-1 block w-full"
+                               v-model="addFileForm.display_name"/>
+                    <jet-input-error :message="addFileForm.error('display_name')" class="mt-2"/>
+                </div>
+
+                <input type="file" accept="application/pdf,.pdf" @input="selectFile" />
+                <jet-input-error :message="addFileForm.error('file')" class="mt-2"/>
                 <progress v-if="addFileForm.progress" :value="addFileForm.progress.percentage" max="100">
                     {{ addFileForm.progress.percentage }}%
                 </progress>
@@ -97,9 +106,16 @@
             </template>
 
             <template #content>
+                <!-- Readable name -->
+                <div class="mt-4">
+                    <jet-label for="display_name" value="Readable name"/>
+                    <jet-input id="display_name" type="text" class="mt-1 block w-full" v-model="updateFileForm.display_name"/>
+                    <jet-input-error :message="updateFileForm.error('display_name')" class="mt-2"/>
+                </div>
+
                 <!-- Filename -->
                 <div class="mt-4">
-                    <jet-label for="filename" value="filename"/>
+                    <jet-label for="filename" value="File name"/>
                     <jet-input id="filename" type="text" class="mt-1 block w-full" v-model="updateFileForm.filename"/>
                     <jet-input-error :message="updateFileForm.error('filename')" class="mt-2"/>
                 </div>
@@ -198,7 +214,8 @@ export default {
     data() {
         return {
             addFileForm: this.$inertia.form({
-                file: null
+                file: null,
+                display_name: '',
             }, {
                 bag: 'addFileForm',
                 resetOnSuccess: true,
@@ -207,6 +224,7 @@ export default {
             updateFileForm: this.$inertia.form({
                 id: '',
                 filename: '',
+                display_name: '',
                 year: '',
             }, {
                 bag: 'updateFileForm',
@@ -222,6 +240,14 @@ export default {
     },
 
     methods: {
+        selectFile(event) {
+            const file = event.target.files[0]
+            this.addFileForm.file = file
+
+            if (file && !this.addFileForm.display_name) {
+                this.addFileForm.display_name = file.name
+            }
+        },
         addFile() {
             this.addFileForm.post('/sacres/' + this.sacre.id + '/files', {
                 preserveScroll: true
@@ -247,6 +273,7 @@ export default {
         updateFileDialog(file) {
             this.updateFileForm.id = file.id
             this.updateFileForm.filename = file.filename
+            this.updateFileForm.display_name = file.display_name
             this.updateFileForm.year = file.year
             this.fileId = file.id
             this.showUpdateFileDialog = true

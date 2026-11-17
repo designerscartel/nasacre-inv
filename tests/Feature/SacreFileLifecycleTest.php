@@ -14,12 +14,31 @@ use App\Models\SacreInvoice;
 use App\Models\SharedFile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SacreFileLifecycleTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_uploaded_file_has_an_independent_readable_name()
+    {
+        Storage::fake();
+        $this->actingAs(User::factory()->create());
+        $sacre = $this->sacre();
+
+        $this->post(route('sacre-files.store', $sacre), [
+            'file' => UploadedFile::fake()->create('original-report.pdf', 10, 'application/pdf'),
+            'display_name' => 'Annual report 2026',
+        ])->assertStatus(303);
+
+        $file = SacreFile::firstOrFail();
+
+        $this->assertSame('Annual report 2026', $file->display_name);
+        $this->assertNotSame('original-report.pdf', $file->filename);
+        Storage::assertExists('files/'.$file->filename);
+    }
 
     public function test_file_renames_move_the_stored_pdf_and_suffix_collisions()
     {
@@ -29,23 +48,27 @@ class SacreFileLifecycleTest extends TestCase
         $file = SacreFile::create([
             'sacre_id' => $sacre->id,
             'filename' => 'original.pdf',
+            'display_name' => 'Original report',
             'year' => '2026',
         ]);
         Storage::put('files/original.pdf', 'original');
 
         $this->put(route('sacre-files.update', [$sacre, $file]), [
             'filename' => 'renamed.pdf',
+            'display_name' => 'Renamed annual report',
             'year' => '2027',
         ])->assertStatus(303);
 
         Storage::assertMissing('files/original.pdf');
         Storage::assertExists('files/renamed.pdf');
         $this->assertSame('renamed.pdf', $file->refresh()->filename);
+        $this->assertSame('Renamed annual report', $file->display_name);
 
         Storage::put('files/existing.pdf', 'existing');
         Storage::put('files/existing-2.pdf', 'existing 2');
         $this->put(route('sacre-files.update', [$sacre, $file]), [
             'filename' => 'existing.pdf',
+            'display_name' => 'Existing annual report',
             'year' => '2028',
         ])->assertStatus(303);
 

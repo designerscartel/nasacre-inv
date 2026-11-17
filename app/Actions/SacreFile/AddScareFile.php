@@ -24,6 +24,7 @@ class AddScareFile implements AddsSacreFile
 
         Validator::make($input, [
             'file' => ['required', 'file', 'mimes:pdf', 'mimetypes:application/pdf', 'max:10240'],
+            'display_name' => ['nullable', 'string', 'max:255'],
         ])->validateWithBag('addFileForm');
 
         if (!empty($input['file'])) {
@@ -32,6 +33,7 @@ class AddScareFile implements AddsSacreFile
             $myFile->storeAs('files', $fileName);
             $file = new SacreFile();
             $file->filename = $fileName;
+            $file->display_name = trim($input['display_name'] ?? '') ?: $myFile->getClientOriginalName();
             $sacre->files()->save($file);
         }
 
