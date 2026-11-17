@@ -95,7 +95,7 @@ class ImportPlacesOfInterest extends Command
                             'last_training' => $this->value($row, $indexes, 'Date of most recent training') ?: null,
                             'charge_to_speak' => $this->value($row, $indexes, 'Charge to speak') ?: null,
                             'notes' => $this->value($row, $indexes, 'Notes') ?: null,
-                            'do_not_list' => $this->value($row, $indexes, 'DO NOT LIST') !== '',
+                            'do_not_list' => $this->shouldNotList($this->value($row, $indexes, 'DO NOT LIST')),
                             'deleted_at' => null,
                         ]
                     );
@@ -133,5 +133,10 @@ class ImportPlacesOfInterest extends Command
     private function value(array $row, array $indexes, string $header): string
     {
         return trim((string) ($row[$indexes[$header] ?? -1] ?? ''));
+    }
+
+    private function shouldNotList(string $value): bool
+    {
+        return ! in_array(strtolower($value), ['', 'add'], true);
     }
 }

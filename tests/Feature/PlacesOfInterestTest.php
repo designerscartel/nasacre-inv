@@ -35,6 +35,17 @@ class PlacesOfInterestTest extends TestCase
         $this->assertSame($regionCount, Region::count());
     }
 
+    public function test_csv_import_lists_entries_marked_add_and_hides_paused_or_dnl_entries(): void
+    {
+        $this->artisan('places:import', ['path' => 'storage/RE-Hubs-updated-v1.csv'])
+            ->assertSuccessful();
+
+        $this->assertFalse(PlaceOfInterest::where('contact_name', 'Sian Howell-Jones')->firstOrFail()->do_not_list);
+        $this->assertFalse(PlaceOfInterest::where('name', 'Durham')->where('contact_name', 'Mahshid Turner')->firstOrFail()->do_not_list);
+        $this->assertTrue(PlaceOfInterest::where('contact_name', 'Kirpa Kaur')->firstOrFail()->do_not_list);
+        $this->assertTrue(PlaceOfInterest::where('contact_name', 'Albert King')->firstOrFail()->do_not_list);
+    }
+
     public function test_authenticated_user_can_manage_places(): void
     {
         $this->actingAs($this->userWithTeam());
